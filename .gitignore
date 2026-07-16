@@ -1,1 +1,8 @@
 node_modules
+.claude
+.codex
+.cursor
+agents
+skills
+AGENT.md
+AGENTS.md
