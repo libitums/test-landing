@@ -1,0 +1,8 @@
+.comparison { overflow-x: auto; border: var(--space-1) solid var(--color-border); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); }
+.comparison:focus-visible { outline: var(--space-1) solid var(--color-focus); box-shadow: var(--focus-ring); }
+.comparison table { inline-size: 100%; min-inline-size: var(--content-reading); border-collapse: collapse; text-align: start; }
+.comparison th, .comparison td { inline-size: calc(100% / 3); padding: var(--space-5); border-block-end: var(--space-1) solid var(--color-border); text-align: start; }
+.comparison thead { background: var(--color-surface); }
+.comparison th { font-weight: var(--font-semibold); }
+.comparison tbody tr:last-child > * { border-block-end: none; }
+.comparison td:last-child { color: var(--color-muted-fg); }
