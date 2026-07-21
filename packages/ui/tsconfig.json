@@ -1,1 +1,1 @@
-{"extends":"@landing/config-typescript/react.json","include":["src"]}
+{ "extends": "@landing/config-typescript/react.json", "include": ["src"] }

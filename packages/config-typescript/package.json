@@ -1,1 +1,9 @@
-{"name":"@landing/config-typescript","version":"0.0.0","private":true,"exports":{"./base.json":"./base.json","./react.json":"./react.json"}}
+{
+  "name": "@landing/config-typescript",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./base.json": "./base.json",
+    "./react.json": "./react.json"
+  }
+}

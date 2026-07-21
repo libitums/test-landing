@@ -6,6 +6,15 @@ export interface ButtonLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>
   variant?: LandingActionVariant | "destructive";
 }
 
-export function ButtonLink({ children, className = "", variant = "primary", ...props }: ButtonLinkProps) {
-  return <a className={`button button--${variant} ${className}`.trim()} {...props}>{children}</a>;
+export function ButtonLink({
+  children,
+  className = "",
+  variant = "primary",
+  ...props
+}: ButtonLinkProps) {
+  return (
+    <a className={`button button--${variant} ${className}`.trim()} {...props}>
+      {children}
+    </a>
+  );
 }

@@ -1,8 +1,30 @@
-node_modules
-.claude
-.codex
-.cursor
-agents
-skills
+# Dependencies and package-manager cache
+node_modules/
+.pnpm-store/
+
+# Build and test output
+dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Tool caches and incremental state
+.vite/
+*.tsbuildinfo
+*.log
+
+# Local environment and operating-system files
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Local agent harness mirrors and sources
+.claude/
+.codex/
+.cursor/
+agents/
+skills/
 AGENT.md
 AGENTS.md

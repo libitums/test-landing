@@ -63,17 +63,17 @@
 
 ## 공통 프리미티브 상태
 
-| 프리미티브 | 상태 | 토큰 계약 |
-|---|---|---|
-| Button | default | primary는 `--color-accent`/`--color-accent-fg`; secondary는 `--color-bg`/`--color-fg`/`--color-border` |
-| Button | hover / active | primary는 각각 `--color-accent-hover`, `--color-accent-active`; secondary는 `--color-surface`, `--color-surface-strong` |
-| Button | focus-visible | `--color-focus`와 `--focus-ring`; outline 제거만 단독 사용 금지 |
-| Button | disabled | `--color-disabled-bg`/`--color-disabled-fg`; 상호작용과 모션 없음 |
-| Button | loading | 기존 레이블 폭을 보존하고 텍스트 상태를 함께 알림; `--duration-normal` 사용 |
-| Card | default / hover | `--color-bg`/`--color-border`/`--shadow-sm`; 상호작용형만 hover에서 `--shadow-md` |
-| Input | default / focus | `--color-bg`/`--color-fg`/`--color-border`; focus-visible은 Button과 동일 |
-| Input | error | `--color-danger`로 테두리와 연결된 오류 문구를 함께 표시 |
-| Empty | empty | 제목, 설명, 선택 행동 순서; `--color-muted-fg`를 보조 문구에만 사용 |
+| 프리미티브 | 상태            | 토큰 계약                                                                                                               |
+| ---------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Button     | default         | primary는 `--color-accent`/`--color-accent-fg`; secondary는 `--color-bg`/`--color-fg`/`--color-border`                  |
+| Button     | hover / active  | primary는 각각 `--color-accent-hover`, `--color-accent-active`; secondary는 `--color-surface`, `--color-surface-strong` |
+| Button     | focus-visible   | `--color-focus`와 `--focus-ring`; outline 제거만 단독 사용 금지                                                         |
+| Button     | disabled        | `--color-disabled-bg`/`--color-disabled-fg`; 상호작용과 모션 없음                                                       |
+| Button     | loading         | 기존 레이블 폭을 보존하고 텍스트 상태를 함께 알림; `--duration-normal` 사용                                             |
+| Card       | default / hover | `--color-bg`/`--color-border`/`--shadow-sm`; 상호작용형만 hover에서 `--shadow-md`                                       |
+| Input      | default / focus | `--color-bg`/`--color-fg`/`--color-border`; focus-visible은 Button과 동일                                               |
+| Input      | error           | `--color-danger`로 테두리와 연결된 오류 문구를 함께 표시                                                                |
+| Empty      | empty           | 제목, 설명, 선택 행동 순서; `--color-muted-fg`를 보조 문구에만 사용                                                     |
 
 모든 상태 전환은 `--duration-fast` 또는 `--duration-normal`과
 `--ease-standard`를 사용한다. reduced-motion 환경에서는 비필수 전환과 반복

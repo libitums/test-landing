@@ -1,1 +1,15 @@
-{"name":"@landing/contracts","version":"0.0.0","private":true,"type":"module","exports":{".":"./src/landing.ts"},"scripts":{"typecheck":"tsc --noEmit -p tsconfig.json"},"devDependencies":{"@landing/config-typescript":"workspace:*"}}
+{
+  "name": "@landing/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/landing.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@landing/config-typescript": "workspace:*"
+  }
+}

@@ -155,15 +155,15 @@ BetaApp
 
 `data-testid`는 아래 값만 안정 계약으로 사용한다. 반복 항목에는 데이터의 `id`를 `:` 뒤에 붙인다.
 
-| 영역 | 고정 값 |
-|---|---|
-| 앱 루트 | `landing:alpha`, `landing:beta` |
+| 영역        | 고정 값                                                             |
+| ----------- | ------------------------------------------------------------------- |
+| 앱 루트     | `landing:alpha`, `landing:beta`                                     |
 | 공통 프레임 | `landing-shell`, `landing-header`, `landing-main`, `landing-footer` |
-| Hero | `hero`, `hero-action:{action.id}` |
-| 기능 | `feature-grid`, `feature-card:{feature.id}` |
-| 최종 CTA | `cta-section`, `cta-action:{action.id}` |
-| Alpha 전용 | `alpha-proof-strip`, `alpha-proof:{metric.id}` |
-| Beta 전용 | `beta-comparison`, `beta-comparison-row:{row.id}` |
+| Hero        | `hero`, `hero-action:{action.id}`                                   |
+| 기능        | `feature-grid`, `feature-card:{feature.id}`                         |
+| 최종 CTA    | `cta-section`, `cta-action:{action.id}`                             |
+| Alpha 전용  | `alpha-proof-strip`, `alpha-proof:{metric.id}`                      |
+| Beta 전용   | `beta-comparison`, `beta-comparison-row:{row.id}`                   |
 
 단위 테스트는 고정 test-id와 사용자 노출 role/name을 함께 사용한다. test-id는 스타일 선택자로 사용하지 않는다.
 

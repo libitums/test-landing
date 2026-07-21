@@ -27,6 +27,9 @@ describe("Alpha landing", () => {
     expect(screen.getByTestId("cta-action:create")).toHaveAttribute("href", "#top");
     expect(screen.queryByTestId("landing:beta")).not.toBeInTheDocument();
     expect(screen.queryByTestId("beta-comparison")).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Start exploring" })).toHaveAttribute("href", "#features");
+    expect(screen.getByRole("link", { name: "Start exploring" })).toHaveAttribute(
+      "href",
+      "#features",
+    );
   });
 });
