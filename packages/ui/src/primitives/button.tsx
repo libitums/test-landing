@@ -3,7 +3,7 @@ import type { LandingActionVariant } from "@landing/contracts";
 
 export interface ButtonLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children: ReactNode;
-  variant?: LandingActionVariant | "destructive";
+  variant?: LandingActionVariant | "destructive" | "ghost";
 }
 
 export function ButtonLink({

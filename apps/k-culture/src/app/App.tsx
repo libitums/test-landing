@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { CtaSection, FeatureGrid, Hero, LandingShell } from "@landing/ui";
+import { CtaSection, FeatureGrid, Hero, LandingShell, Navbar } from "@landing/ui";
 import { KCultureProofStrip } from "../features/k-culture/KCultureProofStrip";
-import { createContent } from "./content";
-import { LocaleNavigation } from "./LocaleNavigation";
+import { createContent, createNavbarProps } from "./content";
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
@@ -22,19 +21,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   return (
     <div id="top" data-testid="landing:k-culture">
       <LandingShell
-        header={
-          <header className="landing-header">
-            <div className="container header-inner">
-              <a href="#top">{t("brand")}</a>
-              <nav className="nav" aria-label={t("nav.label")}>
-                <a href="#features">{t("nav.discover")}</a>
-                <a href="#proof">{t("nav.impact")}</a>
-                <a href="#cta">{t("nav.cta")}</a>
-              </nav>
-              <LocaleNavigation runtime={runtime} location={location} />
-            </div>
-          </header>
-        }
+        header={<Navbar {...createNavbarProps(runtime, location)} />}
         footer={
           <footer className="landing-footer">
             <div className="container footer-inner">{t("brand")}</div>

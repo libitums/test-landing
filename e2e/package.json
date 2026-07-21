@@ -1,0 +1,31 @@
+{
+  "name": "@landing/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint .",
+    "e2e": "playwright test --config playwright.config.ts",
+    "e2e:update": "playwright test --config playwright.config.ts --update-snapshots"
+  },
+  "dependencies": {
+    "@landing/analytics": "workspace:*",
+    "@landing/contracts": "workspace:*",
+    "@landing/i18n": "workspace:*",
+    "@landing/ui": "workspace:*",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@landing/config-eslint": "workspace:*",
+    "@landing/config-typescript": "workspace:*",
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^24.0.0",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "9.31.0",
+    "typescript": "5.8.3",
+    "vite": "7.0.5"
+  }
+}

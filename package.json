@@ -12,6 +12,8 @@
     "test": "pnpm -r --if-present test",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "e2e": "pnpm --filter @landing/e2e e2e",
+    "e2e:update": "pnpm --filter @landing/e2e e2e:update",
     "doctor": "npx react-doctor@latest"
   },
   "browserslist": [
@@ -26,7 +28,9 @@
     "not OperaMini all"
   ],
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "9.31.0",
+    "@playwright/test": "^1.61.1",
     "@testing-library/jest-dom": "6.6.4",
     "@testing-library/react": "16.3.0",
     "@types/react": "19.1.8",
