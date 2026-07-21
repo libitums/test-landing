@@ -1,0 +1,12 @@
+# Dependencies, caches, and generated output
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Binary and tool-owned visual sources
+*.png
+*.pen

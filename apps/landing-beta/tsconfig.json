@@ -1,1 +1,1 @@
-{"extends":"@landing/config-typescript/react.json","include":["src","vite.config.ts"]}
+{ "extends": "@landing/config-typescript/react.json", "include": ["src", "vite.config.ts"] }

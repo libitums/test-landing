@@ -22,17 +22,17 @@
 토큰의 실제 값과 전체 목록은
 `packages/design-tokens/src/tokens.css`가 단일 출처다.
 
-| 범주 | 대표 토큰 | 역할 |
-|---|---|---|
-| 색 | `--color-bg`, `--color-fg`, `--color-muted-fg` | 배경과 텍스트 |
-| 액션 | `--color-accent`, `--color-accent-fg` | 주요 행동과 그 위의 콘텐츠 |
-| 상태 | `--color-danger`, `--color-danger-fg`, `--color-focus` | 오류와 키보드 포커스 |
-| 간격 | `--space-1` … `--space-24` | 밀도와 레이아웃 리듬 |
-| 타이포 | `--font-sans`, `--text-xs` … `--text-display` | 글꼴과 타입 스케일 |
-| 형태 | `--radius-sm` … `--radius-full` | 컨트롤과 컨테이너 모서리 |
-| 깊이 | `--shadow-sm` … `--shadow-lg` | 표면 위계 |
-| 모션 | `--duration-fast`, `--duration-normal`, `--ease-standard` | 상태 전환 |
-| 레이아웃 | `--content-max`, `--content-reading`, `--breakpoint-mobile` | 콘텐츠 폭과 반응형 경계 |
+| 범주     | 대표 토큰                                                   | 역할                       |
+| -------- | ----------------------------------------------------------- | -------------------------- |
+| 색       | `--color-bg`, `--color-fg`, `--color-muted-fg`              | 배경과 텍스트              |
+| 액션     | `--color-accent`, `--color-accent-fg`                       | 주요 행동과 그 위의 콘텐츠 |
+| 상태     | `--color-danger`, `--color-danger-fg`, `--color-focus`      | 오류와 키보드 포커스       |
+| 간격     | `--space-1` … `--space-24`                                  | 밀도와 레이아웃 리듬       |
+| 타이포   | `--font-sans`, `--text-xs` … `--text-display`               | 글꼴과 타입 스케일         |
+| 형태     | `--radius-sm` … `--radius-full`                             | 컨트롤과 컨테이너 모서리   |
+| 깊이     | `--shadow-sm` … `--shadow-lg`                               | 표면 위계                  |
+| 모션     | `--duration-fast`, `--duration-normal`, `--ease-standard`   | 상태 전환                  |
+| 레이아웃 | `--content-max`, `--content-reading`, `--breakpoint-mobile` | 콘텐츠 폭과 반응형 경계    |
 
 ## 컴포넌트 프리미티브
 
