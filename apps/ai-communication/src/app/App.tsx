@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { CtaSection, FeatureGrid, Hero, LandingShell, Navbar } from "@landing/ui";
+import { CtaSection, FeatureGrid, Footer, Hero, LandingShell, Navbar } from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
-import { createContent, createNavbarProps } from "./content";
+import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
@@ -22,11 +22,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
     <div id="top" data-testid="landing:ai-communication">
       <LandingShell
         header={<Navbar {...createNavbarProps(runtime, location)} />}
-        footer={
-          <footer className="landing-footer">
-            <div className="container footer-inner">{t("brand")}</div>
-          </footer>
-        }
+        footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
           <Hero content={content.hero} onAction={trackCta} />

@@ -5,3 +5,10 @@ export { Hero } from "./sections/hero";
 export { FeatureGrid, FeatureCard } from "./sections/feature-grid";
 export { CtaSection } from "./sections/cta-section";
 export { Navbar } from "./sections/navbar";
+export { Footer } from "./sections/footer";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./primitives/accordion";
