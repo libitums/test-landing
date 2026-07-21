@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "main": "index.ts",
+  "scripts": {
+    "test": "vitest run"
+  },
   "peerDependencies": {
     "vite": "^7.0.0",
     "vitest": "^3.0.0",

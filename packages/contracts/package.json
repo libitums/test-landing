@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/landing.ts"
+    ".": "./src/landing.ts",
+    "./analytics": "./src/analytics.ts",
+    "./i18n": "./src/i18n.ts",
+    "./footer": "./src/footer.ts",
+    "./navbar": "./src/navbar.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"

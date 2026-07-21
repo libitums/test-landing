@@ -1,14 +1,23 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
-export function createViteConfig() {
+/** esbuild equivalents for the repository's explicit oldest WebKit and Chromium floors. */
+export const supportedBrowserBuildTargets = ["safari15", "chrome109"] as const;
+
+interface ViteConfigOptions {
+  testSetupFile?: string | null;
+}
+
+export function createViteConfig({
+  testSetupFile = "./src/test/setup.ts",
+}: ViteConfigOptions = {}) {
   return defineConfig({
     plugins: [react()],
-    build: { target: ["es2020", "safari15"] },
+    build: { target: [...supportedBrowserBuildTargets] },
     test: {
       environment: "jsdom",
       globals: true,
-      setupFiles: ["./src/test/setup.ts"],
+      setupFiles: testSetupFile ? [testSetupFile] : [],
     },
   });
 }
