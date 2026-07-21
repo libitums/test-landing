@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
@@ -97,7 +97,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     }
   });
 
-  it("switches locale accessibly while preserving route, query, and hash", () => {
+  it("switches locale accessibly while preserving route, query, and hash", async () => {
     render(
       <App
         analytics={analytics}
@@ -105,13 +105,16 @@ describe("ai-communication Phase 2 localization integration", () => {
         location="/ar/campaign/launch?experiment=A#comparison"
       />,
     );
-    const navigation = screen.getByRole("navigation", { name: resources.ar["locale.label"] });
-    expect(navigation.querySelectorAll("a")).toHaveLength(3);
-    expect(screen.getByRole("link", { name: resources.ar["locale.ar"] })).toHaveAttribute(
+    const languageTrigger = screen.getByRole("button", { name: resources.ar["locale.label"] });
+    languageTrigger.focus();
+    fireEvent.keyDown(languageTrigger, { key: "ArrowDown" });
+    const menu = await screen.findByRole("menu", { name: resources.ar["locale.label"] });
+    expect(menu.querySelectorAll("a")).toHaveLength(3);
+    expect(screen.getByRole("menuitem", { name: resources.ar["locale.ar"] })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(screen.getByRole("link", { name: resources.ar["locale.en-US"] })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: resources.ar["locale.en-US"] })).toHaveAttribute(
       "href",
       "/en-US/campaign/launch?experiment=A#comparison",
     );

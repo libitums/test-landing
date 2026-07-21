@@ -4,3 +4,4 @@ export { LandingShell } from "./sections/landing-shell";
 export { Hero } from "./sections/hero";
 export { FeatureGrid, FeatureCard } from "./sections/feature-grid";
 export { CtaSection } from "./sections/cta-section";
+export { Navbar } from "./sections/navbar";
