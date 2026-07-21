@@ -1,6 +1,6 @@
 # Landing Experiment Monorepo
 
-여러 국가를 대상으로 하는 랜딩 페이지 실험을 빠르게 만들기 위한 pnpm + Vite + React + TypeScript 모노레포다. 두 예제 앱은 동일한 디자인 토큰과 shadcn 계열 공통 UI를 소비하며, 앱 전용 UI는 각 앱 내부에 격리한다.
+여러 국가를 대상으로 하는 랜딩 페이지 실험을 빠르게 만들기 위한 pnpm + Vite + React + TypeScript 모노레포다. 세 프로젝트는 동일한 디자인 토큰, 공통 UI, 공급자 독립 분석 경계를 소비하며 앱 전용 UI는 각 앱 내부에 격리한다.
 
 요구사항과 계약의 단일 출처는 [`docs/specs/landing-monorepo.md`](docs/specs/landing-monorepo.md), 디자인의 단일 출처는 [`DESIGN.md`](DESIGN.md), 후속 로드맵은 [`PLAN.md`](PLAN.md)다.
 
@@ -11,9 +11,12 @@ Corepack과 저장소가 선언한 pnpm 버전을 사용한다.
 ```sh
 corepack enable
 pnpm install
-pnpm --filter @landing/alpha dev
-pnpm --filter @landing/beta dev
+pnpm dev:k-drama
+pnpm dev:ai-communication
+pnpm dev:k-culture
 ```
+
+위 명령은 저장소 루트에서 각 앱의 Vite 개발 서버를 실행한다.
 
 루트 품질 게이트:
 
@@ -27,8 +30,9 @@ pnpm test
 특정 workspace 명령은 pnpm filter로 실행한다.
 
 ```sh
-pnpm --filter @landing/alpha dev
-pnpm --filter @landing/beta test
+pnpm --filter @landing/k-drama dev
+pnpm --filter @landing/ai-communication test
+pnpm --filter @landing/k-culture test
 pnpm --filter @landing/ui test
 ```
 
@@ -36,12 +40,14 @@ pnpm --filter @landing/ui test
 
 ```text
 apps/
-  landing-alpha/       제품 가치 중심 예제와 Alpha 전용 UI
-  landing-beta/        비교·선택 중심 예제와 Beta 전용 UI
+  k-drama/             K-drama 프로젝트와 전용 UI
+  ai-communication/    AI communication 프로젝트와 전용 UI
+  k-culture/           K-culture 프로젝트와 전용 UI
 packages/
+  analytics/           동의 게이트·검증·adapter를 묶는 공통 분석 경계
   contracts/           공유 콘텐츠·props·test-id 계약
   design-tokens/       DESIGN.md를 구현하는 공통 토큰과 전역 스타일
-  ui/                  shadcn 계열 primitive와 공통 랜딩 섹션
+  ui/                  shadcn 계열 primitive와 공통 페이지 section
   config-eslint/       공유 ESLint 설정
   config-typescript/   공유 TypeScript 설정
   config-vite/         공유 Vite/Vitest 및 브라우저 타깃 설정
@@ -50,7 +56,7 @@ docs/
   design/              와이어프레임과 토큰 결정
 ```
 
-앱은 다른 앱을 import하지 않는다. 공통화할 코드는 `packages/`로 이동하고, 앱만의 표현은 `apps/<app>/src/features/`에 둔다. 컴포넌트와 test-id의 정확한 경계는 스펙 문서를 따른다.
+앱은 다른 앱을 import하지 않는다. 공통화할 코드는 `packages/`로 이동하고, 앱만의 표현은 `apps/<app>/src/features/`에 둔다. 분석 context는 프로젝트별로 주입하되 consent 판단, 검증, adapter 동작은 `@landing/analytics`가 소유한다. 컴포넌트와 test-id의 정확한 경계는 스펙 문서를 따른다.
 
 ## Execution layer와 작업 DAG
 

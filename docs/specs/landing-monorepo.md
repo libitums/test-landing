@@ -61,7 +61,7 @@ pnpm, Vite, React, TypeScript, shadcn 기반 구성 원칙. 데스크톱 우선 
 │   ├── design-tokens/src/{tokens.css,index.ts}
 │   ├── ui/src/
 │   │   ├── primitives/{button,card}.tsx
-│   │   └── landing/{landing-shell.tsx,hero.tsx,feature-grid.tsx,cta-section.tsx}.tsx
+│   │   └── sections/{landing-shell.tsx,hero.tsx,feature-grid.tsx,cta-section.tsx}.tsx
 │   ├── config-eslint/
 │   ├── config-typescript/
 │   └── config-vite/

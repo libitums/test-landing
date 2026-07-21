@@ -3,6 +3,9 @@
   "private": true,
   "packageManager": "pnpm@10.13.1",
   "scripts": {
+    "dev:k-drama": "pnpm --filter @landing/k-drama dev",
+    "dev:ai-communication": "pnpm --filter @landing/ai-communication dev",
+    "dev:k-culture": "pnpm --filter @landing/k-culture dev",
     "build": "pnpm -r --if-present build",
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "pnpm -r --if-present lint",

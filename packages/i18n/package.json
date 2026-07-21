@@ -1,0 +1,22 @@
+{
+  "name": "@landing/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint src",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@landing/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@landing/config-eslint": "workspace:*",
+    "@landing/config-typescript": "workspace:*",
+    "vitest": "^3.2.4"
+  }
+}
