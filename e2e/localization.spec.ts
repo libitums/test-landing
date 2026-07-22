@@ -6,17 +6,14 @@ const apps = [
   {
     id: "k-drama",
     origin: "http://127.0.0.1:4173",
-    primaryCta: "hero-action:start",
   },
   {
     id: "ai-communication",
     origin: "http://127.0.0.1:4174",
-    primaryCta: "hero-action:compare",
   },
   {
     id: "k-culture",
     origin: "http://127.0.0.1:4175",
-    primaryCta: "hero-action:explore",
   },
 ] as const;
 const locales = [
@@ -93,8 +90,10 @@ for (const app of apps) {
         );
       }
 
-      await expect(page.getByTestId(app.primaryCta)).toBeVisible();
-      await expect(page.getByTestId(app.primaryCta)).toHaveAttribute("href", /^#/);
+      const heroCta = page.getByTestId("hero-cta");
+      await expect(heroCta).toBeVisible();
+      await expect(heroCta).toHaveRole("button");
+      await expect(heroCta).not.toHaveAttribute("href");
       const sourceOrder = await tabOrder(page);
       expect(sourceOrder.length).toBeGreaterThan(5);
       const navbarOrder = sourceOrder
@@ -186,7 +185,7 @@ for (const app of apps) {
     await expect(page.getByRole("banner")).toBeVisible();
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.getByRole("contentinfo")).toBeVisible();
-    const cta = page.getByTestId(app.primaryCta);
+    const cta = page.getByTestId("hero-cta");
     await expect(cta).toBeVisible();
     await cta.focus();
     await expect(cta).toBeFocused();
