@@ -1,12 +1,25 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const apps = [
-  { id: "k-drama", origin: "http://127.0.0.1:4173" },
-  { id: "ai-communication", origin: "http://127.0.0.1:4174" },
-  { id: "k-culture", origin: "http://127.0.0.1:4175" },
+  {
+    id: "k-drama",
+    origin: "http://127.0.0.1:4173",
+    earlyAccessPath: "/k-drama/early-access",
+  },
+  {
+    id: "ai-communication",
+    origin: "http://127.0.0.1:4174",
+    earlyAccessPath: "/ai-communication/early-access",
+  },
+  {
+    id: "k-culture",
+    origin: "http://127.0.0.1:4175",
+    earlyAccessPath: "/k-culture/early-access",
+  },
 ] as const;
 
 const slotSuffixes = [":number-label", ":header", ":subheader", ":content"] as const;
+const rootExclusionSuffixes = [...slotSuffixes, ":early-access-cta"] as const;
 
 async function getFeatureRoots(page: Page) {
   const candidates = page.locator('[data-testid^="shared-feature:"]');
@@ -14,7 +27,9 @@ async function getFeatureRoots(page: Page) {
 
   for (const candidate of await candidates.all()) {
     const testId = await candidate.getAttribute("data-testid");
-    if (testId && !slotSuffixes.some((suffix) => testId.endsWith(suffix))) roots.push(candidate);
+    if (testId && !rootExclusionSuffixes.some((suffix) => testId.endsWith(suffix))) {
+      roots.push(candidate);
+    }
   }
 
   expect(
@@ -95,6 +110,20 @@ async function expectCompleteFeature(root: Locator, options: { stylesAvailable?:
   ).toHaveLength(1);
 }
 
+async function expectEarlyAccessCta(root: Locator, expectedPath: string) {
+  const rootId = await root.getAttribute("data-testid");
+  if (!rootId) throw new Error("shared feature root must expose its stable test id");
+  const cta = root.getByTestId(`${rootId}:early-access-cta`);
+  await expect(cta).toHaveCount(1);
+  await expect(cta).toBeVisible();
+  await expect(cta).toHaveRole("link");
+  await expect(cta).toHaveAccessibleName("Get early access");
+  await expect(cta).toHaveAttribute("href", expectedPath);
+  await expect(cta).toHaveClass(/button--secondary/);
+  await expect(cta).toHaveClass(/shared-feature__early-access-cta/);
+  return cta;
+}
+
 async function expectIntentionalLineBreak(copy: Locator) {
   const text = await copy.textContent();
   expect(text, "localized copy must retain its intentional newline").toContain("\n");
@@ -137,7 +166,10 @@ for (const app of apps) {
         ),
       );
       expect(new Set(appearances)).toEqual(new Set(["white", "soft"]));
-      for (const root of roots) await expectCompleteFeature(root);
+      for (const root of roots) {
+        await expectCompleteFeature(root);
+        await expectEarlyAccessCta(root, app.earlyAccessPath);
+      }
       await expectNoHorizontalOverflow(page);
     });
 
@@ -148,7 +180,10 @@ for (const app of apps) {
       );
       await page.goto(`${app.origin}/en-US/`);
 
-      for (const root of await getFeatureRoots(page)) await expectCompleteFeature(root);
+      for (const root of await getFeatureRoots(page)) {
+        await expectCompleteFeature(root);
+        await expectEarlyAccessCta(root, app.earlyAccessPath);
+      }
       await expectNoHorizontalOverflow(page);
     });
 
@@ -164,10 +199,17 @@ for (const app of apps) {
           style.remove();
       });
 
-      for (const root of await getFeatureRoots(page)) {
+      const roots = await getFeatureRoots(page);
+      for (const root of roots) {
         await expectCompleteFeature(root, { stylesAvailable: false });
+        await expectEarlyAccessCta(root, app.earlyAccessPath);
       }
       await expectNoHorizontalOverflow(page);
+
+      const firstRoot = roots[0];
+      if (!firstRoot) throw new Error("the first feature CTA is missing");
+      await (await expectEarlyAccessCta(firstRoot, app.earlyAccessPath)).click();
+      await expect(page).toHaveURL(`${app.origin}${app.earlyAccessPath}`);
     });
   });
 }
@@ -199,6 +241,25 @@ test("shared feature copy preserves intentional lines, accessible text, and sema
   await expect(numberLabel).toHaveCSS("background-color", "rgb(109, 93, 251)");
   await expect(subheader).toHaveCSS("color", "rgb(100, 116, 139)");
   await expect(subheader).toHaveCSS("font-weight", "300");
+});
+
+test("feature early access CTA uses the large low-emphasis secondary treatment", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "Computed CTA presentation is sampled once");
+  await page.goto(`${apps[0].origin}/en-US/`);
+
+  const firstRoot = (await getFeatureRoots(page))[0];
+  if (!firstRoot) throw new Error("the representative feature CTA is missing");
+  const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath);
+  await expect(cta).toHaveCSS("min-height", "44px");
+  await expect(cta).toHaveCSS("padding-block-start", "16px");
+  await expect(cta).toHaveCSS("padding-inline-start", "32px");
+  await expect(cta).toHaveCSS("font-size", "18px");
+  await expect(cta).toHaveCSS("font-weight", "500");
+  await expect(cta).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(cta).toHaveCSS("color", "rgb(15, 23, 42)");
+  await expect(cta).toHaveCSS("border-color", "rgb(203, 213, 225)");
 });
 
 test("all apps use the same template contract with distinct copy and children", async ({
