@@ -70,7 +70,7 @@ hover와 active가 공유하는 보라색은 상호작용 역할의 `--color-lin
 | 번호 형태                                 | `--radius-full`                                    |
 | 반응형 경계                               | `--breakpoint-mobile`                              |
 | Early Access CTA 기본 / hover·active      | `--color-subtle-fg` / `--color-link-interactive`   |
-| Early Access CTA 타입                     | `--text-base`, `--font-semibold`, `--leading-body` |
+| Early Access CTA 타입                     | `--text-base`, `--font-normal`, `--leading-body`   |
 | Early Access CTA 포커스                   | `--color-focus`, `--focus-ring`                    |
 
 `--text-display`가 이미 유동 크기이므로 레퍼런스의 큰 헤드라인을 별도 기능 전용
@@ -139,9 +139,9 @@ hover와 active가 공유하는 보라색은 상호작용 역할의 `--color-lin
   같은 Boolean 조합으로 외형을 전환하지 않는다. 앱은 지역화된 레이블과 실제
   목적지만 소유한다.
 - 기본 상태는 투명한 표면과 경계 없는 `--color-subtle-fg` 텍스트를 쓰며 타입은
-  `--text-base` / `--font-semibold` / `--leading-body`다. 링크는 기본 상태부터
-  밑줄을 표시해 색상 없이도 상호작용 가능함을 알린다. 버튼형 패딩, 최소 블록 크기,
-  radius, 고정 너비는 적용하지 않는다.
+  `--text-base` / `--font-normal` / `--leading-body`다. 굵기는 기존 공통 토큰의
+  표준 400으로 고정한다. 링크는 기본 상태부터 밑줄을 표시해 색상 없이도 상호작용
+  가능함을 알린다. 버튼형 패딩, 최소 블록 크기, radius, 고정 너비는 적용하지 않는다.
 - hover와 active는 모두 `--color-link-interactive`로 바꾸되 밑줄을 계속 유지한다.
   두 상태 모두 색상만으로 구분하지 않도록 밑줄의 시각적 강조도 함께 유지하며,
   상태 전환이 레이아웃을 움직이지 않아야 한다.
