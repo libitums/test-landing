@@ -43,6 +43,10 @@ WCAG AA를 충족한다.
 `--font-light`는 기존 굵기 스케일의 `--font-normal`(400) 바로 아래인 표준 light
 값 300이며, 세 앱이 같은 서브헤더 위계를 공유하도록 공통 토큰으로 둔다.
 
+Early Access CTA는 기존 공통 `Button`의 명시적 `secondary` variant로 충분히
+표현할 수 있다. 낮은 강조의 표면·경계·상태와 큰 터치 영역에 필요한 색, 간격,
+타입, 형태, 포커스 토큰이 모두 있으므로 CTA 전용 토큰은 추가하지 않는다.
+
 | 시각 역할                                 | 토큰                                               |
 | ----------------------------------------- | -------------------------------------------------- |
 | 흰색 섹션 배경 / 기본 글자                | `--color-bg` / `--color-fg`                        |
@@ -62,6 +66,9 @@ WCAG AA를 충족한다.
 | 번호 타입                                 | `--text-lg`, `--font-bold`, `--leading-heading`    |
 | 번호 형태                                 | `--radius-full`                                    |
 | 반응형 경계                               | `--breakpoint-mobile`                              |
+| Early Access CTA 표면 / 글자 / 경계       | `--color-bg` / `--color-fg` / `--color-border`     |
+| Early Access CTA 크기                     | `--control-height`, `--space-4`, `--space-8`       |
+| Early Access CTA 타입 / 형태              | `--text-lg`, `--font-medium`, `--radius-md`        |
 
 `--text-display`가 이미 유동 크기이므로 레퍼런스의 큰 헤드라인을 별도 기능 전용
 타입 토큰 없이 재현한다. 번호 배지 또한 `--space-12`를 너비와 높이에 함께 써서
@@ -121,6 +128,31 @@ WCAG AA를 충족한다.
   loading / error / empty 상태는 해당 자식 컴포넌트가 소유한다. 공통 섹션 자체는
   상호작용 요소가 아니므로 hover, active, disabled, loading 상태를 만들지 않는다.
   자식의 `focus-visible` 표시는 `--focus-ring`을 사용하고 섹션이 잘라내지 않는다.
+
+### `EarlyAccessCta`
+
+- 각 `SharedFeatureContent`의 앱별 자식에는 하나의 큰 Early Access CTA를 포함한다.
+  CTA는 공통 `Button`의 명시적 `secondary` variant를 합성하며 primary 여부 같은
+  Boolean 조합으로 외형을 전환하지 않는다. 앱은 지역화된 레이블과 동작만 소유한다.
+- 기본 상태는 `--color-bg` 표면, `--color-fg` 글자, `--color-border` 경계를 쓴다.
+  큰 CTA의 최소 블록 크기는 `--control-height`, 블록 패딩은 `--space-4`, 인라인
+  패딩은 `--space-8`이다. 타입은 `--text-lg` / `--font-medium`, 형태는
+  `--radius-md`를 사용한다. 최소 크기와 패딩을 함께 적용하되 고정 높이는 쓰지 않는다.
+- 낮은 강조는 secondary variant의 경계형 표면으로 표현한다. hover는
+  `--color-surface`, active는 `--color-surface-strong`을 쓰며, 상태를 크기 변화나
+  모션만으로 전달하지 않는다. disabled와 loading이 필요한 경우 공통 Button의
+  `--color-disabled-bg` / `--color-disabled-fg` 및 기존 레이블 폭 보존 계약을 따른다.
+- `focus-visible`은 `--color-focus`와 `--focus-ring`을 함께 사용한다. CTA의 링이
+  `SharedFeatureContent` 경계에 잘리지 않아야 하며 Tab 순서는 해당 자식의 자연스러운
+  DOM 순서를 따른다. 링크 동작이면 목적지를 가진 링크 의미론을, 앱 동작이면 button
+  의미론을 사용하고 시각 variant는 동일하게 유지한다.
+- `--color-fg`는 `--color-bg`, hover 및 active 표면 모두에서 일반 텍스트 WCAG AA를
+  만족한다. 기본 경계도 유지하므로 흰색 섹션에서 CTA 외곽을 색 차이 하나에만
+  의존하지 않는다.
+- 데스크톱에서는 콘텐츠 흐름의 inline-start에 intrinsic 너비로 둔다. 모바일에서는
+  가용 인라인 크기를 사용해 큰 터치 영역을 제공하되 레이블은 자연스럽게 줄바꿈하고
+  고정 너비, 말줄임, line clamp를 쓰지 않는다. CTA는 어떤 뷰포트에서도 숨기거나
+  다른 섹션으로 이동하지 않는다.
 
 ## 반응형 계약
 
