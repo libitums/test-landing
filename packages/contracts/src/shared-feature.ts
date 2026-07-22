@@ -5,6 +5,18 @@ import type { ContentSlot } from "./landing";
 /** Explicit surface variants; consumers must not replace these with display flags. */
 export type SharedFeatureAppearance = "white" | "soft";
 
+/** Destinations for the app-owned CTA composed inside each feature's children. */
+export type FeatureEarlyAccessDestination =
+  "/k-drama/early-access" | "/ai-communication/early-access" | "/k-culture/early-access";
+
+export interface FeatureEarlyAccessAction {
+  featureId: string;
+  label: "Get early access";
+  href: FeatureEarlyAccessDestination;
+  size: "large";
+  emphasis: "low";
+}
+
 /**
  * Common copy and the app-owned feature content composed beneath it.
  *
@@ -29,4 +41,5 @@ export const sharedFeatureTestIds = {
   header: (id: string) => `shared-feature:${id}:header` as const,
   subheader: (id: string) => `shared-feature:${id}:subheader` as const,
   content: (id: string) => `shared-feature:${id}:content` as const,
+  earlyAccessCta: (id: string) => `shared-feature:${id}:early-access-cta` as const,
 } as const;
