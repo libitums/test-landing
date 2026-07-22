@@ -76,9 +76,12 @@ describe("shared page sections", () => {
         />
         <CtaSection
           content={{
+            badge: "Beta",
             title: "Join",
-            description: "Now",
+            description: "Now\nToday",
             actions: [{ id: "text", label: "Details", href: "#details", variant: "text" }],
+            notes: [{ id: "card", label: "No card required" }],
+            ghostWords: ["JOIN", "NOW"],
           }}
         />
       </>,
@@ -88,6 +91,11 @@ describe("shared page sections", () => {
     expect(screen.getByRole("heading", { level: 2, name: "Join" })).toBeInTheDocument();
     expect(screen.getByTestId("feature-card:one")).toBeInTheDocument();
     expect(screen.getByTestId("feature-card:two")).toBeInTheDocument();
-    expect(screen.getByTestId("cta-action:text")).toHaveClass("button--text");
+    const primary = screen.getByTestId("cta-action:text");
+    expect(primary).toHaveClass("button--text", "cta__pill");
+    expect(primary).toHaveTextContent("Details");
+    expect(screen.getByText("Beta")).toBeInTheDocument();
+    expect(screen.getByTestId("cta-note:card")).toHaveTextContent("No card required");
+    expect(screen.getByText("JOIN")).toBeInTheDocument();
   });
 });
