@@ -1,7 +1,15 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { CtaSection, FeatureGrid, Footer, Hero, LandingShell, Navbar } from "@landing/ui";
+import {
+  CtaSection,
+  FeatureCard,
+  Footer,
+  Hero,
+  LandingShell,
+  Navbar,
+  SharedFeatureTemplate,
+} from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
@@ -38,7 +46,18 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
             />
           </div>
           <div id="features">
-            <FeatureGrid title={t("features.title")} items={content.features} />
+            <SharedFeatureTemplate
+              numberLabel="01"
+              headerText={t("features.title")}
+              subheaderText={content.hero.description}
+              testId="shared-feature:ai-communication"
+            >
+              <div className="feature-grid">
+                {content.features.map((feature) => (
+                  <FeatureCard key={feature.id} feature={feature} />
+                ))}
+              </div>
+            </SharedFeatureTemplate>
           </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />
