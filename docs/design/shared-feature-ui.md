@@ -30,12 +30,23 @@
 `--color-muted-fg`는 7.22:1이며 일반 텍스트 WCAG AA를 충족한다. 기존 흰색
 표면에서는 각각 17.85:1, 7.58:1이다.
 
+번호 배지는 단계 표시라는 시맨틱 역할에 맞춰 `--color-step`을 사용한다. 이
+토큰은 기존 `--color-editorial-accent`를 별칭으로 재사용하므로 요구 색상
+`#6d5dfb`의 단일 출처를 유지하고 UI CSS에는 생 색상을 노출하지 않는다.
+`--color-accent-fg`의 흰색 텍스트는 `--color-step` 위에서 4.56:1로 일반 텍스트
+WCAG AA를 충족한다.
+
+서브헤더는 본문보다 낮은 위계를 드러내는 `--color-subtle-fg`를 사용한다. 이
+시맨틱 토큰의 값은 `#64748b`이며 disabled 상태와 의미를 섞지 않는다. 실제
+`--text-xl` 크기와 `--font-normal` 굵기에서도 일반 텍스트 기준을 적용했을 때
+`--color-bg` 위 4.76:1, `--color-surface-soft` 위 4.53:1로 WCAG AA를 충족한다.
+
 | 시각 역할                                 | 토큰                                               |
 | ----------------------------------------- | -------------------------------------------------- |
 | 흰색 섹션 배경 / 기본 글자                | `--color-bg` / `--color-fg`                        |
 | 부드러운 섹션 배경 / 기본 글자            | `--color-surface-soft` / `--color-fg`              |
-| 서브헤더 글자                             | `--color-muted-fg`                                 |
-| 번호 배지 배경 / 글자                     | `--color-accent` / `--color-accent-fg`             |
+| 서브헤더 글자                             | `--color-subtle-fg`                                |
+| 번호 배지 배경 / 글자                     | `--color-step` / `--color-accent-fg`               |
 | 전체 콘텐츠 폭                            | `--content-max`                                    |
 | 헤더 읽기 폭                              | `--content-reading`                                |
 | 데스크톱 인라인 여백 / 모바일 인라인 여백 | `--space-8` / `--space-4`                          |
@@ -45,7 +56,7 @@
 | 헤더와 서브헤더 간격                      | `--space-6`                                        |
 | 소개부와 기능 콘텐츠 간격                 | `--space-12`                                       |
 | 헤더 타입                                 | `--text-display`, `--font-bold`, `--leading-tight` |
-| 서브헤더 타입                             | `--text-xl`, `--font-medium`, `--leading-body`     |
+| 서브헤더 타입                             | `--text-xl`, `--font-normal`, `--leading-body`     |
 | 번호 타입                                 | `--text-lg`, `--font-bold`, `--leading-heading`    |
 | 번호 형태                                 | `--radius-full`                                    |
 | 반응형 경계                               | `--breakpoint-mobile`                              |
@@ -73,7 +84,7 @@
 
 ### `SharedFeatureNumber`
 
-- 소개부의 첫 요소다. 배경은 `--color-accent`, 글자는
+- 소개부의 첫 요소다. 배경은 `--color-step`, 글자는
   `--color-accent-fg`이며 크기는 양 축 모두 `--space-12`다.
 - 가운데 정렬한 `--text-lg` / `--font-bold` / `--leading-heading` 번호를 쓰고
   형태는 `--radius-full`이다.
@@ -91,8 +102,9 @@
 
 ### `SharedFeatureSubheader`
 
-- 헤더를 바로 보충하는 본문이다. 색은 `--color-muted-fg`, 타입은
-  `--text-xl` / `--font-medium` / `--leading-body`다.
+- 헤더를 바로 보충하는 본문이다. 색은 `--color-subtle-fg`, 타입은
+  `--text-xl` / `--font-normal` / `--leading-body`다. 기존 `--font-medium`보다
+  한 단계 낮은 굵기로 헤더와 위계를 분리한다.
 - 최대 인라인 크기는 `--content-reading`이며 헤더와의 간격은 `--space-6`이다.
   지역화 문자열의 의도적인 `\n`을 보존하되 각 줄은 다시 자연스럽게 감쌀 수
   있어야 한다. 문구가 없을 때 빈 공간을 예약하지 않는다.
@@ -142,10 +154,11 @@
 - 서브헤더가 없거나 `children`이 비어도 빈 자리, 장식용 skeleton, 임의 오류
   상태를 만들지 않는다. 데이터 상태가 필요한 앱은 `children` 내부에서 명시적
   empty / loading / error UI를 제공한다.
-- `--color-fg`와 `--color-muted-fg`는 `--color-bg` 및
-  `--color-surface-soft` 양쪽에서 일반 텍스트 WCAG AA를 만족한다. 흰색과 soft
-  표면은 장식적 구분일 뿐이므로 색 차이를 유일한 섹션 이름이나 순서 단서로 쓰지
-  않는다. `--color-accent-fg`는 `--color-accent` 위 일반 텍스트 AA를 만족한다.
+- `--color-fg`, `--color-muted-fg`, `--color-subtle-fg`는 `--color-bg` 및
+  `--color-surface-soft` 양쪽에서 각각 사용하는 텍스트 크기의 WCAG AA를
+  만족한다. 흰색과 soft 표면은 장식적 구분일 뿐이므로 색 차이를 유일한 섹션
+  이름이나 순서 단서로 쓰지 않는다. `--color-accent-fg`는 `--color-step` 위
+  일반 텍스트 AA를 만족한다.
 - 번호 외 앱별 인터랙션의 키보드 포커스를 섹션의 overflow나 stacking context로
   자르지 않는다. 정보는 색상 하나에만 의존하지 않는다.
 
