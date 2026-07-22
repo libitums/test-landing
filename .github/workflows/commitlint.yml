@@ -1,0 +1,22 @@
+# Checks that PR commits follow Conventional Commits (feat:, fix:, docs: ...).
+# Advisory: it reports a status on the PR but nothing here blocks a merge
+# (no branch protection is configured). Config lives in .commitlintrc.json.
+name: Commit Lint
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      # Full history so the action can lint every commit in the PR range.
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Pinned to a commit SHA (third-party action).
+      - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
