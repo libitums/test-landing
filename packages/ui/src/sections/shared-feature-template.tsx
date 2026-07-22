@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import type { SharedFeatureTemplateProps } from "@landing/contracts/shared-feature";
 
 const renderSlot = (slot: unknown) => slot as ReactNode;
@@ -14,7 +14,8 @@ export function SharedFeatureTemplate({
   children,
   testId,
 }: SharedFeatureTemplateProps) {
-  const headingId = testId ? `${testId}:heading` : undefined;
+  const generatedHeadingId = useId();
+  const headingId = testId ? `${testId}:heading` : generatedHeadingId;
 
   return (
     <section className="shared-feature" data-testid={testId} aria-labelledby={headingId}>

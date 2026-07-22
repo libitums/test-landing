@@ -56,6 +56,22 @@ describe("SharedFeatureTemplate", () => {
     expect(onClick).toHaveBeenCalledOnce();
   });
 
+  it("names the section from its heading without test instrumentation", () => {
+    render(
+      <SharedFeatureTemplate
+        numberLabel="03"
+        headerText="Feature without a test id"
+        subheaderText="The accessible name does not depend on test instrumentation"
+      >
+        App content
+      </SharedFeatureTemplate>,
+    );
+
+    const section = screen.getByRole("region", { name: "Feature without a test id" });
+    expect(section).not.toHaveAttribute("data-testid");
+    expect(within(section).getByRole("heading", { level: 2 })).toHaveAttribute("id");
+  });
+
   it("supports repeated instances with stable app-provided ids", () => {
     render(
       <>
