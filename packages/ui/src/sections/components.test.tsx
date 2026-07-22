@@ -1,10 +1,11 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, expect, it } from "vitest";
 import { CtaSection } from "./cta-section";
 import { FeatureGrid } from "./feature-grid";
 import { Hero } from "./hero";
 import { LandingShell } from "./landing-shell";
+import { PricingSection } from "./pricing-section";
 
 describe("shared page sections", () => {
   it("renders compound shell slots", () => {
@@ -97,5 +98,46 @@ describe("shared page sections", () => {
     expect(screen.getByText("Beta")).toBeInTheDocument();
     expect(screen.getByTestId("cta-note:card")).toHaveTextContent("No card required");
     expect(screen.getByText("JOIN")).toBeInTheDocument();
+  });
+
+  it("renders pricing plans and switches prices with the billing toggle", () => {
+    render(
+      <PricingSection
+        content={{
+          title: "Plans",
+          subtitle: "Pick one",
+          billing: { monthlyLabel: "Monthly", annualLabel: "Annual", annualBadge: "Save 20%" },
+          plans: [
+            {
+              id: "free",
+              name: "Free",
+              description: "Basic",
+              price: { monthly: "$0", annual: "$0", unit: "/mo" },
+              cta: "Start free",
+              features: [{ id: "a", label: "One clip" }],
+            },
+            {
+              id: "plus",
+              name: "Plus",
+              badge: "Popular",
+              featured: true,
+              description: "More",
+              price: { monthly: "$4.99", annual: "$3.99", unit: "/mo" },
+              cta: "Get Plus",
+              features: [{ id: "b", label: "Unlimited clips" }],
+            },
+          ],
+          footerNote: "Cancel anytime.",
+        }}
+      />,
+    );
+    expect(screen.getByRole("heading", { level: 2, name: "Plans" })).toBeInTheDocument();
+    const plus = screen.getByTestId("pricing-plan:plus");
+    expect(within(plus).getByText("Popular")).toBeInTheDocument();
+    expect(within(plus).getByText("$4.99")).toBeInTheDocument();
+    expect(within(plus).getByText("Get Plus")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("pricing-billing:annual"));
+    expect(within(plus).getByText("$3.99")).toBeInTheDocument();
+    expect(within(plus).queryByText("$4.99")).not.toBeInTheDocument();
   });
 });
