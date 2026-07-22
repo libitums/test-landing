@@ -40,5 +40,24 @@ describe("K-culture landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:k-culture")).toBeInTheDocument();
+    expect(screen.getByTestId("shared-feature:k-culture-music")).toHaveClass(
+      "shared-feature--white",
+    );
+    expect(screen.getByTestId("shared-feature:k-culture-taste")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:k-culture-style")).toHaveClass(
+      "shared-feature--white",
+    );
+    const featureAction = screen.getByTestId("shared-feature:k-culture-music:early-access-cta");
+    expect(featureAction).toHaveAttribute("href", "/k-culture/early-access");
+    expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
+    expect(featureAction).not.toHaveClass("button--secondary");
+    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    fireEvent.click(featureAction);
+    await waitFor(() => expect(adapter.events).toHaveLength(2));
+    expect(adapter.events[adapter.events.length - 1]).toEqual(
+      expect.objectContaining({ name: "feature_cta_clicked", featureId: "music" }),
+    );
   });
 });

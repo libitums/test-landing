@@ -16,7 +16,7 @@ DESIGN.md 표준 따름. 벗어남: 없음. 이번 Phase에는 시각 변경이 
 
 ## 범위
 
-- 포함(scope_in): 세 프로젝트 명칭과 경계로의 기존 예제 앱 마이그레이션, 공급자 독립적인 버전 1 이벤트 `experiment_viewed`/`cta_clicked`/`conversion_completed`, 런타임 payload 검증 계약, 공통 측정 context, `utm_country` 기반 `countryHint` 정제, 동의 게이트, no-op 및 in-memory adapter, 노출 중복 방지, 분석 실패 격리, 공통 contract/단위/통합 테스트
+- 포함(scope_in): 세 프로젝트 명칭과 경계로의 기존 예제 앱 마이그레이션, 공급자 독립적인 버전 1 이벤트 `experiment_viewed`/`cta_clicked`/`feature_cta_clicked`/`conversion_completed`, 기능 CTA의 필수 `featureId`, 런타임 payload 검증 계약, 공통 측정 context, `utm_country` 기반 `countryHint` 정제, 동의 게이트, no-op 및 in-memory adapter, 노출 중복 방지, 분석 실패 격리, 공통 contract/단위/통합 테스트
 - 제외(scope_out): 실제 외부 분석 SDK, CMP, 동의 UI, IP 등으로 수행하는 정확한 위치 판정, `countryHint`를 이용한 동의 판정, 동의 전 이벤트 저장·큐·재전송, 원본 URL query 수집, 시각 디자인 변경
 
 ## 수용 기준 (acceptance_criteria)
@@ -31,6 +31,7 @@ DESIGN.md 표준 따름. 벗어남: 없음. 이번 Phase에는 시각 변경이 
 8. 런타임 검증 실패와 동기/비동기 adapter 실패가 페이지 렌더링, CTA 기본 링크 이동, 호출자 흐름을 막지 않으며 미처리 예외를 만들지 않는다.
 9. 저장소 루트의 typecheck와 관련 contract/unit/integration test가 지원 브라우저 정책을 대상으로 통과한다.
 10. 최종 review 레이어가 Phase 1을 통과시킨 뒤 작업을 멈추고, Phase 2 착수 전에 사용자 의사를 확인한다.
+11. 기능별 early-access CTA 클릭은 `feature_cta_clicked`로 기록되고 비어 있지 않은 `featureId`를 포함하며, 일반 `cta_clicked`와 구분된다.
 
 ## 제약 (constraints)
 
@@ -90,6 +91,7 @@ UI action / page exposure / conversion
 
 - `AnalyticsProjectId`: 세 프로젝트의 닫힌 union
 - `AnalyticsEventName`, `AnalyticsEventVersion`, `AnalyticsEvent`: version 1 이벤트 discriminated union
+- `FeatureCtaClickedEvent`: 기능 CTA를 구분하는 필수 `featureId` payload
 - `AnalyticsContext`: 모든 이벤트의 필수 공통 context
 - `CountryHint`, `CountryHintParser`, `CountryAllowlist`: 정제된 국가 힌트 경계
 - `ConsentState`, `ConsentProvider`: 현재 동의 상태 주입 경계

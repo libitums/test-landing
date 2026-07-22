@@ -4,7 +4,8 @@ export type AnalyticsProjectId = "k-drama" | "ai-communication" | "k-culture";
 
 export type AnalyticsEventVersion = 1;
 
-export type AnalyticsEventName = "experiment_viewed" | "cta_clicked" | "conversion_completed";
+export type AnalyticsEventName =
+  "experiment_viewed" | "cta_clicked" | "feature_cta_clicked" | "conversion_completed";
 
 declare const countryCodeBrand: unique symbol;
 
@@ -35,16 +36,23 @@ export interface CtaClickedEvent extends AnalyticsContext {
   version: AnalyticsEventVersion;
 }
 
+export interface FeatureCtaClickedEvent extends AnalyticsContext {
+  name: "feature_cta_clicked";
+  version: AnalyticsEventVersion;
+  featureId: string;
+}
+
 export interface ConversionCompletedEvent extends AnalyticsContext {
   name: "conversion_completed";
   version: AnalyticsEventVersion;
 }
 
-export type AnalyticsEvent = ExperimentViewedEvent | CtaClickedEvent | ConversionCompletedEvent;
+export type AnalyticsEvent =
+  ExperimentViewedEvent | CtaClickedEvent | FeatureCtaClickedEvent | ConversionCompletedEvent;
 
-export type AnalyticsEventInput = {
-  name: AnalyticsEventName;
-};
+export type AnalyticsEventInput =
+  | { name: "experiment_viewed" | "cta_clicked" | "conversion_completed" }
+  | { name: "feature_cta_clicked"; featureId: string };
 
 export interface AnalyticsValidationSuccess {
   valid: true;

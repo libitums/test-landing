@@ -9,15 +9,15 @@
 
 ## 자주 쓰는 스크립트
 
-| 명령 | 설명 |
-|------|------|
-| `pnpm dev:k-drama` (또는 `dev:ai-communication`, `dev:k-culture`) | 앱 개발 서버 |
-| `pnpm typecheck` | 전 워크스페이스 타입 검사 |
-| `pnpm lint` | ESLint |
-| `pnpm test` | 단위·통합 테스트 (Vitest) |
-| `pnpm build` | 프로덕션 빌드 |
-| `pnpm e2e` / `pnpm e2e:update` | Playwright E2E / 스냅샷 갱신 |
-| `pnpm format` / `pnpm format:check` | Prettier |
+| 명령                                                              | 설명                         |
+| ----------------------------------------------------------------- | ---------------------------- |
+| `pnpm dev:k-drama` (또는 `dev:ai-communication`, `dev:k-culture`) | 앱 개발 서버                 |
+| `pnpm typecheck`                                                  | 전 워크스페이스 타입 검사    |
+| `pnpm lint`                                                       | ESLint                       |
+| `pnpm test`                                                       | 단위·통합 테스트 (Vitest)    |
+| `pnpm build`                                                      | 프로덕션 빌드                |
+| `pnpm e2e` / `pnpm e2e:update`                                    | Playwright E2E / 스냅샷 갱신 |
+| `pnpm format` / `pnpm format:check`                               | Prettier                     |
 
 ## 브랜치와 커밋
 

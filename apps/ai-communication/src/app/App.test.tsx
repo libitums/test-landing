@@ -40,5 +40,26 @@ describe("AI communication landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
+    expect(screen.getByTestId("shared-feature:ai-communication-clarity")).toHaveClass(
+      "shared-feature--white",
+    );
+    expect(screen.getByTestId("shared-feature:ai-communication-access")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:ai-communication-global")).toHaveClass(
+      "shared-feature--white",
+    );
+    const featureAction = screen.getByTestId(
+      "shared-feature:ai-communication-clarity:early-access-cta",
+    );
+    expect(featureAction).toHaveAttribute("href", "/ai-communication/early-access");
+    expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
+    expect(featureAction).not.toHaveClass("button--secondary");
+    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    fireEvent.click(featureAction);
+    await waitFor(() => expect(adapter.events).toHaveLength(2));
+    expect(adapter.events[adapter.events.length - 1]).toEqual(
+      expect.objectContaining({ name: "feature_cta_clicked", featureId: "clarity" }),
+    );
   });
 });

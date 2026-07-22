@@ -40,6 +40,35 @@ describe("analytics event validator", () => {
     },
   );
 
+  it("accepts a feature CTA event with a non-empty feature id", () => {
+    const event = { ...validEvent, name: "feature_cta_clicked", featureId: "discover" } as const;
+    expect(validator.validate(event)).toEqual({ valid: true, event });
+  });
+
+  it.each([
+    [{}, "missing"],
+    [{ featureId: "" }, "invalid"],
+    [{ featureId: "   " }, "invalid"],
+  ] as const)("rejects a feature CTA with an invalid feature id %#", (change, code) => {
+    const result = validator.validate({
+      ...validEvent,
+      name: "feature_cta_clicked",
+      ...change,
+    });
+    expect(result.valid).toBe(false);
+    if (!result.valid) {
+      expect(result.issues).toContainEqual({ field: "featureId", code });
+    }
+  });
+
+  it("rejects feature ids on existing event variants", () => {
+    const result = validator.validate({ ...validEvent, featureId: "discover" });
+    expect(result.valid).toBe(false);
+    if (!result.valid) {
+      expect(result.issues).toContainEqual({ field: "featureId", code: "unknown" });
+    }
+  });
+
   it.each([
     [{ version: undefined }, "version", "invalid"],
     [{ name: "other" }, "name", "invalid"],
@@ -130,6 +159,21 @@ describe("analytics adapters and tracker", () => {
     expect(adapter.events).toEqual([{ ...context, name: "cta_clicked", version: 1 }]);
     adapter.clear();
     expect(adapter.events).toEqual([]);
+  });
+
+  it("persists and sends the complete feature CTA input", async () => {
+    const { adapter, tracker } = setup();
+    await expect(
+      tracker.track({ name: "feature_cta_clicked", featureId: "personalized-feed" }),
+    ).resolves.toEqual({ status: "sent" });
+    expect(adapter.events).toEqual([
+      {
+        ...context,
+        name: "feature_cta_clicked",
+        featureId: "personalized-feed",
+        version: 1,
+      },
+    ]);
   });
 
   it("deduplicates an exposure within a tracker lifecycle", async () => {
