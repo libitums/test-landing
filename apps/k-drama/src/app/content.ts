@@ -81,12 +81,13 @@ export function createContent(runtime: I18nRuntime) {
   const t = runtime.translate;
   return {
     hero: {
-      eyebrow: t("hero.eyebrow"),
       title: t("hero.title"),
       description: t("hero.description"),
-      actions: [
-        { id: "start", label: t("hero.start"), href: "#features", variant: "primary" },
-        { id: "method", label: t("hero.method"), href: "#proof", variant: "secondary" },
+      cta: { label: t("hero.start") },
+      highlights: [
+        { id: "speed", label: t("features.speed.title") },
+        { id: "consistency", label: t("features.consistency.title") },
+        { id: "freedom", label: t("features.freedom.title") },
       ],
     } satisfies HeroContent,
     features: [

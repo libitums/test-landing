@@ -13,10 +13,24 @@ export interface LandingAction {
 }
 
 export interface HeroContent {
-  eyebrow?: string;
   title: string;
+  /**
+   * Sub-header copy. A newline (`\n`) is rendered as an explicit line break,
+   * so content authors control where the text wraps per locale.
+   */
   description: string;
-  actions: readonly [LandingAction, ...LandingAction[]];
+  cta?: HeroCtaContent;
+  /** Optional, extensible checklist of one-line feature summaries shown under the CTA. */
+  highlights?: readonly HeroHighlight[];
+}
+
+export interface HeroCtaContent {
+  label: string;
+}
+
+export interface HeroHighlight {
+  id: string;
+  label: string;
 }
 
 export interface FeatureItem {
@@ -60,7 +74,7 @@ export interface LandingShellSlotProps {
 
 export interface HeroProps {
   content: HeroContent;
-  onAction?: LandingActionHandler;
+  children: ContentSlot;
   testId?: "hero";
 }
 
@@ -101,11 +115,14 @@ export const landingTestIds = {
   main: "landing-main",
   footer: "landing-footer",
   hero: "hero",
+  heroCta: "hero-cta",
+  heroHighlights: "hero-highlights",
+  heroMedia: "hero-media",
   featureGrid: "feature-grid",
   ctaSection: "cta-section",
   alphaProofStrip: "alpha-proof-strip",
   betaComparison: "beta-comparison",
-  heroAction: (id: string) => `hero-action:${id}` as const,
+  heroHighlight: (id: string) => `hero-highlight:${id}` as const,
   featureCard: (id: string) => `feature-card:${id}` as const,
   ctaAction: (id: string) => `cta-action:${id}` as const,
   alphaProof: (id: string) => `alpha-proof:${id}` as const,

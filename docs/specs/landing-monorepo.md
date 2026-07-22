@@ -81,8 +81,8 @@ pnpm, Vite, React, TypeScript, shadcn 기반 구성 원칙. 데스크톱 우선 
 
 ```text
 ┌──────────────── Header: brand · nav · CTA ────────────────┐
-│ Hero: eyebrow · headline · copy · primary/secondary CTA   │
-│                                      product placeholder  │
+│ Hero: centered headline · copy · CTA                      │
+│                         project-owned media children      │
 ├──────────────── AlphaProofStrip (앱 전용) ────────────────┤
 │ FeatureGrid: 3 shared FeatureCard items                    │
 ├──────────────── final shared CTA ──────────────────────────┤
@@ -94,7 +94,7 @@ pnpm, Vite, React, TypeScript, shadcn 기반 구성 원칙. 데스크톱 우선 
 
 ```text
 ┌──────────────── Header: brand · nav · CTA ────────────────┐
-│ Hero: eyebrow · headline · copy · primary CTA             │
+│ Hero: centered headline · copy · CTA · media children     │
 ├──────────────── BetaComparison (앱 전용) ─────────────────┤
 │ FeatureGrid: 3 shared FeatureCard items                    │
 ├──────────────── final shared CTA ──────────────────────────┤
@@ -102,7 +102,7 @@ pnpm, Vite, React, TypeScript, shadcn 기반 구성 원칙. 데스크톱 우선 
 └────────────────────────────────────────────────────────────┘
 ```
 
-좁은 화면에서는 동일한 문서 순서를 유지하고 다단 그리드와 Hero 콘텐츠를 단일 열로 전환한다. 정보나 액션을 모바일에서 제거하지 않는다.
+좁은 화면에서는 동일한 문서 순서를 유지하고 다단 그리드와 Hero 콘텐츠를 단일 열로 전환한다. Hero의 현재 세 프로젝트 공통 계약은 `docs/specs/shared-hero.md`를 우선한다.
 
 ## 컴포넌트 트리와 책임
 
@@ -129,7 +129,7 @@ BetaApp
 ```
 
 - `LandingShell`: 페이지 landmark와 Header/Main/Footer 슬롯을 합성하는 공통 프레임이다.
-- `Hero`: 텍스트 콘텐츠와 1~2개의 CTA를 표현한다.
+- `Hero`: 중앙 정렬된 제목·설명·선택적 CTA label과 프로젝트가 `children`으로 합성하는 미디어 영역을 표현한다.
 - `FeatureGrid`: 전달받은 기능 목록을 표시하며 각 항목을 `FeatureCard`에 위임한다.
 - `FeatureCard`: 기능 하나의 제목과 설명을 표현한다.
 - `CtaSection`: 페이지 마지막 행동 유도 콘텐츠를 표현한다.
@@ -140,16 +140,17 @@ BetaApp
 
 ## 고정 TypeScript 계약
 
-단일 출처는 `packages/contracts/src/landing.ts`다. `@landing/ui`와 두 앱은 이 타입을 import하고 같은 이름의 로컬 타입을 재정의하지 않는다.
+단일 출처는 `packages/contracts/src/landing.ts`다. `@landing/ui`와 현재 세 프로젝트는 이 타입을 import하고 같은 이름의 로컬 타입을 재정의하지 않는다.
 
-- `LandingAction`: `primary | secondary | text` 명시적 variant와 링크 목적지를 가진 CTA
-- `HeroContent`, `FeatureItem`, `CtaContent`: 공유 섹션 콘텐츠
+- `LandingAction`: `primary | secondary | text` 명시적 variant와 링크 목적지를 가진 최종 CTA 등 비-Hero 섹션의 액션
+- `HeroCtaContent`, `HeroContent`: 행동 없이 CTA label 표시만 설정하는 Hero 콘텐츠
+- `FeatureItem`, `CtaContent`: 그 밖의 공유 섹션 콘텐츠
 - `ProofMetric`, `ComparisonRow`: 앱 전용 섹션 데이터
 - `LandingShellProps`, `LandingShellSlotProps`: 합성 가능한 공통 프레임 props
 - `HeroProps`, `FeatureGridProps`, `FeatureCardProps`, `CtaSectionProps`: 공유 UI props
 - `AlphaProofStripProps`, `BetaComparisonProps`: 앱 전용 UI props
 
-`onAction`은 분석 이벤트가 아니라 현재 범위의 앱 내 행동 경계다. 구현 시 링크 기본 동작을 보존하며, 분석 SDK나 이벤트 스키마를 추가하지 않는다.
+`HeroProps`에는 `onAction`, 링크 또는 이벤트 계약이 없고 미디어는 `children`으로 받는다. 비-Hero 섹션의 `onAction`은 분석 이벤트가 아니라 현재 범위의 앱 내 행동 경계다. 구현 시 링크 기본 동작을 보존하며, 분석 SDK나 이벤트 스키마를 추가하지 않는다.
 
 ## test-id 계약
 
@@ -159,7 +160,7 @@ BetaApp
 | ----------- | ------------------------------------------------------------------- |
 | 앱 루트     | `landing:alpha`, `landing:beta`                                     |
 | 공통 프레임 | `landing-shell`, `landing-header`, `landing-main`, `landing-footer` |
-| Hero        | `hero`, `hero-action:{action.id}`                                   |
+| Hero        | `hero`, `hero-cta`, `hero-media`                                    |
 | 기능        | `feature-grid`, `feature-card:{feature.id}`                         |
 | 최종 CTA    | `cta-section`, `cta-action:{action.id}`                             |
 | Alpha 전용  | `alpha-proof-strip`, `alpha-proof:{metric.id}`                      |
@@ -169,17 +170,17 @@ BetaApp
 
 ## 데이터 흐름
 
-API와 전역 상태는 없다. 각 앱의 정적 콘텐츠 모듈이 계약 타입을 만족하는 데이터를 소유하고 App에서 공유/전용 컴포넌트로 아래 방향으로 전달한다. CTA 동작은 `onAction(action)`으로 앱에 올라가며 링크 이동 외 부수효과는 없다.
+API와 전역 상태는 없다. 각 앱의 정적 콘텐츠 모듈이 계약 타입을 만족하는 데이터를 소유하고 App에서 공유/전용 컴포넌트로 아래 방향으로 전달한다. Hero CTA에는 동작이 없으며, 비-Hero 섹션의 CTA 동작만 `onAction(action)`으로 앱에 올라간다.
 
 ```text
 app content constants → App composition → shared/app-specific UI
-                                           └→ onAction → app navigation boundary
+                                           └→ non-Hero onAction → app navigation boundary
 ```
 
 ## 검증 계약
 
 - 각 앱의 Vitest + Testing Library 테스트는 공통 `Hero`, `FeatureGrid`, `CtaSection`과 해당 앱 전용 컴포넌트가 렌더됨을 검증한다.
-- 공통 UI 테스트는 CTA variant별 링크 속성, feature 반복 렌더, slot 합성을 검증한다.
+- 공통 UI 테스트는 Hero의 텍스트·선택적 CTA label·media children 합성, 비-Hero CTA variant별 링크 속성, feature 반복 렌더, slot 합성을 검증한다.
 - 계약 파일은 strict TypeScript로 검사한다.
 - 빌드 산출물은 타깃 브라우저 정책을 반영한다. Browserslist 설정과 Vite의 build target 중 더 좁은 범위를 선택하지 않도록 구성한다.
 - 접근 가능한 heading 순서, landmark, 링크 이름, 키보드 탐색을 구현 기본 요건으로 둔다. 색 대비 값은 DESIGN.md를 확장하는 디자인 레이어가 WCAG AA를 충족하도록 고정한다.
@@ -197,4 +198,4 @@ app content constants → App composition → shared/app-specific UI
 
 ## 계약 고정
 
-이 문서와 `packages/contracts/src/landing.ts`의 경로, export 이름, props, action variant, test-id가 구현·디자인·테스트 레이어의 고정 계약이다. 변경이 필요하면 소비 레이어 전체에 알리고 이 문서와 타입을 먼저 함께 갱신한다.
+이 문서와 `packages/contracts/src/landing.ts`의 경로, export 이름, props, action variant, test-id가 구현·디자인·테스트 레이어의 고정 계약이다. Hero에 대해서는 `docs/specs/shared-hero.md`가 최신 세 프로젝트 공통 계약이며, 변경이 필요하면 소비 레이어 전체에 알리고 두 문서와 타입을 먼저 함께 갱신한다.

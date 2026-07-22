@@ -13,9 +13,10 @@
 - `Container`는 `--content-max` 안에서 가운데 정렬하고 인라인 여백은 데스크톱
   `--space-8`, 모바일 `--space-4`를 쓴다.
 - `Section`의 블록 여백은 데스크톱 `--space-24`, 모바일 `--space-16`이다.
-- 두 열 영역은 데스크톱에서 동일 비중의 열과 `--space-12` 간격을 사용한다.
-  `--breakpoint-mobile` 이하에서는 문서 순서를 유지한 한 열과 `--space-8`
-  간격으로 바뀐다.
+- Hero를 제외한 두 열 영역은 데스크톱에서 동일 비중의 열과 `--space-12` 간격을
+  사용한다. `--breakpoint-mobile` 이하에서는 문서 순서를 유지한 한 열과
+  `--space-8` 간격으로 바뀐다. Hero의 중앙형 단일 열과 media children 계약은
+  `docs/design/shared-hero.md`를 따른다.
 - 제목의 최대 읽기 폭은 `--content-reading`이며 hero 제목은
   `--text-display`/`--leading-tight`, 섹션 제목은
   `--text-3xl`/`--leading-heading`을 쓴다.
@@ -26,7 +27,7 @@
 
 ```text
 [Header: Brand | Product · Pricing · FAQ | Primary action]
-[Hero: eyebrow + headline + copy + actions | product preview]
+[Hero: centered headline + copy + primary action / media children]
 [Trust strip: customer marks]
 [Feature grid: shared Card × 3]
 [App-only interactive comparison]
@@ -35,10 +36,11 @@
 [Footer: locale + legal/navigation]
 ```
 
-- Hero는 데스크톱 두 열, 모바일 한 열이다. 행동 그룹은 primary와 secondary만
-  두며 모바일에서는 각 버튼이 가용 인라인 공간을 채울 수 있다.
-- 제품 미리보기와 비교 영역은 `--color-surface`, `--color-border`,
-  `--radius-xl`, `--shadow-lg`로 위계를 만든다.
+- Hero는 모든 뷰포트에서 headline → copy → primary action → media children의
+  중앙형 단일 열을 유지하며 `docs/design/shared-hero.md`를 따른다.
+- Hero의 media 표면은 앱이 소유한다. 제품 미리보기와 비교 영역에 표면 위계가
+  필요하면 앱이 `--color-surface`, `--color-border`, `--radius-xl`,
+  `--shadow-lg`를 조합한다.
 - 전용 비교 UI는 A 앱에 남긴다. 다른 앱에서 같은 사용자 문제와 API가 확인될
   때만 공통 패키지 승격을 검토한다.
 
@@ -46,7 +48,7 @@
 
 ```text
 [Header: Brand | Stories · Method | Primary action]
-[Hero: centered eyebrow + headline + copy + action]
+[Hero: centered headline + copy + primary action / media children]
 [Editorial proof: image placeholder | narrative]
 [Outcome metrics: shared Card × 3]
 [App-only step timeline]
@@ -55,7 +57,8 @@
 [Footer: locale + legal/navigation]
 ```
 
-- Hero 본문은 `--content-reading` 안에서 가운데 정렬한다.
+- Hero는 `docs/design/shared-hero.md`의 중앙형 단일 열과 media children 계약을
+  따른다.
 - Editorial proof는 데스크톱에서 교차 두 열, 모바일에서 이미지 다음 설명
   순서의 한 열이다.
 - 전용 timeline은 B 앱에 남기며 단계는 색상만이 아니라 숫자와 제목으로
