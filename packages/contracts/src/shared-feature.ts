@@ -13,8 +13,7 @@ export interface FeatureEarlyAccessAction {
   featureId: string;
   label: "Get early access";
   href: FeatureEarlyAccessDestination;
-  size: "large";
-  emphasis: "low";
+  presentation: "text-link";
 }
 
 /**
