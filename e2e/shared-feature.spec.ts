@@ -38,13 +38,18 @@ async function expectCompleteFeature(root: Locator) {
   expect(rootId).toMatch(/^shared-feature:.+$/);
   if (!rootId) throw new Error("shared feature root must expose its stable test id");
 
-  const slots = slotSuffixes.map((suffix) => root.getByTestId(`${rootId}${suffix}`));
-  for (const slot of slots) {
+  const slots = {
+    numberLabel: root.getByTestId(`${rootId}:number-label`),
+    header: root.getByTestId(`${rootId}:header`),
+    subheader: root.getByTestId(`${rootId}:subheader`),
+    content: root.getByTestId(`${rootId}:content`),
+  };
+  for (const slot of Object.values(slots)) {
     await expect(slot).toHaveCount(1);
     await expect(slot).toBeVisible();
   }
 
-  const [numberLabel, header, subheader, content] = slots;
+  const { numberLabel, header, subheader, content } = slots;
   for (const copy of [numberLabel, header, subheader]) await expect(copy).toContainText(/\S+/);
   await expect(header).toHaveRole("heading");
   await expect(content).not.toBeEmpty();
@@ -56,7 +61,7 @@ async function expectCompleteFeature(root: Locator) {
         .map((element) => element.getAttribute("data-testid"))
         .filter((testId): testId is string => testId !== null && expected.includes(testId));
     },
-    slots.map((_, index) => `${rootId}${slotSuffixes[index]}`),
+    slotSuffixes.map((suffix) => `${rootId}${suffix}`),
   );
   expect(order).toEqual(slotSuffixes.map((suffix) => `${rootId}${suffix}`));
 
