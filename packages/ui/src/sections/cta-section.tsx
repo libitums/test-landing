@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import type { CtaSectionProps } from "@landing/contracts";
 import { landingTestIds } from "@landing/contracts";
@@ -14,13 +14,46 @@ function withLineBreaks(text: string): ReactNode {
   ));
 }
 
+/** True once the node has scrolled into view — used to play the pill animation a single time. */
+function useSeenOnce<T extends Element>() {
+  const ref = useRef<T>(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || seen) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setSeen(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setSeen(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [seen]);
+  return { ref, seen };
+}
+
 export function CtaSection({ content, onAction, testId = "cta-section" }: CtaSectionProps) {
   const [primary, ...rest] = content.actions;
   const notes = content.notes ?? [];
   const [ghostStart, ghostEnd] = content.ghostWords;
+  const { ref, seen } = useSeenOnce<HTMLElement>();
 
   return (
-    <section className="cta" data-testid={testId} aria-labelledby={`${testId}-title`}>
+    <section
+      ref={ref}
+      className="cta"
+      data-seen={seen ? "true" : undefined}
+      data-testid={testId}
+      aria-labelledby={`${testId}-title`}
+    >
       <span
         className="cta__ghost cta__ghost--start"
         aria-hidden="true"
@@ -46,6 +79,7 @@ export function CtaSection({ content, onAction, testId = "cta-section" }: CtaSec
             data-testid={landingTestIds.ctaAction(primary.id)}
             onClick={() => onAction?.(primary)}
           >
+            <span className="cta__pill-fill" aria-hidden="true" />
             <span className="cta__pill-knob" aria-hidden="true">
               <ArrowRight className="cta__pill-icon" strokeWidth={2} />
             </span>
