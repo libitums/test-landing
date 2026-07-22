@@ -40,9 +40,21 @@ export interface FeatureItem {
 }
 
 export interface CtaContent {
+  /** Optional promise badge shown above the headline. */
+  badge?: string;
   title: string;
+  /** A newline (`\n`) is rendered as an explicit line break, per locale. */
   description: string;
   actions: readonly [LandingAction, ...LandingAction[]];
+  /** Optional, extensible reassurance notes shown under the actions. */
+  notes?: readonly CtaNote[];
+  /** Two decorative background words [start, end]; always rendered. */
+  ghostWords: readonly [string, string];
+}
+
+export interface CtaNote {
+  id: string;
+  label: string;
 }
 
 export interface ProofMetric {
@@ -125,6 +137,8 @@ export const landingTestIds = {
   heroHighlight: (id: string) => `hero-highlight:${id}` as const,
   featureCard: (id: string) => `feature-card:${id}` as const,
   ctaAction: (id: string) => `cta-action:${id}` as const,
+  ctaNote: (id: string) => `cta-note:${id}` as const,
+  ctaGhost: "cta-ghost",
   alphaProof: (id: string) => `alpha-proof:${id}` as const,
   betaComparisonRow: (id: string) => `beta-comparison-row:${id}` as const,
 } as const;
