@@ -796,9 +796,10 @@ button:focus-visible {
 .cta__title {
   max-inline-size: 100%;
   color: var(--color-fg);
-  font-size: var(--text-3xl);
+  font-size: var(--text-display);
   font-weight: var(--font-bold);
-  line-height: var(--leading-heading);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
 .cta__description {
