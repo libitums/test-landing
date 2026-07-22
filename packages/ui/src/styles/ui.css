@@ -689,6 +689,7 @@ button:focus-visible {
 }
 .shared-feature__early-access-cta.button--text {
   color: var(--color-subtle-fg);
+  font-weight: var(--font-normal);
   text-decoration: underline;
 }
 .shared-feature__early-access-cta.button--text:hover,
