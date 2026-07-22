@@ -2,14 +2,20 @@
 
 import type { ContentSlot } from "./landing";
 
+/** Explicit surface variants; consumers must not replace these with display flags. */
+export type SharedFeatureAppearance = "white" | "soft";
+
 /**
  * Common copy and the app-owned feature content composed beneath it.
  *
  * `numberLabel` is text, rather than a number, so apps can localize it or retain
  * intentional formatting such as `01`. Actions and business behavior belong in
- * `children`; the shared template does not interpret them.
+ * `children`; the shared template does not interpret them. Newline characters in
+ * the localized heading strings are intentional visual breaks, while the complete
+ * string remains the accessible text.
  */
 export interface SharedFeatureTemplateProps {
+  appearance: SharedFeatureAppearance;
   numberLabel: string;
   headerText: string;
   subheaderText: string;
