@@ -1,0 +1,26 @@
+# Path-based PR labels (actions/labeler v5 syntax).
+# Labels must already exist in the repo; they are created alongside this config.
+
+apps:
+  - changed-files:
+      - any-glob-to-any-file: "apps/**"
+
+ui:
+  - changed-files:
+      - any-glob-to-any-file: "packages/ui/**"
+
+contracts:
+  - changed-files:
+      - any-glob-to-any-file: "packages/contracts/**"
+
+e2e:
+  - changed-files:
+      - any-glob-to-any-file: "e2e/**"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: "docs/**"

@@ -6,7 +6,7 @@ import { App } from "./App";
 import { getRuntime } from "../i18n";
 
 describe("AI communication landing", () => {
-  it("tracks exposure and CTA without changing link navigation", async () => {
+  it("renders the display-only Hero composition and only tracks exposure", async () => {
     const adapter = createInMemoryAnalyticsAdapter();
     const analytics = createAppAnalytics("?utm_country=kr", {
       consent: { getState: () => "granted" },
@@ -15,23 +15,21 @@ describe("AI communication landing", () => {
     });
     render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
     await waitFor(() => expect(adapter.events).toHaveLength(1));
-    const action = screen.getByTestId("hero-action:compare");
-    expect(action).toHaveAttribute("href", "#comparison");
+    const hero = screen.getByTestId("hero");
+    const action = screen.getByTestId("hero-cta");
+    const media = screen.getByTestId("hero-media");
+    expect(hero).toContainElement(screen.getByRole("heading", { level: 1 }));
+    expect(hero).toContainElement(action);
+    expect(hero).toContainElement(media);
+    expect(action).toHaveRole("button");
+    expect(action).not.toHaveAttribute("href");
+    expect(action).toHaveTextContent(/\S+/);
+    expect(media).toBeInTheDocument();
+    expect(media.querySelector("img")).toBeNull();
     fireEvent.click(action);
-    await waitFor(() => expect(adapter.events).toHaveLength(2));
     expect(adapter.events).toEqual([
       {
         name: "experiment_viewed",
-        version: 1,
-        projectId: "ai-communication",
-        experimentId: "landing-phase-1",
-        variantId: "ai-communication-v1",
-        locale: "en-US",
-        pageId: "home",
-        countryHint: "KR",
-      },
-      {
-        name: "cta_clicked",
         version: 1,
         projectId: "ai-communication",
         experimentId: "landing-phase-1",
@@ -59,7 +57,7 @@ describe("AI communication landing", () => {
     expect(featureAction).not.toHaveClass("button--secondary");
     featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
     fireEvent.click(featureAction);
-    await waitFor(() => expect(adapter.events).toHaveLength(3));
+    await waitFor(() => expect(adapter.events).toHaveLength(2));
     expect(adapter.events[adapter.events.length - 1]).toEqual(
       expect.objectContaining({ name: "feature_cta_clicked", featureId: "clarity" }),
     );

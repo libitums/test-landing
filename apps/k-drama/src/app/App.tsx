@@ -37,7 +37,17 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
-          <Hero content={content.hero} onAction={trackCta} />
+          <Hero content={content.hero}>
+            <div
+              className="hero-media-card hero-media-card--drama"
+              role="group"
+              aria-label={t("hero.eyebrow")}
+            >
+              <span>{t("features.speed.title")}</span>
+              <span>{t("features.consistency.title")}</span>
+              <span>{t("features.freedom.title")}</span>
+            </div>
+          </Hero>
           <div id="proof">
             <KDramaProofStrip metrics={content.metrics} title={t("proof.title")} />
           </div>

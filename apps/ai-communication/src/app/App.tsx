@@ -37,7 +37,16 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
-          <Hero content={content.hero} onAction={trackCta} />
+          <Hero content={content.hero}>
+            <div
+              className="hero-media-card hero-media-card--communication"
+              role="group"
+              aria-label={t("comparison.region")}
+            >
+              <span>{t("comparison.product")}</span>
+              <span>{t("comparison.alternative")}</span>
+            </div>
+          </Hero>
           <div id="comparison">
             <AiCommunicationComparison
               rows={content.rows}
