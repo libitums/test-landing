@@ -119,7 +119,7 @@ async function expectEarlyAccessCta(root: Locator, expectedPath: string) {
   await expect(cta).toHaveRole("link");
   await expect(cta).toHaveAccessibleName("Get early access");
   await expect(cta).toHaveAttribute("href", expectedPath);
-  await expect(cta).toHaveClass(/button--secondary/);
+  await expect(cta).toHaveClass(/button--text/);
   await expect(cta).toHaveClass(/shared-feature__early-access-cta/);
   return cta;
 }
@@ -182,7 +182,12 @@ for (const app of apps) {
 
       for (const root of await getFeatureRoots(page)) {
         await expectCompleteFeature(root);
-        await expectEarlyAccessCta(root, app.earlyAccessPath);
+        const cta = await expectEarlyAccessCta(root, app.earlyAccessPath);
+        const content = root.getByTestId(`${await root.getAttribute("data-testid")}:content`);
+        const [ctaBox, contentBox] = await Promise.all([cta.boundingBox(), content.boundingBox()]);
+        expect(ctaBox?.width, "the mobile text link must retain intrinsic width").toBeLessThan(
+          contentBox?.width ?? 0,
+        );
       }
       await expectNoHorizontalOverflow(page);
     });
@@ -243,7 +248,7 @@ test("shared feature copy preserves intentional lines, accessible text, and sema
   await expect(subheader).toHaveCSS("font-weight", "300");
 });
 
-test("feature early access CTA uses the large low-emphasis secondary treatment", async ({
+test("feature early access CTA uses an intrinsic underlined text-link treatment", async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "Computed CTA presentation is sampled once");
@@ -252,27 +257,31 @@ test("feature early access CTA uses the large low-emphasis secondary treatment",
   const firstRoot = (await getFeatureRoots(page))[0];
   if (!firstRoot) throw new Error("the representative feature CTA is missing");
   const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath);
-  await expect(cta).toHaveCSS("min-height", "44px");
-  await expect(cta).toHaveCSS("padding-block-start", "16px");
-  await expect(cta).toHaveCSS("padding-inline-start", "32px");
-  await expect(cta).toHaveCSS("font-size", "18px");
-  await expect(cta).toHaveCSS("font-weight", "500");
-  await expect(cta).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect(cta).toHaveCSS("color", "rgb(15, 23, 42)");
-  await expect(cta).toHaveCSS("border-color", "rgb(203, 213, 225)");
-
-  const target = await cta.boundingBox();
-  expect(target?.height).toBeGreaterThanOrEqual(44);
-  expect(target?.width).toBeGreaterThanOrEqual(44);
+  await expect(cta).toHaveCSS("min-height", "0px");
+  await expect(cta).toHaveCSS("padding-block-start", "0px");
+  await expect(cta).toHaveCSS("padding-inline-start", "0px");
+  await expect(cta).toHaveCSS("font-size", "16px");
+  await expect(cta).toHaveCSS("font-weight", "400");
+  await expect(cta).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(cta).toHaveCSS("color", "rgb(100, 116, 139)");
+  await expect(cta).toHaveCSS("border-top-width", "0px");
+  await expect(cta).toHaveCSS("text-decoration-line", "underline");
 
   await cta.focus();
   await expect(cta).toBeFocused();
   await expect(cta).not.toHaveCSS("outline-style", "none");
 
   await cta.hover();
-  await page.mouse.down();
-  await expect(cta).toHaveCSS("background-color", "rgb(226, 232, 240)");
-  await page.mouse.up();
+  await expect(cta).toHaveCSS("color", "rgb(91, 66, 199)");
+  await expect(cta).toHaveCSS("text-decoration-line", "underline");
+  const softRoot = (await getFeatureRoots(page))[1];
+  if (!softRoot) throw new Error("the soft-surface feature CTA is missing");
+  const softCta = await expectEarlyAccessCta(softRoot, apps[0].earlyAccessPath);
+  await expect(softCta).toHaveCSS("color", "rgb(100, 116, 139)");
+  await expect(softCta).toHaveCSS("text-decoration-line", "underline");
+  await softCta.focus();
+  await expect(softCta).toBeFocused();
+  await expect(softCta).not.toHaveCSS("outline-style", "none");
 });
 
 test("all apps use the same template contract with distinct copy and children", async ({
