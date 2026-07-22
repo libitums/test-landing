@@ -848,6 +848,7 @@ button:focus-visible {
   inset-inline-start: 0;
   inline-size: 0;
   background: var(--color-cta-surface);
+  transition: inline-size 900ms var(--ease-standard) 200ms;
 }
 .cta__pill-knob {
   position: relative;
@@ -869,34 +870,13 @@ button:focus-visible {
   position: relative;
   z-index: 1;
   font-weight: var(--font-semibold);
+  transition: color 900ms var(--ease-standard) 200ms;
 }
 .cta[data-seen="true"] .cta__pill-fill {
-  animation: cta-pill-sweep 1100ms var(--ease-standard) 200ms both;
+  inline-size: 100%;
 }
 .cta[data-seen="true"] .cta__pill-label {
-  animation: cta-pill-label 1100ms var(--ease-standard) 200ms both;
-}
-@keyframes cta-pill-sweep {
-  0% {
-    inline-size: 0;
-  }
-  40%,
-  60% {
-    inline-size: 100%;
-  }
-  100% {
-    inline-size: 0;
-  }
-}
-@keyframes cta-pill-label {
-  0%,
-  100% {
-    color: var(--color-fg);
-  }
-  40%,
-  60% {
-    color: var(--color-cta-on-surface);
-  }
+  color: var(--color-cta-on-surface);
 }
 .cta__notes {
   margin-block: var(--space-2) var(--space-0);
@@ -928,9 +908,9 @@ button:focus-visible {
   .cta__pill {
     transition: none;
   }
-  .cta[data-seen="true"] .cta__pill-fill,
-  .cta[data-seen="true"] .cta__pill-label {
-    animation: none;
+  .cta__pill-fill,
+  .cta__pill-label {
+    transition: none;
   }
 }
 
