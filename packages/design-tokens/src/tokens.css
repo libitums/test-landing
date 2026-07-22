@@ -33,6 +33,7 @@
   --color-cta-fill: #fefefe;
   --color-cta-on-surface: #fefefe;
   --color-cta-on-fill: var(--color-editorial-accent);
+  --color-cta-ghost: rgb(123 97 255 / 5%);
 
   --font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
