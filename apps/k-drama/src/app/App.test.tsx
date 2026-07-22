@@ -51,7 +51,8 @@ describe("K-drama landing", () => {
     );
     const featureAction = screen.getByTestId("shared-feature:k-drama-speed:early-access-cta");
     expect(featureAction).toHaveAttribute("href", "/k-drama/early-access");
-    expect(featureAction).toHaveClass("button--secondary", "shared-feature__early-access-cta");
+    expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
+    expect(featureAction).not.toHaveClass("button--secondary");
     featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
     fireEvent.click(featureAction);
     await waitFor(() => expect(adapter.events).toHaveLength(3));

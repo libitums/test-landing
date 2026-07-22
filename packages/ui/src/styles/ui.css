@@ -283,19 +283,39 @@ h3 {
 .button--primary:active {
   background: var(--color-accent-active);
 }
-.button--secondary,
-.button--text {
+.button--secondary {
   background: var(--color-bg);
   color: var(--color-fg);
   border-color: var(--color-border);
 }
-.button--secondary:hover,
-.button--text:hover {
+.button--secondary:hover {
   background: var(--color-surface);
 }
-.button--secondary:active,
-.button--text:active {
+.button--secondary:active {
   background: var(--color-surface-strong);
+}
+.button--text {
+  min-block-size: auto;
+  justify-content: flex-start;
+  padding: var(--space-0);
+  border: var(--space-0);
+  border-radius: var(--space-0);
+  background: transparent;
+  color: var(--color-fg);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-body);
+  text-decoration: underline;
+}
+.button--text:hover {
+  background: transparent;
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+.button--text:active {
+  background: transparent;
+  color: var(--color-accent-active);
+  text-decoration: underline;
 }
 .button--ghost {
   background: transparent;
@@ -667,13 +687,6 @@ button:focus-visible {
   inline-size: 100%;
   margin-block-start: var(--space-12);
 }
-.shared-feature__early-access-cta {
-  min-block-size: var(--control-height);
-  padding-block: var(--space-4);
-  padding-inline: var(--space-8);
-  font-size: var(--text-lg);
-  font-weight: var(--font-medium);
-}
 .shared-feature__content img,
 .shared-feature__content video,
 .shared-feature__content svg {
@@ -693,9 +706,6 @@ button:focus-visible {
   }
   .shared-feature__inner {
     padding-inline: var(--space-4);
-  }
-  .shared-feature__early-access-cta {
-    inline-size: 100%;
   }
   .hero__layout,
   .feature-grid {

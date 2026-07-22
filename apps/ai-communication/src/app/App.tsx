@@ -63,7 +63,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                 >
                   <ButtonLink
                     className="shared-feature__early-access-cta"
-                    variant="secondary"
+                    variant="text"
                     href="/ai-communication/early-access"
                     data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
                     onClick={() => trackFeatureCta(feature.id)}
