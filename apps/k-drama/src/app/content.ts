@@ -113,9 +113,15 @@ export function createContent(runtime: I18nRuntime) {
       { id: "launch", value: t("proof.launch.value"), label: t("proof.launch.label") },
     ] satisfies readonly ProofMetric[],
     cta: {
+      badge: t("cta.badge"),
       title: t("cta.title"),
       description: t("cta.description"),
       actions: [{ id: "create", label: t("cta.action"), href: "#top", variant: "primary" }],
+      notes: [
+        { id: "card", label: t("cta.note.card") },
+        { id: "access", label: t("cta.note.access") },
+      ],
+      ghostWords: ["SPEAK", "FREELY"],
     } satisfies CtaContent,
   };
 }
