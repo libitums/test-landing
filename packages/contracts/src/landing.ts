@@ -107,6 +107,56 @@ export interface CtaSectionProps {
   testId?: "cta-section";
 }
 
+export type BillingPeriod = "monthly" | "annual";
+
+export interface PricingBilling {
+  monthlyLabel: string;
+  annualLabel: string;
+  /** Optional savings badge shown next to the annual option, e.g. "Save 20%". */
+  annualBadge?: string;
+}
+
+export interface PricingPrice {
+  monthly: string;
+  annual: string;
+  /** Cadence unit shown next to the amount, e.g. "/mo". */
+  unit: string;
+}
+
+export interface PricingFeature {
+  id: string;
+  label: string;
+}
+
+export interface PricingPlan {
+  id: string;
+  name: string;
+  /** Optional emphasis badge, e.g. "Popular". */
+  badge?: string;
+  /** Visually highlight this plan as the recommended tier. */
+  featured?: boolean;
+  description: string;
+  price: PricingPrice;
+  /** Display-only CTA label (no link or tracking). */
+  cta: string;
+  features: readonly PricingFeature[];
+}
+
+export interface PricingContent {
+  kicker?: string;
+  title: string;
+  /** A newline (`\n`) is rendered as an explicit line break, per locale. */
+  subtitle?: string;
+  billing: PricingBilling;
+  plans: readonly PricingPlan[];
+  footerNote?: string;
+}
+
+export interface PricingSectionProps {
+  content: PricingContent;
+  testId?: "pricing-section";
+}
+
 export interface AlphaProofStripProps {
   metrics: readonly ProofMetric[];
   testId?: "alpha-proof-strip";
@@ -132,6 +182,8 @@ export const landingTestIds = {
   heroMedia: "hero-media",
   featureGrid: "feature-grid",
   ctaSection: "cta-section",
+  pricingSection: "pricing-section",
+  pricingBilling: "pricing-billing",
   alphaProofStrip: "alpha-proof-strip",
   betaComparison: "beta-comparison",
   heroHighlight: (id: string) => `hero-highlight:${id}` as const,
@@ -139,6 +191,8 @@ export const landingTestIds = {
   ctaAction: (id: string) => `cta-action:${id}` as const,
   ctaNote: (id: string) => `cta-note:${id}` as const,
   ctaGhost: "cta-ghost",
+  pricingPlan: (id: string) => `pricing-plan:${id}` as const,
+  pricingBillingOption: (period: string) => `pricing-billing:${period}` as const,
   alphaProof: (id: string) => `alpha-proof:${id}` as const,
   betaComparisonRow: (id: string) => `beta-comparison-row:${id}` as const,
 } as const;
