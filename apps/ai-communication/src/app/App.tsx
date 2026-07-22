@@ -1,7 +1,16 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { CtaSection, Footer, Hero, LandingShell, Navbar, SharedFeatureTemplate } from "@landing/ui";
+import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
+import {
+  ButtonLink,
+  CtaSection,
+  Footer,
+  Hero,
+  LandingShell,
+  Navbar,
+  SharedFeatureTemplate,
+} from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
@@ -17,6 +26,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   const t = runtime.translate;
   const trackCta = () => {
     void analytics.track({ name: "cta_clicked" });
+  };
+  const trackFeatureCta = (featureId: string) => {
+    void analytics.track({ name: "feature_cta_clicked", featureId });
   };
   return (
     <div id="top" data-testid="landing:ai-communication">
@@ -38,22 +50,29 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
             />
           </div>
           <div id="features">
-            {content.features.map((feature, index) => (
-              <SharedFeatureTemplate
-                key={feature.id}
-                appearance={index === 1 ? "soft" : "white"}
-                numberLabel={`0${index + 1}`}
-                headerText={feature.title}
-                subheaderText={feature.description}
-                testId={`shared-feature:ai-communication-${feature.id}`}
-              >
-                <div
-                  className="shared-feature__showcase"
-                  data-testid={`ai-communication-feature-content:${feature.id}`}
-                  aria-hidden="true"
-                />
-              </SharedFeatureTemplate>
-            ))}
+            {content.features.map((feature, index) => {
+              const featureTestId = `ai-communication-${feature.id}`;
+              return (
+                <SharedFeatureTemplate
+                  key={feature.id}
+                  appearance={index === 1 ? "soft" : "white"}
+                  numberLabel={`0${index + 1}`}
+                  headerText={feature.title}
+                  subheaderText={feature.description}
+                  testId={sharedFeatureTestIds.root(featureTestId)}
+                >
+                  <ButtonLink
+                    className="shared-feature__early-access-cta"
+                    variant="secondary"
+                    href="/ai-communication/early-access"
+                    data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
+                    onClick={() => trackFeatureCta(feature.id)}
+                  >
+                    Get early access
+                  </ButtonLink>
+                </SharedFeatureTemplate>
+              );
+            })}
           </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />

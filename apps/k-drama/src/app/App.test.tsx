@@ -49,5 +49,14 @@ describe("K-drama landing", () => {
     expect(screen.getByTestId("shared-feature:k-drama-freedom")).toHaveClass(
       "shared-feature--white",
     );
+    const featureAction = screen.getByTestId("shared-feature:k-drama-speed:early-access-cta");
+    expect(featureAction).toHaveAttribute("href", "/k-drama/early-access");
+    expect(featureAction).toHaveClass("button--secondary", "shared-feature__early-access-cta");
+    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    fireEvent.click(featureAction);
+    await waitFor(() => expect(adapter.events).toHaveLength(3));
+    expect(adapter.events[adapter.events.length - 1]).toEqual(
+      expect.objectContaining({ name: "feature_cta_clicked", featureId: "speed" }),
+    );
   });
 });
