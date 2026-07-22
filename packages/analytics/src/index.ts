@@ -17,6 +17,7 @@ import type {
 const eventNames = new Set<AnalyticsEventName>([
   "experiment_viewed",
   "cta_clicked",
+  "feature_cta_clicked",
   "conversion_completed",
 ]);
 
@@ -64,7 +65,8 @@ export const analyticsEventValidator: AnalyticsEventValidator = {
     const issues: AnalyticsValidationIssue[] = [];
 
     for (const key of Object.keys(candidate)) {
-      if (!eventKeys.has(key)) {
+      const isFeatureId = key === "featureId" && candidate.name === "feature_cta_clicked";
+      if (!eventKeys.has(key) && !isFeatureId) {
         issues.push({ field: key, code: "unknown" });
       }
     }
@@ -92,6 +94,14 @@ export const analyticsEventValidator: AnalyticsEventValidator = {
       !eventNames.has(candidate.name as AnalyticsEventName)
     ) {
       issues.push({ field: "name", code: "invalid" });
+    }
+
+    if (candidate.name === "feature_cta_clicked") {
+      if (!("featureId" in candidate)) {
+        issues.push({ field: "featureId", code: "missing" });
+      } else if (typeof candidate.featureId !== "string" || candidate.featureId.trim() === "") {
+        issues.push({ field: "featureId", code: "invalid" });
+      }
     }
 
     if (typeof candidate.projectId === "string" && !projectIds.has(candidate.projectId)) {
@@ -177,7 +187,7 @@ export function createAnalyticsTracker(options: AnalyticsTrackerOptions): Analyt
 
         const validation = options.validator.validate({
           ...options.context,
-          name: input.name,
+          ...input,
           version: 1,
         });
         if (!validation.valid) {

@@ -25,6 +25,7 @@ const baseContext: AnalyticsContext = {
 const validEvents = [
   { ...baseContext, name: "experiment_viewed", version: 1 },
   { ...baseContext, name: "cta_clicked", version: 1 },
+  { ...baseContext, name: "feature_cta_clicked", featureId: "recommendations", version: 1 },
   { ...baseContext, name: "conversion_completed", version: 1 },
 ] as const satisfies readonly [AnalyticsEvent, ...AnalyticsEvent[]];
 
@@ -135,10 +136,17 @@ describe("tracker integration", () => {
 
       await tracker.track({ name: "experiment_viewed" });
       await tracker.track({ name: "cta_clicked" });
+      await tracker.track({ name: "feature_cta_clicked", featureId: "early-access" });
 
       expect(adapter.events).toEqual([
         { ...context, name: "experiment_viewed", version: 1 },
         { ...context, name: "cta_clicked", version: 1 },
+        {
+          ...context,
+          name: "feature_cta_clicked",
+          featureId: "early-access",
+          version: 1,
+        },
       ]);
     },
   );
