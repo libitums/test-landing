@@ -1,15 +1,7 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import {
-  CtaSection,
-  FeatureCard,
-  Footer,
-  Hero,
-  LandingShell,
-  Navbar,
-  SharedFeatureTemplate,
-} from "@landing/ui";
+import { CtaSection, Footer, Hero, LandingShell, Navbar, SharedFeatureTemplate } from "@landing/ui";
 import { KDramaProofStrip } from "../features/k-drama/KDramaProofStrip";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
@@ -38,18 +30,22 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
             <KDramaProofStrip metrics={content.metrics} title={t("proof.title")} />
           </div>
           <div id="features">
-            <SharedFeatureTemplate
-              numberLabel="01"
-              headerText={t("features.title")}
-              subheaderText={content.hero.description}
-              testId="shared-feature:k-drama"
-            >
-              <div className="feature-grid">
-                {content.features.map((feature) => (
-                  <FeatureCard key={feature.id} feature={feature} />
-                ))}
-              </div>
-            </SharedFeatureTemplate>
+            {content.features.map((feature, index) => (
+              <SharedFeatureTemplate
+                key={feature.id}
+                appearance={index === 1 ? "soft" : "white"}
+                numberLabel={`0${index + 1}`}
+                headerText={feature.title}
+                subheaderText={feature.description}
+                testId={`shared-feature:k-drama-${feature.id}`}
+              >
+                <div
+                  className="shared-feature__showcase"
+                  data-testid={`k-drama-feature-content:${feature.id}`}
+                  aria-hidden="true"
+                />
+              </SharedFeatureTemplate>
+            ))}
           </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />

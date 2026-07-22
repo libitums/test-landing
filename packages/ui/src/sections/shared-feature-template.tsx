@@ -8,6 +8,7 @@ function testIdSuffix(testId: SharedFeatureTemplateProps["testId"], suffix: stri
 }
 
 export function SharedFeatureTemplate({
+  appearance,
   numberLabel,
   headerText,
   subheaderText,
@@ -18,7 +19,11 @@ export function SharedFeatureTemplate({
   const headingId = testId ? `${testId}:heading` : generatedHeadingId;
 
   return (
-    <section className="shared-feature" data-testid={testId} aria-labelledby={headingId}>
+    <section
+      className={`shared-feature shared-feature--${appearance}`}
+      data-testid={testId}
+      aria-labelledby={headingId}
+    >
       <div className="shared-feature__inner">
         <div className="shared-feature__number" data-testid={testIdSuffix(testId, "number-label")}>
           {numberLabel}

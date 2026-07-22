@@ -42,5 +42,14 @@ describe("K-culture landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:k-culture")).toBeInTheDocument();
+    expect(screen.getByTestId("shared-feature:k-culture-music")).toHaveClass(
+      "shared-feature--white",
+    );
+    expect(screen.getByTestId("shared-feature:k-culture-taste")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:k-culture-style")).toHaveClass(
+      "shared-feature--white",
+    );
   });
 });

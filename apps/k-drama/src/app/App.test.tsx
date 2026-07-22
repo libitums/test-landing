@@ -42,5 +42,12 @@ describe("K-drama landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:k-drama")).toBeInTheDocument();
+    expect(screen.getByTestId("shared-feature:k-drama-speed")).toHaveClass("shared-feature--white");
+    expect(screen.getByTestId("shared-feature:k-drama-consistency")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:k-drama-freedom")).toHaveClass(
+      "shared-feature--white",
+    );
   });
 });

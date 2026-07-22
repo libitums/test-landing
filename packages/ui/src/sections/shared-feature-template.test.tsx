@@ -7,6 +7,7 @@ describe("SharedFeatureTemplate", () => {
   it("renders the shared copy and app content in semantic document order", () => {
     render(
       <SharedFeatureTemplate
+        appearance="white"
         numberLabel="01"
         headerText="Shared heading"
         subheaderText="A longer localized description"
@@ -41,6 +42,7 @@ describe("SharedFeatureTemplate", () => {
     const onClick = vi.fn();
     render(
       <SharedFeatureTemplate
+        appearance="soft"
         numberLabel="02"
         headerText="Another feature"
         subheaderText="App-owned behavior follows"
@@ -59,6 +61,7 @@ describe("SharedFeatureTemplate", () => {
   it("names the section from its heading without test instrumentation", () => {
     render(
       <SharedFeatureTemplate
+        appearance="white"
         numberLabel="03"
         headerText="Feature without a test id"
         subheaderText="The accessible name does not depend on test instrumentation"
@@ -76,6 +79,7 @@ describe("SharedFeatureTemplate", () => {
     render(
       <>
         <SharedFeatureTemplate
+          appearance="white"
           numberLabel="01"
           headerText="First"
           subheaderText="First description"
@@ -84,6 +88,7 @@ describe("SharedFeatureTemplate", () => {
           Alpha
         </SharedFeatureTemplate>
         <SharedFeatureTemplate
+          appearance="soft"
           numberLabel="02"
           headerText="Second"
           subheaderText="Second description"
@@ -96,5 +101,28 @@ describe("SharedFeatureTemplate", () => {
 
     expect(screen.getByTestId("shared-feature:alpha:content")).toHaveTextContent("Alpha");
     expect(screen.getByTestId("shared-feature:beta:content")).toHaveTextContent("Beta");
+  });
+
+  it("renders explicit surfaces and preserves localized visual line breaks", () => {
+    render(
+      <SharedFeatureTemplate
+        appearance="soft"
+        numberLabel="04"
+        headerText={"A localized\nheading"}
+        subheaderText={"A localized\nsubheader"}
+        testId="shared-feature:line-breaks"
+      >
+        Content
+      </SharedFeatureTemplate>,
+    );
+
+    const section = screen.getByRole("region", { name: /A localized\s+heading/ });
+    expect(section).toHaveClass("shared-feature--soft");
+    expect(screen.getByTestId("shared-feature:line-breaks:header")).toHaveTextContent(
+      "A localized heading",
+    );
+    expect(screen.getByTestId("shared-feature:line-breaks:subheader")).toHaveTextContent(
+      "A localized subheader",
+    );
   });
 });

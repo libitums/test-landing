@@ -42,5 +42,14 @@ describe("AI communication landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
+    expect(screen.getByTestId("shared-feature:ai-communication-clarity")).toHaveClass(
+      "shared-feature--white",
+    );
+    expect(screen.getByTestId("shared-feature:ai-communication-access")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:ai-communication-global")).toHaveClass(
+      "shared-feature--white",
+    );
   });
 });
