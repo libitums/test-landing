@@ -1,0 +1,42 @@
+# CI — fast, deterministic gate for every PR and for main.
+# Runs the checks a teammate would run locally: types, lint, unit/integration
+# tests, and a production build across the pnpm workspace.
+#
+# The visual e2e suite is intentionally NOT run here: its Playwright snapshots
+# are platform-specific (committed as *-darwin.png) and have no Linux baselines,
+# so they would always fail on ubuntu runners. Run `pnpm e2e` locally instead.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Only the latest commit on a PR (or branch, on push) needs to be verified.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # pnpm version is read from the "packageManager" field in package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build

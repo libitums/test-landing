@@ -1,0 +1,21 @@
+# Configuration for kentaro-m/auto-assign-action (see .github/workflows/auto-assign.yml).
+# Requests review from the whole org pool and assigns the PR to its author.
+# GitHub automatically skips the author when requesting reviewers, so a solo
+# author never blocks their own PR.
+
+addReviewers: true
+addAssignees: author
+
+# The reviewer pool = all current org members. numberOfReviewers: 0 requests
+# every eligible reviewer (the author is filtered out automatically).
+# Draft PRs are skipped at the workflow level (see .github/workflows/auto-assign.yml).
+reviewers:
+  - hyesungKomet
+  - JungYeonWoong
+  - libitum-admin
+  - sehyun0518
+numberOfReviewers: 0
+
+# Also skip PRs whose title/body contains "wip".
+skipKeywords:
+  - wip
