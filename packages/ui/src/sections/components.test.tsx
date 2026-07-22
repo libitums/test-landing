@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CtaSection } from "./cta-section";
 import { FeatureGrid } from "./feature-grid";
 import { Hero } from "./hero";
@@ -21,26 +21,47 @@ describe("shared page sections", () => {
     expect(screen.getByRole("contentinfo")).toHaveTextContent("Footer");
   });
 
-  it("preserves hero link navigation and reports the action", () => {
-    const onAction = vi.fn();
-    render(
+  it("renders hero copy, author line breaks, an extensible highlight checklist, and composed media", () => {
+    const { container } = render(
       <Hero
         content={{
           title: "Title",
-          description: "Description",
-          actions: [
-            { id: "primary", label: "Continue", href: "#next", variant: "primary" },
-            { id: "secondary", label: "Learn", href: "#learn", variant: "secondary" },
+          description: "First line\nSecond line",
+          cta: { label: "Continue" },
+          highlights: [
+            { id: "a", label: "Fast" },
+            { id: "b", label: "Coherent" },
+            { id: "c", label: "Flexible" },
           ],
         }}
-        onAction={onAction}
-      />,
+      >
+        <div role="group" aria-label="Product preview">
+          Preview
+        </div>
+      </Hero>,
     );
-    const link = screen.getByRole("link", { name: "Continue" });
-    expect(link).toHaveAttribute("href", "#next");
-    link.click();
-    expect(onAction).toHaveBeenCalledWith(expect.objectContaining({ id: "primary" }));
-    expect(screen.getByTestId("hero-action:secondary")).toHaveClass("button--secondary");
+    expect(screen.getByRole("heading", { level: 1, name: "Title" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    const description = container.querySelector(".hero__description");
+    expect(description?.querySelectorAll("br")).toHaveLength(1);
+    expect(description).toHaveTextContent("First line");
+    expect(description).toHaveTextContent("Second line");
+    const highlights = screen.getByTestId("hero-highlights");
+    expect(within(highlights).getAllByRole("listitem")).toHaveLength(3);
+    expect(screen.getByTestId("hero-highlight:a")).toHaveTextContent("Fast");
+    expect(screen.getByTestId("hero-media")).toHaveTextContent("Preview");
+    expect(screen.getByRole("group", { name: "Product preview" })).toBeInTheDocument();
+  });
+
+  it("does not render empty CTA, highlight, or media surfaces", () => {
+    render(<Hero content={{ title: "Title", description: "Description" }}>{null}</Hero>);
+
+    expect(screen.queryByTestId("hero-cta")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("hero-highlights")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("hero-media")).not.toBeInTheDocument();
   });
 
   it("renders each feature and CTA variant", () => {
