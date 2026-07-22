@@ -17,9 +17,12 @@ async function getFeatureRoots(page: Page) {
     if (testId && !slotSuffixes.some((suffix) => testId.endsWith(suffix))) roots.push(candidate);
   }
 
-  expect(roots.length, "the app must compose at least one shared feature template").toBeGreaterThan(
-    0,
-  );
+  expect(
+    roots.length,
+    "each app must compose at least three shared feature templates",
+  ).toBeGreaterThanOrEqual(3);
+  const ids = await Promise.all(roots.map((root) => root.getAttribute("data-testid")));
+  expect(new Set(ids).size, "shared feature root ids must be distinct and stable").toBe(ids.length);
   return roots;
 }
 
@@ -33,7 +36,8 @@ async function expectNoHorizontalOverflow(page: Page) {
     .toBe(0);
 }
 
-async function expectCompleteFeature(root: Locator) {
+async function expectCompleteFeature(root: Locator, options: { stylesAvailable?: boolean } = {}) {
+  const { stylesAvailable = true } = options;
   const rootId = await root.getAttribute("data-testid");
   expect(rootId).toMatch(/^shared-feature:.+$/);
   if (!rootId) throw new Error("shared feature root must expose its stable test id");
@@ -46,13 +50,19 @@ async function expectCompleteFeature(root: Locator) {
   };
   for (const slot of Object.values(slots)) {
     await expect(slot).toHaveCount(1);
-    await expect(slot).toBeVisible();
   }
 
   const { numberLabel, header, subheader, content } = slots;
-  for (const copy of [numberLabel, header, subheader]) await expect(copy).toContainText(/\S+/);
+  for (const copy of [numberLabel, header, subheader]) {
+    await expect(copy).toBeVisible();
+    await expect(copy).toContainText(/\S+/);
+  }
+  if (stylesAvailable) await expect(content).toBeVisible();
   await expect(header).toHaveRole("heading");
-  await expect(content).not.toBeEmpty();
+  expect(
+    await content.locator(":scope > *").count(),
+    "app-owned children must remain composed",
+  ).toBeGreaterThan(0);
 
   const order = await root.locator(":scope [data-testid]").evaluateAll(
     (elements, ids) => {
@@ -73,6 +83,34 @@ async function expectCompleteFeature(root: Locator) {
     await interactive.focus();
     await expect(interactive).toBeFocused();
   }
+
+  const appearanceClasses = (await root.getAttribute("class"))
+    ?.split(/\s+/)
+    .filter(
+      (className) => className === "shared-feature--white" || className === "shared-feature--soft",
+    );
+  expect(
+    appearanceClasses,
+    "the explicit appearance must be represented by one modifier",
+  ).toHaveLength(1);
+}
+
+async function expectIntentionalLineBreak(copy: Locator) {
+  const text = await copy.textContent();
+  expect(text, "localized copy must retain its intentional newline").toContain("\n");
+  await expect(copy).toHaveCSS("white-space", "pre-line");
+
+  const lineTops = await copy.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return Array.from(range.getClientRects())
+      .filter((rect) => rect.width > 0 && rect.height > 0)
+      .map((rect) => Math.round(rect.top));
+  });
+  expect(
+    new Set(lineTops).size,
+    "the embedded newline must produce multiple visual lines",
+  ).toBeGreaterThanOrEqual(2);
 }
 
 for (const app of apps) {
@@ -86,7 +124,20 @@ for (const app of apps) {
       );
       await page.goto(`${app.origin}/en-US/`);
 
-      for (const root of await getFeatureRoots(page)) await expectCompleteFeature(root);
+      const roots = await getFeatureRoots(page);
+      expect(
+        await Promise.all(
+          roots.slice(0, 3).map((root) => root.getByTestId(/:number-label$/).textContent()),
+        ),
+      ).toEqual(["01", "02", "03"]);
+      const appearances = await Promise.all(
+        roots.map(
+          async (root) =>
+            (await root.getAttribute("class"))?.match(/shared-feature--(white|soft)/)?.[1],
+        ),
+      );
+      expect(new Set(appearances)).toEqual(new Set(["white", "soft"]));
+      for (const root of roots) await expectCompleteFeature(root);
       await expectNoHorizontalOverflow(page);
     });
 
@@ -113,10 +164,42 @@ for (const app of apps) {
           style.remove();
       });
 
-      for (const root of await getFeatureRoots(page)) await expectCompleteFeature(root);
+      for (const root of await getFeatureRoots(page)) {
+        await expectCompleteFeature(root, { stylesAvailable: false });
+      }
+      await expectNoHorizontalOverflow(page);
     });
   });
 }
+
+test("shared feature copy preserves intentional lines, accessible text, and semantic visual tokens", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "chromium",
+    "Computed presentation is sampled once in Chromium",
+  );
+  await page.goto(`${apps[0].origin}/en-US/`);
+
+  const firstRoot = (await getFeatureRoots(page))[0];
+  if (!firstRoot) throw new Error("the representative shared feature is missing");
+  const rootId = await firstRoot.getAttribute("data-testid");
+  if (!rootId) throw new Error("the representative shared feature id is missing");
+  const numberLabel = firstRoot.getByTestId(`${rootId}:number-label`);
+  const header = firstRoot.getByTestId(`${rootId}:header`);
+  const subheader = firstRoot.getByTestId(`${rootId}:subheader`);
+
+  await expectIntentionalLineBreak(header);
+  await expectIntentionalLineBreak(subheader);
+  const naturalHeading = (await header.textContent())?.replace(/\s+/g, " ").trim();
+  if (!naturalHeading) throw new Error("the representative heading copy is empty");
+  await expect(firstRoot).toHaveAccessibleName(naturalHeading);
+
+  await expect(numberLabel).toHaveClass(/shared-feature__number/);
+  await expect(numberLabel).toHaveCSS("background-color", "rgb(109, 93, 251)");
+  await expect(subheader).toHaveCSS("color", "rgb(100, 116, 139)");
+  await expect(subheader).toHaveCSS("font-weight", "300");
+});
 
 test("all apps use the same template contract with distinct copy and children", async ({
   browser,
