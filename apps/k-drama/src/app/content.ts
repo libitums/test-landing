@@ -1,4 +1,10 @@
-import type { CtaContent, FeatureItem, HeroContent, ProofMetric } from "@landing/contracts";
+import type {
+  CtaContent,
+  FeatureItem,
+  HeroContent,
+  PricingContent,
+  ProofMetric,
+} from "@landing/contracts";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
 import type { NavbarProps } from "@landing/contracts/navbar";
@@ -123,5 +129,58 @@ export function createContent(runtime: I18nRuntime) {
       ],
       ghostWords: ["SPEAK", "FREELY"],
     } satisfies CtaContent,
+    pricing: {
+      kicker: t("pricing.kicker"),
+      title: t("pricing.title"),
+      subtitle: t("pricing.subtitle"),
+      billing: {
+        monthlyLabel: t("pricing.billing.monthly"),
+        annualLabel: t("pricing.billing.annual"),
+        annualBadge: t("pricing.billing.save"),
+      },
+      plans: [
+        {
+          id: "free",
+          name: t("pricing.free.name"),
+          description: t("pricing.free.description"),
+          price: { monthly: "$0", annual: "$0", unit: t("pricing.unit") },
+          cta: t("pricing.free.cta"),
+          features: [
+            { id: "clips", label: t("pricing.free.feature.clips") },
+            { id: "captions", label: t("pricing.free.feature.captions") },
+            { id: "saved", label: t("pricing.free.feature.saved") },
+          ],
+        },
+        {
+          id: "plus",
+          name: t("pricing.plus.name"),
+          badge: t("pricing.badge.popular"),
+          featured: true,
+          description: t("pricing.plus.description"),
+          price: { monthly: "$4.99", annual: "$3.99", unit: t("pricing.unit") },
+          cta: t("pricing.plus.cta"),
+          features: [
+            { id: "unlimited", label: t("pricing.plus.feature.unlimited") },
+            { id: "import", label: t("pricing.plus.feature.import") },
+            { id: "offline", label: t("pricing.plus.feature.offline") },
+            { id: "reminders", label: t("pricing.plus.feature.reminders") },
+          ],
+        },
+        {
+          id: "premium",
+          name: t("pricing.premium.name"),
+          description: t("pricing.premium.description"),
+          price: { monthly: "$9.99", annual: "$7.99", unit: t("pricing.unit") },
+          cta: t("pricing.premium.cta"),
+          features: [
+            { id: "pronunciation", label: t("pricing.premium.feature.pronunciation") },
+            { id: "subtitles", label: t("pricing.premium.feature.subtitles") },
+            { id: "collections", label: t("pricing.premium.feature.collections") },
+            { id: "priority", label: t("pricing.premium.feature.priority") },
+          ],
+        },
+      ],
+      footerNote: t("pricing.footer"),
+    } satisfies PricingContent,
   };
 }
