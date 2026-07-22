@@ -687,6 +687,15 @@ button:focus-visible {
   inline-size: 100%;
   margin-block-start: var(--space-12);
 }
+.shared-feature__early-access-cta.button--text {
+  color: var(--color-subtle-fg);
+  text-decoration: underline;
+}
+.shared-feature__early-access-cta.button--text:hover,
+.shared-feature__early-access-cta.button--text:active {
+  color: var(--color-link-interactive);
+  text-decoration: underline;
+}
 .shared-feature__content img,
 .shared-feature__content video,
 .shared-feature__content svg {
