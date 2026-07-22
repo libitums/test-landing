@@ -38,8 +38,10 @@ WCAG AA를 충족한다.
 
 서브헤더는 본문보다 낮은 위계를 드러내는 `--color-subtle-fg`를 사용한다. 이
 시맨틱 토큰의 값은 `#64748b`이며 disabled 상태와 의미를 섞지 않는다. 실제
-`--text-xl` 크기와 `--font-normal` 굵기에서도 일반 텍스트 기준을 적용했을 때
+`--text-xl` 크기와 `--font-light` 굵기에서도 일반 텍스트 기준을 적용했을 때
 `--color-bg` 위 4.76:1, `--color-surface-soft` 위 4.53:1로 WCAG AA를 충족한다.
+`--font-light`는 기존 굵기 스케일의 `--font-normal`(400) 바로 아래인 표준 light
+값 300이며, 세 앱이 같은 서브헤더 위계를 공유하도록 공통 토큰으로 둔다.
 
 | 시각 역할                                 | 토큰                                               |
 | ----------------------------------------- | -------------------------------------------------- |
@@ -56,7 +58,7 @@ WCAG AA를 충족한다.
 | 헤더와 서브헤더 간격                      | `--space-6`                                        |
 | 소개부와 기능 콘텐츠 간격                 | `--space-12`                                       |
 | 헤더 타입                                 | `--text-display`, `--font-bold`, `--leading-tight` |
-| 서브헤더 타입                             | `--text-xl`, `--font-normal`, `--leading-body`     |
+| 서브헤더 타입                             | `--text-xl`, `--font-light`, `--leading-body`      |
 | 번호 타입                                 | `--text-lg`, `--font-bold`, `--leading-heading`    |
 | 번호 형태                                 | `--radius-full`                                    |
 | 반응형 경계                               | `--breakpoint-mobile`                              |
@@ -103,8 +105,8 @@ WCAG AA를 충족한다.
 ### `SharedFeatureSubheader`
 
 - 헤더를 바로 보충하는 본문이다. 색은 `--color-subtle-fg`, 타입은
-  `--text-xl` / `--font-normal` / `--leading-body`다. 기존 `--font-medium`보다
-  한 단계 낮은 굵기로 헤더와 위계를 분리한다.
+  `--text-xl` / `--font-light` / `--leading-body`다. 표준 light 굵기 300으로
+  헤더와 위계를 분리한다.
 - 최대 인라인 크기는 `--content-reading`이며 헤더와의 간격은 `--space-6`이다.
   지역화 문자열의 의도적인 `\n`을 보존하되 각 줄은 다시 자연스럽게 감쌀 수
   있어야 한다. 문구가 없을 때 빈 공간을 예약하지 않는다.
