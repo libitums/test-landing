@@ -15,8 +15,8 @@ export const koKR = {
   "hero.eyebrow": "더 나은 의사결정",
   "hero.title": "결정하기 전에 경로를 비교하세요",
   "hero.description":
-    "공통 시스템이 단절된 출시를 반복 가능한 학습 과정으로 바꾸는 방법을 확인하세요.",
-  "hero.action": "접근 방식 비교",
+    "공통 시스템이 단절된 출시를\n반복 가능한 학습 과정으로 바꾸는 방법을 확인하세요.",
+  "hero.action": "Get Early Access",
   "hero.preview": "접근 방식 미리보기",
   "comparison.title": "더 명확한 경로를 선택하세요",
   "comparison.region": "스크롤 가능한 접근 방식 비교",
@@ -77,8 +77,8 @@ export const enUS: Record<keyof typeof koKR, string> = {
   "hero.eyebrow": "A better way to decide",
   "hero.title": "Compare the paths before you commit",
   "hero.description":
-    "See how a shared system turns disconnected launches into a repeatable learning practice.",
-  "hero.action": "Compare approaches",
+    "See how a shared system turns disconnected launches\ninto a repeatable learning practice.",
+  "hero.action": "Get Early Access",
   "hero.preview": "Approach preview",
   "comparison.title": "Choose the clearer path",
   "comparison.region": "Scrollable approach comparison",
@@ -139,8 +139,8 @@ export const ar: Record<keyof typeof koKR, string> = {
   "hero.eyebrow": "طريقة أفضل للقرار",
   "hero.title": "قارن المسارات قبل الالتزام",
   "hero.description":
-    "اكتشف كيف يحول النظام المشترك عمليات الإطلاق المنفصلة إلى ممارسة تعلم قابلة للتكرار.",
-  "hero.action": "قارن الأساليب",
+    "اكتشف كيف يحول النظام المشترك عمليات الإطلاق المنفصلة\nإلى ممارسة تعلم قابلة للتكرار.",
+  "hero.action": "احصل على وصول مبكر",
   "hero.preview": "معاينة الأساليب",
   "comparison.title": "اختر المسار الأوضح",
   "comparison.region": "مقارنة أساليب قابلة للتمرير",
