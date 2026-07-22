@@ -293,6 +293,10 @@ h3 {
 .button--text:hover {
   background: var(--color-surface);
 }
+.button--secondary:active,
+.button--text:active {
+  background: var(--color-surface-strong);
+}
 .button--ghost {
   background: transparent;
   color: var(--color-fg);

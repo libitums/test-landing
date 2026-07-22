@@ -260,6 +260,19 @@ test("feature early access CTA uses the large low-emphasis secondary treatment",
   await expect(cta).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(cta).toHaveCSS("color", "rgb(15, 23, 42)");
   await expect(cta).toHaveCSS("border-color", "rgb(203, 213, 225)");
+
+  const target = await cta.boundingBox();
+  expect(target?.height).toBeGreaterThanOrEqual(44);
+  expect(target?.width).toBeGreaterThanOrEqual(44);
+
+  await cta.focus();
+  await expect(cta).toBeFocused();
+  await expect(cta).not.toHaveCSS("outline-style", "none");
+
+  await cta.hover();
+  await page.mouse.down();
+  await expect(cta).toHaveCSS("background-color", "rgb(226, 232, 240)");
+  await page.mouse.up();
 });
 
 test("all apps use the same template contract with distinct copy and children", async ({
