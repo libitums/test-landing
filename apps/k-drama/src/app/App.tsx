@@ -68,7 +68,12 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                 >
                   <div className="k-drama-hero-card__content" aria-hidden="true">
                     <strong>Make your own lesson</strong>
-                    <div className="k-drama-hero-card__url">▶ youtube.com/shorts/...</div>
+                    <div className="k-drama-hero-card__url">
+                      <span className="k-drama-hero-card__youtube-icon" aria-hidden="true">
+                        ▶
+                      </span>
+                      <span>youtube.com/shorts/...</span>
+                    </div>
                     <b>
                       Paste a link.
                       <br />
