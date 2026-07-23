@@ -4,6 +4,7 @@
   --color-bg: #ffffff;
   --color-surface: #f8fafc;
   --color-surface-soft: #fbf9f8;
+  --color-canvas-warm: #fcfaf7;
   --color-surface-strong: #e2e8f0;
   --color-fg: #0f172a;
   --color-muted-fg: #475569;
@@ -54,7 +55,9 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   --text-display: clamp(2.5rem, 5vw, 4.5rem);
+  --text-hero-display: 3.875rem;
   --leading-tight: 1.1;
+  --leading-hero-display: 1.06;
   --leading-heading: 1.2;
   --leading-body: 1.6;
 
@@ -76,11 +79,14 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
   --shadow-sm: 0 1px 2px rgb(15 23 42 / 8%);
   --shadow-md: 0 8px 24px rgb(15 23 42 / 12%);
   --shadow-lg: 0 20px 48px rgb(15 23 42 / 16%);
+  --shadow-media-card: 0 16px 34px rgb(0 0 0 / 9.4%);
+  --shadow-media-card-soft: 0 16px 34px rgb(0 0 0 / 6.3%);
   --shadow-cta: 0 12px 28px -6px rgb(109 40 217 / 20%);
   --focus-ring: 0 0 0 3px rgb(29 78 216 / 32%);
 
@@ -92,6 +98,11 @@
   --control-height: 2.75rem;
   --content-max: 75rem;
   --content-reading: 44rem;
+  --content-hero-copy: 48.75rem;
+  --content-hero-headline: 47.5rem;
+  --content-hero-subhead: 38.75rem;
+  --media-card-compact: 17.5rem;
+  --media-card-wide: 26.25rem;
   --breakpoint-mobile: 48rem;
   --layer-header: 20;
   --layer-overlay: 40;
