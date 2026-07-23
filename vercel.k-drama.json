@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter @landing/k-drama build",
+  "outputDirectory": "apps/k-drama/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
