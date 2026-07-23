@@ -1022,7 +1022,7 @@ button:focus-visible {
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-full);
   background: var(--color-editorial-control);
-  color: var(--color-editorial-accent);
+  color: var(--color-editorial-accent-active);
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
 }
@@ -1077,7 +1077,7 @@ button:focus-visible {
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   background: var(--color-editorial-control);
-  color: var(--color-editorial-accent);
+  color: var(--color-editorial-accent-active);
   font-size: var(--text-xs);
   font-weight: var(--font-bold);
 }
