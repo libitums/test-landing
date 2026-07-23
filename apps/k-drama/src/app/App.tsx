@@ -19,6 +19,13 @@ import {
   KDramaYoutubeLessonFeature,
 } from "../features/k-drama/KDramaFeatureVisuals";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
+
+const featureVisuals = {
+  subtitles: <KDramaDualSubtitleFeature />,
+  youtube: <KDramaYoutubeLessonFeature />,
+  shortform: <KDramaShortformFeature />,
+};
+
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
@@ -35,11 +42,6 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
-  };
-  const featureVisuals = {
-    subtitles: <KDramaDualSubtitleFeature />,
-    youtube: <KDramaYoutubeLessonFeature />,
-    shortform: <KDramaShortformFeature />,
   };
   return (
     <div id="top" data-testid="landing:k-drama">
@@ -122,7 +124,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                           <span>오늘도 좋은 하루 보내세요</span>
                         </div>
                         <div className="k-drama-hero-card__feed-slide">
-                          <strong className="k-drama-hero-card__feed-heading">One more scene</strong>
+                          <strong className="k-drama-hero-card__feed-heading">
+                            One more scene
+                          </strong>
                           <div className="k-drama-hero-card__feed-chips">
                             <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--topic">
                               K-drama
