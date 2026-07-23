@@ -16,6 +16,7 @@
     "@landing/design-tokens": "workspace:*",
     "@landing/ui": "workspace:*",
     "@landing/i18n": "workspace:*",
+    "lucide-react": "^1.25.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

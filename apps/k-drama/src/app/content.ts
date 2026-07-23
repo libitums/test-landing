@@ -92,26 +92,26 @@ export function createContent(runtime: I18nRuntime) {
       description: t("hero.description"),
       cta: { label: t("hero.start") },
       highlights: [
-        { id: "speed", label: t("features.speed.title") },
-        { id: "consistency", label: t("features.consistency.title") },
-        { id: "freedom", label: t("features.freedom.title") },
+        { id: "subtitles", label: t("features.subtitles.title") },
+        { id: "youtube", label: t("features.youtube.title") },
+        { id: "shortform", label: t("features.shortform.title") },
       ],
     } satisfies HeroContent,
     features: [
       {
-        id: "speed",
-        title: t("features.speed.title"),
-        description: t("features.speed.description"),
+        id: "subtitles",
+        title: t("features.subtitles.title"),
+        description: t("features.subtitles.description"),
       },
       {
-        id: "consistency",
-        title: t("features.consistency.title"),
-        description: t("features.consistency.description"),
+        id: "youtube",
+        title: t("features.youtube.title"),
+        description: t("features.youtube.description"),
       },
       {
-        id: "freedom",
-        title: t("features.freedom.title"),
-        description: t("features.freedom.description"),
+        id: "shortform",
+        title: t("features.shortform.title"),
+        description: t("features.shortform.description"),
       },
     ] satisfies readonly FeatureItem[],
     metrics: [
