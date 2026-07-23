@@ -1,37 +1,31 @@
-.comparison {
-  overflow-x: auto;
-  border: var(--space-1) solid var(--color-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-}
-.comparison:focus-visible {
-  outline: var(--space-1) solid var(--color-focus);
-  box-shadow: var(--focus-ring);
-}
-.comparison table {
-  inline-size: 100%;
-  min-inline-size: var(--content-reading);
-  border-collapse: collapse;
-  text-align: start;
-}
-.comparison th,
-.comparison td {
-  inline-size: calc(100% / 3);
-  padding: var(--space-5);
-  border-block-end: var(--space-1) solid var(--color-border);
-  text-align: start;
-}
-.comparison thead {
+.proof-strip {
   background: var(--color-surface);
 }
-.comparison th {
-  font-weight: var(--font-semibold);
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin: var(--space-0);
 }
-.comparison tbody tr:last-child > * {
-  border-block-end: none;
+.proof-grid div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-2);
 }
-.comparison td:last-child {
+.proof-grid dt {
   color: var(--color-muted-fg);
+}
+.proof-grid dd {
+  margin: var(--space-0);
+  color: var(--color-accent);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+}
+@media (max-width: 48rem) {
+  .proof-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
 }
 .locale-nav {
   display: flex;

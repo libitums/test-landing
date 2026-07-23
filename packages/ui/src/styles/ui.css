@@ -373,9 +373,6 @@ button:focus-visible {
   background: transparent;
   color: var(--navbar-foreground);
 }
-.navbar--violet-editorial {
-  border-block-end-color: var(--color-editorial-control);
-}
 .navbar__inner {
   min-block-size: var(--control-height);
   display: flex;
