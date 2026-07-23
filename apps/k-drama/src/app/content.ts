@@ -90,6 +90,12 @@ export function createContent(runtime: I18nRuntime) {
       label: t("hero.eyebrow"),
       title: t("hero.title"),
       description: t("hero.description"),
+      cta: { label: t("hero.start") },
+      highlights: [
+        { id: "speed", label: t("features.speed.title") },
+        { id: "consistency", label: t("features.consistency.title") },
+        { id: "freedom", label: t("features.freedom.title") },
+      ],
     } satisfies HeroContent,
     features: [
       {

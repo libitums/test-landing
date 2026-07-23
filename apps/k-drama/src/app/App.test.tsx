@@ -7,7 +7,7 @@ import { App } from "./App";
 import { getRuntime, resources } from "../i18n";
 
 describe("K-drama landing", () => {
-  it("renders the display-only Hero composition and only tracks exposure", async () => {
+  it("renders the shared Hero CTA and highlights while only tracking exposure", async () => {
     const adapter = createInMemoryAnalyticsAdapter();
     const analytics = createAppAnalytics("?utm_country=kr", {
       consent: { getState: () => "granted" },
@@ -18,18 +18,25 @@ describe("K-drama landing", () => {
     await waitFor(() => expect(adapter.events).toHaveLength(1));
     const hero = screen.getByTestId("hero");
     const label = screen.getByTestId(landingTestIds.heroLabel);
+    const action = screen.getByTestId(landingTestIds.heroCta);
+    const highlights = screen.getByTestId(landingTestIds.heroHighlights);
     const media = screen.getByTestId(landingTestIds.heroMedia);
     expect(hero).toContainElement(screen.getByRole("heading", { level: 1 }));
     expect(hero).toContainElement(label);
     expect(hero).toContainElement(media);
     expect(label).toHaveTextContent(resources["en-US"]["hero.eyebrow"]);
-    expect(screen.queryByTestId(landingTestIds.heroCta)).not.toBeInTheDocument();
-    expect(screen.queryByTestId(landingTestIds.heroHighlights)).not.toBeInTheDocument();
+    expect(action).toBeVisible();
+    expect(action).toHaveRole("button");
+    expect(action).not.toHaveAttribute("href");
+    expect(action).toHaveAttribute("aria-disabled", "true");
+    expect(action).toHaveTextContent(/\S+/);
+    expect(within(highlights).getAllByRole("listitem")).toHaveLength(3);
     expect(media).toBeInTheDocument();
     expect(media.querySelector("img")).toBeNull();
     expect(within(media).getAllByRole("img", { name: /\S+/ })).toHaveLength(3);
     expect(within(media).queryByRole("button")).not.toBeInTheDocument();
     expect(within(media).queryByRole("link")).not.toBeInTheDocument();
+    fireEvent.click(action);
     expect(adapter.events).toEqual([
       {
         name: "experiment_viewed",

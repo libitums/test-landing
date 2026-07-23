@@ -101,8 +101,10 @@ for (const app of apps) {
       const heroHighlights = hero.getByTestId(landingTestIds.heroHighlights);
       if (app.displayOnlyHero) {
         await expect(hero.getByTestId(landingTestIds.heroLabel)).toBeVisible();
-        await expect(heroCta).toHaveCount(0);
-        await expect(heroHighlights).toHaveCount(0);
+        await expect(heroCta).toBeVisible();
+        await expect(heroCta).toHaveRole("button");
+        await expect(heroCta).not.toHaveAttribute("href");
+        await expect(heroHighlights.getByRole("listitem")).toHaveCount(3);
         await expect(hero.getByTestId(landingTestIds.heroMedia).getByRole("img")).toHaveCount(3);
       } else {
         await expect(heroCta).toBeVisible();
@@ -205,8 +207,10 @@ for (const app of apps) {
     const cta = hero.getByTestId(landingTestIds.heroCta);
     if (app.displayOnlyHero) {
       await expect(hero.getByTestId(landingTestIds.heroLabel)).toBeVisible();
-      await expect(cta).toHaveCount(0);
-      await expect(hero.getByTestId(landingTestIds.heroHighlights)).toHaveCount(0);
+      await expect(cta).toBeVisible();
+      await expect(
+        hero.getByTestId(landingTestIds.heroHighlights).getByRole("listitem"),
+      ).toHaveCount(3);
       await expect(hero.getByTestId(landingTestIds.heroMedia).getByRole("img")).toHaveCount(3);
     } else {
       await expect(cta).toBeVisible();

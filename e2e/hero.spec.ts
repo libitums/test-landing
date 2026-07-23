@@ -114,13 +114,29 @@ for (const app of apps) {
         const visuals = media.getByRole("img", { name: /\S+/ });
         await expect(label).toBeVisible();
         await expect(label).toHaveText(/\S+/);
-        await expect(cta).toHaveCount(0);
-        await expect(highlights).toHaveCount(0);
+        await expect(cta).toBeVisible();
+        await expect(cta).toHaveRole("button");
+        await expect(cta).toHaveText(/\S+/);
+        await expect(cta).not.toHaveAttribute("href");
+        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        await expect(highlights).toBeVisible();
+        await expect(highlights.getByRole("listitem")).toHaveCount(3);
         await expect(visuals).toHaveCount(3);
         await expect(media.getByRole("button")).toHaveCount(0);
         await expect(media.getByRole("link")).toHaveCount(0);
         await expectCentered(label);
-        await expectOrderedWithoutOverlap([label, heading, description, visuals.first()]);
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([
+          label,
+          heading,
+          description,
+          cta,
+          highlights,
+          visuals.first(),
+        ]);
+        await expect
+          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+          .toBe("rgb(255, 255, 255)");
       } else {
         await expect(hero.getByTestId(landingTestIds.heroLabel)).toHaveCount(0);
         await expect(cta).toBeVisible();
@@ -156,6 +172,7 @@ for (const app of apps) {
       const heading = hero.getByRole("heading", { level: 1 });
       const description = hero.locator(".hero__description");
       const cta = hero.getByTestId(landingTestIds.heroCta);
+      const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
 
       for (const element of [heading, description]) await expectCentered(element);
@@ -163,9 +180,20 @@ for (const app of apps) {
         const label = hero.getByTestId(landingTestIds.heroLabel);
         const visuals = media.getByRole("img", { name: /\S+/ });
         await expectCentered(label);
-        await expect(cta).toHaveCount(0);
+        await expectCentered(cta);
+        await expect(highlights.getByRole("listitem")).toHaveCount(3);
         await expect(visuals).toHaveCount(3);
-        await expectOrderedWithoutOverlap([label, heading, description, ...(await visuals.all())]);
+        await expectOrderedWithoutOverlap([
+          label,
+          heading,
+          description,
+          cta,
+          highlights,
+          ...(await visuals.all()),
+        ]);
+        await expect
+          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+          .toBe("rgb(255, 255, 255)");
       } else {
         await expectCentered(cta);
         await expectOrderedWithoutOverlap([
@@ -198,18 +226,25 @@ test("RTL and long pseudo content preserve Hero order without overflow", async (
       const heading = hero.getByRole("heading", { level: 1 });
       const description = hero.locator(".hero__description");
       const cta = hero.getByTestId(landingTestIds.heroCta);
+      const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
       const visuals = media.getByRole("img", { name: /\S+/ });
 
       for (const element of [label, heading, description]) await expectCentered(element);
-      await expect(cta).toHaveCount(0);
+      await expect(cta).toBeVisible();
+      await expect(highlights.getByRole("listitem")).toHaveCount(3);
       await expect(visuals).toHaveCount(3);
       await expectOrderedWithoutOverlap([
         label,
         heading,
         description,
+        cta,
+        highlights,
         ...(viewport.width <= 768 ? await visuals.all() : [visuals.first()]),
       ]);
+      await expect
+        .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+        .toBe("rgb(255, 255, 255)");
       await expectNoHorizontalOverflowWithin(hero);
     }
   }
