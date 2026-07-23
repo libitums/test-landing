@@ -6,20 +6,21 @@ import { navbarTestIds } from "@landing/contracts/navbar";
 const apps = [
   {
     id: "k-drama",
-    origin: "http://127.0.0.1:4173",
+    origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
     displayOnlyHero: true,
   },
   {
     id: "ai-communication",
-    origin: "http://127.0.0.1:4174",
+    origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
     displayOnlyHero: false,
   },
   {
     id: "k-culture",
-    origin: "http://127.0.0.1:4175",
+    origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
     displayOnlyHero: false,
   },
 ] as const;
+const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
 const locales = [
   { name: "ko-KR", dir: "ltr" },
   { name: "en-US", dir: "ltr" },
@@ -72,6 +73,9 @@ async function expectVisibleFocus(page: Page) {
 for (const app of apps) {
   for (const locale of locales) {
     test(`${app.id} renders ${locale.name} metadata and semantic focus order`, async ({ page }) => {
+      // The focus-order walk traverses the full landing page. Disable smooth scrolling so
+      // Firefox does not spend the test budget animating between distant focus targets.
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(`${app.origin}/${locale.name}/campaign/launch?experiment=phase2`);
 
       await expect(page.locator("html")).toHaveAttribute("lang", locale.name);
@@ -189,7 +193,7 @@ for (const app of apps) {
     );
     const pageErrors: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
-    await page.goto(`http://127.0.0.1:4273/pseudo.html?app=${app.id}`);
+    await page.goto(`${pseudoOrigin}/pseudo.html?app=${app.id}`);
     await page.waitForLoadState("networkidle");
     expect(pageErrors).toEqual([]);
     await expect(page.locator("html")).toHaveAttribute("lang", "en-XA");

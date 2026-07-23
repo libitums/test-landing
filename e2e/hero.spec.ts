@@ -3,10 +3,23 @@ import AxeBuilder from "@axe-core/playwright";
 import { landingTestIds } from "@landing/contracts";
 
 const apps = [
-  { id: "k-drama", origin: "http://127.0.0.1:4173", displayOnly: true },
-  { id: "ai-communication", origin: "http://127.0.0.1:4174", displayOnly: false },
-  { id: "k-culture", origin: "http://127.0.0.1:4175", displayOnly: false },
+  {
+    id: "k-drama",
+    origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
+    displayOnly: true,
+  },
+  {
+    id: "ai-communication",
+    origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
+    displayOnly: false,
+  },
+  {
+    id: "k-culture",
+    origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
+    displayOnly: false,
+  },
 ] as const;
+const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
 
 async function expectNoHorizontalOverflow(page: Page) {
   const result = await page.evaluate(() => {
@@ -173,10 +186,7 @@ test("RTL and long pseudo content preserve Hero order without overflow", async (
 }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "Direction and long-copy coverage runs once");
 
-  for (const target of [
-    `${apps[0].origin}/ar/`,
-    `http://127.0.0.1:4273/pseudo.html?app=${apps[0].id}`,
-  ]) {
+  for (const target of [`${apps[0].origin}/ar/`, `${pseudoOrigin}/pseudo.html?app=${apps[0].id}`]) {
     for (const viewport of [
       { width: 1440, height: 900 },
       { width: 320, height: 800 },
