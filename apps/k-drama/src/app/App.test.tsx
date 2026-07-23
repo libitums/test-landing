@@ -50,14 +50,21 @@ describe("K-drama landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:k-drama")).toBeInTheDocument();
-    expect(screen.getByTestId("shared-feature:k-drama-speed")).toHaveClass("shared-feature--white");
-    expect(screen.getByTestId("shared-feature:k-drama-consistency")).toHaveClass(
-      "shared-feature--soft",
-    );
-    expect(screen.getByTestId("shared-feature:k-drama-freedom")).toHaveClass(
+    expect(screen.getByTestId("shared-feature:k-drama-subtitles")).toHaveClass(
       "shared-feature--white",
     );
-    const featureAction = screen.getByTestId("shared-feature:k-drama-speed:early-access-cta");
+    expect(screen.getByTestId("shared-feature:k-drama-youtube")).toHaveClass(
+      "shared-feature--soft",
+    );
+    expect(screen.getByTestId("shared-feature:k-drama-shortform")).toHaveClass(
+      "shared-feature--white",
+    );
+    expect(document.querySelector(".k-drama-feature--subtitles")).toBeInTheDocument();
+    expect(document.querySelector(".k-drama-feature--youtube")).toBeInTheDocument();
+    expect(document.querySelector(".k-drama-feature--shortform")).toBeInTheDocument();
+    const featureAction = screen.getByTestId(
+      "shared-feature:k-drama-subtitles:early-access-cta",
+    );
     expect(featureAction).toHaveAttribute("href", "/k-drama/early-access");
     expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
     expect(featureAction).not.toHaveClass("button--secondary");
@@ -65,7 +72,7 @@ describe("K-drama landing", () => {
     fireEvent.click(featureAction);
     await waitFor(() => expect(adapter.events).toHaveLength(2));
     expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "feature_cta_clicked", featureId: "speed" }),
+      expect.objectContaining({ name: "feature_cta_clicked", featureId: "subtitles" }),
     );
   });
 });

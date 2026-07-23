@@ -79,6 +79,9 @@ importers:
       "@landing/ui":
         specifier: workspace:*
         version: link:../../packages/ui
+      lucide-react:
+        specifier: ^1.25.0
+        version: 1.25.0(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0

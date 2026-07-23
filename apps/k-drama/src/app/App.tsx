@@ -13,6 +13,11 @@ import {
   PricingSection,
 } from "@landing/ui";
 import { KDramaProofStrip } from "../features/k-drama/KDramaProofStrip";
+import {
+  KDramaDualSubtitleFeature,
+  KDramaShortformFeature,
+  KDramaYoutubeLessonFeature,
+} from "../features/k-drama/KDramaFeatureVisuals";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
   analytics: AnalyticsTracker;
@@ -30,6 +35,11 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
+  };
+  const featureVisuals = {
+    subtitles: <KDramaDualSubtitleFeature />,
+    youtube: <KDramaYoutubeLessonFeature />,
+    shortform: <KDramaShortformFeature />,
   };
   return (
     <div id="top" data-testid="landing:k-drama">
@@ -164,15 +174,18 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                   subheaderText={feature.description}
                   testId={sharedFeatureTestIds.root(featureTestId)}
                 >
-                  <ButtonLink
-                    className="shared-feature__early-access-cta"
-                    variant="text"
-                    href="/k-drama/early-access"
-                    data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
-                    onClick={() => trackFeatureCta(feature.id)}
-                  >
-                    Get early access
-                  </ButtonLink>
+                  <div className="k-drama-feature-composition">
+                    {featureVisuals[feature.id as keyof typeof featureVisuals]}
+                    <ButtonLink
+                      className="shared-feature__early-access-cta"
+                      variant="text"
+                      href="/k-drama/early-access"
+                      data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
+                      onClick={() => trackFeatureCta(feature.id)}
+                    >
+                      Get early access
+                    </ButtonLink>
+                  </div>
                 </SharedFeatureTemplate>
               );
             })}
