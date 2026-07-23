@@ -1,15 +1,12 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
+// ai-communication renders bespoke feature sections (not the shared template),
+// so it is intentionally excluded from the shared-feature contract coverage.
 const apps = [
   {
     id: "k-drama",
     origin: "http://127.0.0.1:4173",
     earlyAccessPath: "/k-drama/early-access",
-  },
-  {
-    id: "ai-communication",
-    origin: "http://127.0.0.1:4174",
-    earlyAccessPath: "/ai-communication/early-access",
   },
   {
     id: "k-culture",
