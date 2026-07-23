@@ -249,6 +249,1063 @@
   }
 }
 
+/* Feature 01 — role-play section (bespoke two-column), from ai-community.pen.
+   Left copy + right decorative visual (phone mockup, rail, scenario cards). */
+.feature-roleplay {
+  padding-block: var(--space-24);
+  background: #ffffff;
+  color: #111111;
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+.feature-roleplay__inner {
+  inline-size: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-16);
+  align-items: center;
+}
+.feature-roleplay__glyph {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+}
+
+/* Left copy */
+.feature-roleplay__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.feature-roleplay__badge {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 9999px;
+  background: #7b61ff;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+}
+.feature-roleplay__headline {
+  margin: 0;
+  max-inline-size: 12ch;
+  font-size: clamp(34px, 4vw, 60px);
+  font-weight: 800;
+  line-height: 1.12;
+}
+.feature-roleplay__pills {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.feature-roleplay__pill {
+  align-self: flex-start;
+  max-inline-size: 100%;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: #f5f3ff;
+  color: #6d28d9;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Right visual */
+.feature-roleplay__visual {
+  position: relative;
+  block-size: 620px;
+  min-inline-size: 0;
+}
+.feature-roleplay__tags {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 235px;
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+.feature-roleplay__tag {
+  padding: 6px 12px;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 13%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+}
+.feature-roleplay__tag--selected {
+  background: #e8e8e8;
+}
+
+/* Action rail */
+.feature-roleplay__rail {
+  position: absolute;
+  inset-block-start: 150px;
+  inset-inline-end: 278px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 7px;
+  border-radius: 9999px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgb(0 0 0 / 6%),
+    0 18px 34px rgb(0 0 0 / 13%);
+}
+.feature-roleplay__rail-btn {
+  display: grid;
+  place-items: center;
+  inline-size: 42px;
+  block-size: 42px;
+  border-radius: 9999px;
+  background: #f8fafc;
+  color: #111827;
+}
+.feature-roleplay__rail-btn--active {
+  background: #635bff;
+  color: #ffffff;
+}
+.feature-roleplay__rail-btn--soft {
+  background: #f6f4ff;
+  color: #635bff;
+}
+.feature-roleplay__rail-btn .feature-roleplay__glyph {
+  inline-size: 19px;
+  block-size: 19px;
+}
+
+/* Phone mockup */
+.feature-roleplay__phone {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  inline-size: 270px;
+  block-size: 620px;
+  border-radius: 48px;
+  overflow: hidden;
+  background: #050505 center / cover no-repeat;
+  background-image: url("/images/generated-1784078540732.png");
+  box-shadow: 0 22px 44px rgb(0 0 0 / 25%);
+  z-index: 2;
+}
+.feature-roleplay__phone-scrim {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  block-size: 150px;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 48%), transparent);
+}
+.feature-roleplay__notch {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  inline-size: 112px;
+  block-size: 28px;
+  border-radius: 16px;
+  background: #050505;
+  z-index: 5;
+}
+.feature-roleplay__notch-speaker {
+  inline-size: 40px;
+  block-size: 5px;
+  border-radius: 3px;
+  background: #111111;
+}
+.feature-roleplay__notch-camera {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 9999px;
+  background: #151515;
+}
+.feature-roleplay__phone-top {
+  position: absolute;
+  inset-inline: 18px;
+  inset-block-start: 44px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 5;
+}
+.feature-roleplay__phone-btn {
+  display: grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: 9999px;
+  background: rgb(0 0 0 / 30%);
+  color: #ffffff;
+}
+.feature-roleplay__phone-btn .feature-roleplay__glyph {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.feature-roleplay__phone-title {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 96px;
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  z-index: 3;
+}
+.feature-roleplay__phone-badge {
+  position: absolute;
+  inset-block-start: 128px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 15px;
+  background: #ffffff;
+  border: 1px solid rgb(255 79 182 / 20%);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 12%);
+  color: #111827;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 3;
+}
+.feature-roleplay__chat {
+  position: absolute;
+  inset-inline: 22px;
+  inset-block-end: 96px;
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgb(255 255 255 / 18%);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgb(255 255 255 / 25%);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 24%);
+  z-index: 3;
+}
+.feature-roleplay__chat-lead {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.feature-roleplay__chat-detail {
+  margin: 0;
+  color: rgb(255 255 255 / 82%);
+  font-size: 10px;
+  font-weight: 500;
+}
+.feature-roleplay__phone-mic {
+  position: absolute;
+  inset-block-end: 34px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 24%);
+  z-index: 4;
+}
+.feature-roleplay__phone-mic .feature-roleplay__glyph {
+  inline-size: 22px;
+  block-size: 22px;
+}
+.feature-roleplay__home-indicator {
+  position: absolute;
+  inset-block-end: 10px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  inline-size: 110px;
+  block-size: 5px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 85%);
+  z-index: 4;
+}
+
+/* Scenario cards */
+.feature-roleplay__cards {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  display: flex;
+  gap: 14px;
+  z-index: 1;
+}
+.feature-roleplay__scene {
+  position: relative;
+  overflow: hidden;
+  inline-size: 138px;
+  block-size: 180px;
+  border-radius: 24px;
+  background: #0b0b0f center / cover no-repeat;
+  box-shadow: 0 16px 34px rgb(0 0 0 / 18%);
+}
+.feature-roleplay__scene--cosmetic {
+  background-image: url("/images/generated-1784080123643.png");
+}
+.feature-roleplay__scene--taxi {
+  background-image: url("/images/generated-1784079571576.png");
+}
+.feature-roleplay__scene-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #050505 0%, rgb(0 0 0 / 60%) 26%, transparent 62%);
+}
+.feature-roleplay__scene-title {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 16px;
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .feature-roleplay__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+  .feature-roleplay__visual {
+    block-size: 560px;
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+}
+
+/* Feature 02 — corrections section (bespoke two-column), from ai-community.pen.
+   Left copy + right decorative collage (voice card, chat card, correction). */
+.feature-corrections {
+  padding-block: var(--space-24);
+  background: #fbf9f8;
+  color: #111111;
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+.feature-corrections__inner {
+  inline-size: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+.feature-corrections__glyph {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+}
+
+/* Left copy */
+.feature-corrections__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.feature-corrections__badge {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 9999px;
+  background: #7b61ff;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+}
+.feature-corrections__headline {
+  margin: 0;
+  font-size: clamp(32px, 3.8vw, 60px);
+  font-weight: 800;
+  line-height: 1.05;
+}
+.feature-corrections__description {
+  margin: 0;
+  max-inline-size: 46ch;
+  color: #5f6368;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* Boxes in order below the copy */
+.feature-corrections__visual {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-inline-size: 0;
+}
+.feature-corrections__card {
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 14px 28px rgb(0 0 0 / 16%);
+}
+.feature-corrections__voice {
+  inline-size: 180px;
+  block-size: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.feature-corrections__wave {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  block-size: 82px;
+}
+.feature-corrections__wave span {
+  inline-size: 20px;
+  border-radius: 12px;
+  background: #7b61ff;
+}
+.feature-corrections__wave span:nth-child(1) {
+  block-size: 48px;
+}
+.feature-corrections__wave span:nth-child(2) {
+  block-size: 82px;
+}
+.feature-corrections__wave span:nth-child(3) {
+  block-size: 50px;
+}
+.feature-corrections__wave span:nth-child(4) {
+  block-size: 30px;
+}
+.feature-corrections__voice-text {
+  margin: 0;
+  color: #5f6368;
+  font-size: 20px;
+  font-weight: 700;
+}
+.feature-corrections__chat {
+  inline-size: 200px;
+  block-size: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 22px 18px;
+}
+.feature-corrections__bubble {
+  padding: 10px 16px;
+  border-radius: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.feature-corrections__bubble--outline {
+  align-self: flex-start;
+  border: 2px solid #7b61ff;
+  border-end-start-radius: 6px;
+  color: #6d28d9;
+}
+.feature-corrections__bubble--fill {
+  align-self: flex-end;
+  background: #7b61ff;
+  border-end-end-radius: 6px;
+  color: #ffffff;
+}
+.feature-corrections__reply {
+  align-self: flex-end;
+  display: grid;
+}
+.feature-corrections__reply > * {
+  grid-area: 1 / 1;
+  justify-self: end;
+}
+.feature-corrections__typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border-end-end-radius: 6px;
+  background: #7b61ff;
+  opacity: 0;
+}
+.feature-corrections__dot {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 9999px;
+  background: #ffffff;
+}
+
+/* Third box: chat-room UI with an elevated correction card overlapping it */
+.feature-corrections__chatroom {
+  position: relative;
+  inline-size: min(340px, 100%);
+  padding: 20px;
+  border-radius: 22px;
+  background: #f6f5f9;
+  box-shadow: inset 0 0 0 1px rgb(17 24 39 / 4%);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.feature-corrections__cr-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.feature-corrections__cr-msg {
+  max-inline-size: 78%;
+  padding: 10px 16px;
+  border-radius: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.feature-corrections__cr-msg--in {
+  align-self: flex-start;
+  border: 2px solid #7b61ff;
+  border-end-start-radius: 6px;
+  color: #6d28d9;
+  background: #ffffff;
+}
+.feature-corrections__cr-msg--out {
+  align-self: flex-end;
+  background: #7b61ff;
+  border-end-end-radius: 6px;
+  color: #ffffff;
+}
+.feature-corrections__feedback {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 6%),
+    0 16px 30px rgb(0 0 0 / 16%);
+}
+.feature-corrections__feedback-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1f2937;
+}
+.feature-corrections__phrase-old {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+}
+.feature-corrections__phrase-new {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+.feature-corrections__phrase-arrow {
+  display: inline-flex;
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  color: #0066ff;
+}
+.feature-corrections__explain {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42;
+  color: #374151;
+}
+
+@media (max-width: 900px) {
+  .feature-corrections__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+}
+
+/* Feature 03 — bias/personas section (bespoke two-column), from ai-community.pen.
+   Left copy + right decorative grid of persona cards + add tile. */
+.feature-bias {
+  padding-block: var(--space-24);
+  background: #fcfaf7;
+  color: #1a1a1a;
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+.feature-bias__inner {
+  inline-size: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-16);
+  align-items: center;
+}
+.feature-bias__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+.feature-bias__badge {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 9999px;
+  background: #7b61ff;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+}
+.feature-bias__headline {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 58px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+.feature-bias__description {
+  margin: 0;
+  max-inline-size: 44ch;
+  color: #5f6368;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.feature-bias__cta.button--text {
+  margin-block-start: 4px;
+}
+
+/* Persona grid + chat list */
+.feature-bias__visual {
+  position: relative;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.feature-bias__chatlist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.feature-bias__chatrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 14px;
+}
+.feature-bias__chatrow:first-child {
+  background: #f6f5f9;
+}
+.feature-bias__avatar {
+  flex: none;
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: 9999px;
+  background: #e5e5ea center / cover no-repeat;
+}
+.feature-bias__avatar--midnight {
+  background-image: url("/images/image-6.png");
+}
+.feature-bias__avatar--offrecord {
+  background-image: url("/images/image-5.png");
+}
+.feature-bias__chatrow-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.feature-bias__chatrow-name {
+  color: #111827;
+  font-size: 15px;
+  font-weight: 600;
+}
+.feature-bias__chatrow-preview {
+  display: block;
+  overflow: hidden;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.feature-bias__chatrow-preview-text {
+  display: inline-block;
+}
+.feature-bias__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.feature-bias__persona {
+  position: relative;
+  overflow: hidden;
+  block-size: 240px;
+  border-radius: 24px;
+  background: #0b0b0f center / cover no-repeat;
+  box-shadow: 0 16px 34px rgb(0 0 0 / 18%);
+}
+.feature-bias__persona::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #050505 4%, rgb(0 0 0 / 60%) 34%, transparent 66%);
+}
+.feature-bias__persona--midnight {
+  background-image: url("/images/image-6.png");
+}
+.feature-bias__persona--offrecord {
+  background-image: url("/images/image-5.png");
+}
+.feature-bias__persona--order {
+  background-image: url("/images/image-7.png");
+}
+.feature-bias__persona--closer {
+  background-image: url("/images/image-8.png");
+}
+.feature-bias__streak {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  z-index: 1;
+  padding: 5px 10px;
+  border-radius: 15px;
+  background: rgb(0 0 0 / 47%);
+  color: #d2d7dc;
+  font-size: 11px;
+  font-weight: 500;
+}
+.feature-bias__persona-body {
+  position: absolute;
+  inset-inline: 14px;
+  inset-block-end: 14px;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+}
+.feature-bias__persona-name {
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.feature-bias__persona-quote {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: rgb(255 255 255 / 78%);
+  font-size: 9px;
+  line-height: 1.42;
+}
+.feature-bias__persona-tags {
+  margin: 0;
+  color: rgb(255 255 255 / 60%);
+  font-size: 9px;
+}
+.feature-bias__add {
+  position: absolute;
+  inset-block-end: -22px;
+  inset-inline-start: -22px;
+  display: grid;
+  place-items: center;
+  inline-size: 88px;
+  block-size: 88px;
+  border-radius: 24px;
+  background: rgba(26, 26, 31, 0.5);
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgb(0 0 0 / 26%);
+}
+.feature-bias__add-glyph {
+  inline-size: 34px;
+  block-size: 34px;
+}
+@media (max-width: 900px) {
+  .feature-bias__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+}
+
+/* Feature 03 chat list: a new message slides into a room (motion-safe).
+   Clip-reveal (no opacity) keeps text at full contrast for axe. */
+@media (prefers-reduced-motion: no-preference) {
+  .feature-bias__chatrow-preview-text {
+    animation: fb-msg-arrive 4.4s ease-in-out infinite;
+  }
+  .feature-bias__chatrow:nth-child(2) .feature-bias__chatrow-preview-text {
+    animation-delay: 2.2s;
+  }
+  @keyframes fb-msg-arrive {
+    0%,
+    8% {
+      transform: translateY(150%);
+    }
+    18%,
+    86% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(150%);
+    }
+  }
+}
+
+/* Feature 02 motion (motion-safe): speech-like waveform + typing → reply. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Waveform with an irregular, speech-like cadence for "지금 어디야?" */
+  .feature-corrections__wave span {
+    transform-origin: center;
+    animation: fc-wave-a 1.9s ease-in-out infinite;
+  }
+  .feature-corrections__wave span:nth-child(2) {
+    animation-name: fc-wave-b;
+  }
+  .feature-corrections__wave span:nth-child(3) {
+    animation-name: fc-wave-c;
+  }
+  .feature-corrections__wave span:nth-child(4) {
+    animation-name: fc-wave-d;
+  }
+  @keyframes fc-wave-a {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    14% {
+      transform: scaleY(0.9);
+    }
+    40% {
+      transform: scaleY(0.5);
+    }
+    60% {
+      transform: scaleY(1);
+    }
+    82% {
+      transform: scaleY(0.45);
+    }
+  }
+  @keyframes fc-wave-b {
+    0%,
+    100% {
+      transform: scaleY(0.55);
+    }
+    20% {
+      transform: scaleY(1);
+    }
+    46% {
+      transform: scaleY(0.6);
+    }
+    72% {
+      transform: scaleY(0.85);
+    }
+  }
+  @keyframes fc-wave-c {
+    0%,
+    100% {
+      transform: scaleY(0.4);
+    }
+    26% {
+      transform: scaleY(0.7);
+    }
+    52% {
+      transform: scaleY(1);
+    }
+    78% {
+      transform: scaleY(0.5);
+    }
+  }
+  @keyframes fc-wave-d {
+    0%,
+    100% {
+      transform: scaleY(0.6);
+    }
+    30% {
+      transform: scaleY(0.4);
+    }
+    56% {
+      transform: scaleY(0.95);
+    }
+    84% {
+      transform: scaleY(0.5);
+    }
+  }
+
+  /* Second box: typing indicator, then the reply bubble appears */
+  .feature-corrections__typing {
+    animation: fc-typing 3.6s ease-in-out infinite;
+  }
+  .feature-corrections__reply .feature-corrections__bubble--fill {
+    opacity: 0;
+    animation: fc-reply 3.6s ease-in-out infinite;
+  }
+  .feature-corrections__dot {
+    animation: fc-dot 1s ease-in-out infinite;
+  }
+  .feature-corrections__dot:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .feature-corrections__dot:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+  @keyframes fc-typing {
+    0%,
+    30% {
+      opacity: 1;
+    }
+    40%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes fc-reply {
+    0%,
+    40% {
+      opacity: 0;
+      transform: translateY(6px) scale(0.96);
+    }
+    50%,
+    92% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(6px) scale(0.96);
+    }
+  }
+  @keyframes fc-dot {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+
+  /* Third box: staged message send (hero-style) — in → out → correction */
+  .feature-corrections__chatroom .feature-corrections__cr-msg--in {
+    animation: fc-cr-in 5s ease-in-out infinite;
+  }
+  .feature-corrections__chatroom .feature-corrections__cr-msg--out {
+    animation: fc-cr-out 5s ease-in-out infinite;
+  }
+  .feature-corrections__chatroom .feature-corrections__feedback {
+    animation: fc-cr-fb 5s ease-in-out infinite;
+  }
+  @keyframes fc-cr-in {
+    0%,
+    4% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+    12%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+  @keyframes fc-cr-out {
+    0%,
+    32% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+    42%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+  @keyframes fc-cr-fb {
+    0%,
+    58% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+    70%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+  }
+}
+
+/* Feature 01 chat: purple fill sweeping in from the left (motion-safe). */
+@media (prefers-reduced-motion: no-preference) {
+  .feature-roleplay__chat-lead {
+    background-image: linear-gradient(to right, #6d28d9 50%, currentColor 50%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: feature-chat-fill 8s ease-in-out infinite;
+  }
+  @keyframes feature-chat-fill {
+    0% {
+      background-position: 100% 0;
+    }
+    40%,
+    82% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }
+
+  .feature-roleplay__cards .feature-roleplay__scene {
+    animation: feature-card-slide 4.6s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  }
+  .feature-roleplay__cards .feature-roleplay__scene:nth-child(2) {
+    animation-delay: 0.28s;
+  }
+  @keyframes feature-card-slide {
+    0% {
+      transform: translateX(52px);
+      opacity: 0;
+    }
+    20%,
+    86% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-52px);
+      opacity: 0;
+    }
+  }
+}
+
 /* Hero media animations — grouped, motion-safe only.
    Cards 1 & 3: tile "click" spring. Card 2: staged message send. */
 @media (prefers-reduced-motion: no-preference) {
