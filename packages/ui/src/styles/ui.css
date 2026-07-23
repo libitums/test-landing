@@ -155,7 +155,7 @@ h3 {
   min-inline-size: 0;
   margin-block-start: var(--space-12);
   padding-block-start: var(--space-8);
-  border-block-start: var(--space-1) solid var(--color-border);
+  border-block-start: 1px solid var(--color-border);
 }
 .footer__logo {
   color: var(--color-fg);
@@ -229,10 +229,10 @@ h3 {
   border-block-start: var(--space-0);
 }
 .landing-header {
-  border-block-end: var(--space-1) solid var(--color-border);
+  border-block-end: 1px solid var(--color-border);
 }
 .landing-footer {
-  border-block-start: var(--space-1) solid var(--color-border);
+  border-block-start: 1px solid var(--color-border);
   color: var(--color-muted-fg);
 }
 .header-inner,
@@ -262,7 +262,7 @@ h3 {
   align-items: center;
   justify-content: center;
   padding-inline: var(--space-6);
-  border: var(--space-1) solid transparent;
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-weight: var(--font-semibold);
   text-align: center;
@@ -333,11 +333,11 @@ h3 {
   color: var(--color-danger-fg);
 }
 a:focus-visible {
-  outline: var(--space-1) solid var(--color-focus);
+  outline: 1px solid var(--color-focus);
   box-shadow: var(--focus-ring);
 }
 button:focus-visible {
-  outline: var(--space-1) solid var(--color-focus);
+  outline: 1px solid var(--color-focus);
   box-shadow: var(--focus-ring);
 }
 .visually-hidden {
@@ -355,7 +355,7 @@ button:focus-visible {
   position: relative;
   z-index: var(--layer-header);
   padding-block: var(--space-4);
-  border-block-end: var(--space-1) solid var(--color-border);
+  border-block-end: 1px solid var(--color-border);
   background: transparent;
   color: var(--color-fg);
 }
@@ -537,7 +537,7 @@ button:focus-visible {
   inset-inline-end: var(--space-0);
   inline-size: min(100%, var(--content-reading));
   padding: var(--space-6);
-  border-inline-start: var(--space-1) solid var(--color-border);
+  border-inline-start: 1px solid var(--color-border);
   background: var(--color-bg);
   box-shadow: var(--shadow-lg);
   animation: navbar-sheet-in var(--duration-normal) var(--ease-standard);
@@ -716,7 +716,7 @@ button:focus-visible {
 .hero-media-card {
   padding: var(--space-8);
   background: var(--color-surface);
-  border: var(--space-1) solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   color: var(--color-muted-fg);
@@ -754,7 +754,7 @@ button:focus-visible {
   gap: var(--space-4);
   padding: var(--space-8);
   background: var(--color-bg);
-  border: var(--space-1) solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
@@ -1049,7 +1049,7 @@ button:focus-visible {
   padding: var(--space-1);
   border-radius: var(--radius-full);
   background: var(--color-surface);
-  border: var(--space-1) solid var(--color-border);
+  border: 1px solid var(--color-border);
 }
 .pricing__billing-option {
   display: inline-flex;
@@ -1095,13 +1095,13 @@ button:focus-visible {
   gap: var(--space-5);
   padding: var(--space-6);
   background: var(--color-bg);
-  border: var(--space-1) solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
 }
 .pricing__plan--featured {
   border-color: var(--color-editorial-accent);
-  border-width: calc(var(--space-1) * 2);
+  border-width: 1px;
   box-shadow: var(--shadow-lg);
 }
 .pricing__plan-head {
@@ -1162,7 +1162,7 @@ button:focus-visible {
   margin-block-start: var(--space-1);
   padding-block-start: var(--space-5);
   padding-inline-start: var(--space-0);
-  border-block-start: var(--space-1) solid var(--color-border);
+  border-block-start: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
