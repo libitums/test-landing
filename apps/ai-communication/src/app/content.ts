@@ -1,9 +1,9 @@
 import type {
-  ComparisonRow,
   CtaContent,
   FeatureItem,
   HeroContent,
   PricingContent,
+  ProofMetric,
 } from "@landing/contracts";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
@@ -16,7 +16,7 @@ export function createNavbarProps(runtime: I18nRuntime, location: string): Navba
     appearance: "violet-editorial",
     content: {
       logo: { kind: "text", label: t("brand"), accessibleLabel: t("brand"), href: "#top" },
-      howItWorks: { label: t("nav.comparison"), href: "#comparison" },
+      howItWorks: { label: t("nav.proof"), href: "#proof" },
       pricing: { label: t("nav.benefits"), href: "#features" },
       language: {
         label: t("locale.label"),
@@ -93,26 +93,11 @@ export function createContent(runtime: I18nRuntime) {
         { id: "global", label: t("features.global.title") },
       ],
     } satisfies HeroContent,
-    rows: [
-      {
-        id: "setup",
-        criterion: t("comparison.setup.criterion"),
-        productValue: t("comparison.setup.product"),
-        alternativeValue: t("comparison.setup.alternative"),
-      },
-      {
-        id: "brand",
-        criterion: t("comparison.brand.criterion"),
-        productValue: t("comparison.brand.product"),
-        alternativeValue: t("comparison.brand.alternative"),
-      },
-      {
-        id: "extension",
-        criterion: t("comparison.extension.criterion"),
-        productValue: t("comparison.extension.product"),
-        alternativeValue: t("comparison.extension.alternative"),
-      },
-    ] satisfies readonly ComparisonRow[],
+    metrics: [
+      { id: "markets", value: t("proof.markets.value"), label: t("proof.markets.label") },
+      { id: "reuse", value: t("proof.reuse.value"), label: t("proof.reuse.label") },
+      { id: "launch", value: t("proof.launch.value"), label: t("proof.launch.label") },
+    ] satisfies readonly ProofMetric[],
     features: [
       {
         id: "clarity",

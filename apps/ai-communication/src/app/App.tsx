@@ -9,7 +9,7 @@ import {
   Navbar,
   PricingSection,
 } from "@landing/ui";
-import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
+import { AiCommunicationProofStrip } from "../features/ai-communication/AiCommunicationProofStrip";
 import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
 import { FeatureRoleplay } from "../features/ai-communication/FeatureRoleplay";
 import { FeatureCorrections } from "../features/ai-communication/FeatureCorrections";
@@ -42,16 +42,8 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
           <Hero content={content.hero}>
             <HeroShowcase label={t("hero.preview")} />
           </Hero>
-          <div id="comparison">
-            <AiCommunicationComparison
-              rows={content.rows}
-              title={t("comparison.title")}
-              regionLabel={t("comparison.region")}
-              tableLabel={t("comparison.table")}
-              criterionLabel={t("comparison.criterion")}
-              productLabel={t("comparison.product")}
-              alternativeLabel={t("comparison.alternative")}
-            />
+          <div id="proof">
+            <AiCommunicationProofStrip metrics={content.metrics} title={t("proof.title")} />
           </div>
           <div id="features">
             <FeatureRoleplay />
