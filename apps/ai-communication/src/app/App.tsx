@@ -13,6 +13,7 @@ import {
   PricingSection,
 } from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
+import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
   analytics: AnalyticsTracker;
@@ -39,14 +40,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
       >
         <LandingShell.Main>
           <Hero content={content.hero}>
-            <div
-              className="hero-media-card hero-media-card--communication"
-              role="group"
-              aria-label={t("comparison.region")}
-            >
-              <span>{t("comparison.product")}</span>
-              <span>{t("comparison.alternative")}</span>
-            </div>
+            <HeroShowcase label={t("hero.preview")} />
           </Hero>
           <div id="comparison">
             <AiCommunicationComparison

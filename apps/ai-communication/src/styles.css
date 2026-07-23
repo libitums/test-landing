@@ -42,3 +42,298 @@
   font-weight: var(--font-bold);
   text-decoration-thickness: var(--space-1);
 }
+
+/* Hero media: role-play conversation + on-the-spot correction, from
+   ai-community.pen ("Talkie Landing Hero"). Decorative reproduction —
+   see HeroShowcase.tsx. Photos come in as background-image (never <img>). */
+.hero-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-6);
+  inline-size: 100%;
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+.hero-showcase__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  inline-size: min(217px, 100%);
+}
+.hero-showcase__col--center {
+  align-self: center;
+  inline-size: min(300px, 100%);
+}
+.hero-showcase__glyph {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+}
+
+/* Scenario photo cards */
+.hero-showcase__scene {
+  position: relative;
+  overflow: hidden;
+  inline-size: min(217px, 100%);
+  block-size: 240px;
+  border-radius: 24px;
+  background-color: #0b0b0f;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 34px rgb(0 0 0 / 18%);
+}
+.hero-showcase__scene--cosmetic {
+  background-image: url("/images/generated-1784080123643.png");
+}
+.hero-showcase__scene--idol {
+  background-image: url("/images/image-5.png");
+}
+.hero-showcase__scene-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgb(0 0 0 / 48%) 0%, rgb(0 0 0 / 12%) 30%, transparent 55%),
+    linear-gradient(to top, #050505 0%, rgb(0 0 0 / 73%) 26%, transparent 74%);
+}
+.hero-showcase__scene-body {
+  position: absolute;
+  inset-inline: 16px;
+  inset-block-end: 16px;
+  display: grid;
+  gap: 4px;
+}
+.hero-showcase__scene-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.hero-showcase__scene--cosmetic .hero-showcase__scene-title {
+  text-align: center;
+  font-size: 18px;
+}
+.hero-showcase__scene-quote {
+  margin: 0;
+  font-size: 9px;
+  line-height: 1.42;
+  color: rgb(255 255 255 / 82%);
+}
+.hero-showcase__scene-tags {
+  margin: 0;
+  font-size: 9px;
+  color: rgb(255 255 255 / 62%);
+}
+
+/* Capture tiles (mic / plus) — centered inside the scenario box, transparent */
+.hero-showcase__tile {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: 88px;
+  block-size: 88px;
+  border-radius: 24px;
+  background: rgba(17, 24, 39, 0.5);
+  color: #ffffff;
+}
+.hero-showcase__tile .hero-showcase__glyph {
+  inline-size: 34px;
+  block-size: 34px;
+}
+
+/* Correction interaction (focal center) */
+.hero-showcase__correction {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  inline-size: min(300px, 100%);
+}
+.hero-showcase__bubble {
+  display: inline-flex;
+  padding: 10px 16px;
+  border-start-start-radius: 18px;
+  border-start-end-radius: 18px;
+  border-end-start-radius: 18px;
+  border-end-end-radius: 0;
+  background: #6d28d9;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
+.hero-showcase__bubble--incoming {
+  align-self: flex-start;
+  background: #ededf0;
+  color: #1f2937;
+  border-end-start-radius: 4px;
+  border-end-end-radius: 18px;
+}
+.hero-showcase__bubble--outgoing {
+  align-self: flex-end;
+  background: #7b61ff;
+  border-end-end-radius: 4px;
+  font-weight: 700;
+}
+.hero-showcase__feedback {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-start-start-radius: 18px;
+  border-start-end-radius: 18px;
+  border-end-start-radius: 18px;
+  border-end-end-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 8%);
+}
+.hero-showcase__feedback-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.hero-showcase__feedback-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1f2937;
+}
+.hero-showcase__feedback-rail {
+  display: inline-flex;
+  gap: 8px;
+  color: #9ca3af;
+}
+.hero-showcase__feedback-rail .hero-showcase__glyph {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.hero-showcase__phrase-old {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+}
+.hero-showcase__phrase-new {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+.hero-showcase__phrase-arrow {
+  display: inline-flex;
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  color: #0066ff;
+}
+.hero-showcase__explain {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42;
+  color: #374151;
+}
+
+@media (max-width: 720px) {
+  .hero-showcase__col--center {
+    order: -1;
+    inline-size: 100%;
+  }
+  .hero-showcase__correction {
+    margin-inline: auto;
+  }
+}
+
+/* Hero media animations — grouped, motion-safe only.
+   Cards 1 & 3: tile "click" spring. Card 2: staged message send. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-showcase__tile {
+    animation: hs-tile-press 2.4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    transform-origin: center;
+  }
+  .hero-showcase__scene--idol .hero-showcase__tile {
+    animation-delay: 1.2s;
+  }
+  @keyframes hs-tile-press {
+    0%,
+    58%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    66% {
+      transform: translate(-50%, -50%) scale(0.84);
+    }
+    76% {
+      transform: translate(-50%, -50%) scale(1.09);
+    }
+    85% {
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+    93% {
+      transform: translate(-50%, -50%) scale(1.02);
+    }
+  }
+
+  .hero-showcase__correction > .hero-showcase__bubble--incoming {
+    animation: hs-msg-incoming 5s ease-in-out infinite;
+  }
+  .hero-showcase__correction > .hero-showcase__bubble--outgoing {
+    animation: hs-msg-outgoing 5s ease-in-out infinite;
+  }
+  .hero-showcase__correction > .hero-showcase__feedback {
+    animation: hs-msg-feedback 5s ease-in-out infinite;
+  }
+  @keyframes hs-msg-incoming {
+    0%,
+    4% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+    }
+    12%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0) scale(1);
+    }
+  }
+  @keyframes hs-msg-outgoing {
+    0%,
+    28% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+    }
+    38%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0) scale(1);
+    }
+  }
+  @keyframes hs-msg-feedback {
+    0%,
+    55% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+    67%,
+    94% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
