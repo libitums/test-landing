@@ -3,10 +3,23 @@ import AxeBuilder from "@axe-core/playwright";
 import { landingTestIds } from "@landing/contracts";
 
 const apps = [
-  { id: "k-drama", origin: "http://127.0.0.1:4173" },
-  { id: "ai-communication", origin: "http://127.0.0.1:4174" },
-  { id: "k-culture", origin: "http://127.0.0.1:4175" },
+  {
+    id: "k-drama",
+    origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
+    displayOnly: true,
+  },
+  {
+    id: "ai-communication",
+    origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
+    displayOnly: false,
+  },
+  {
+    id: "k-culture",
+    origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
+    displayOnly: false,
+  },
 ] as const;
+const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
 
 async function expectNoHorizontalOverflow(page: Page) {
   const result = await page.evaluate(() => {
@@ -71,7 +84,7 @@ async function expectOrderedWithoutOverlap(locators: readonly Locator[]) {
   const boxes = await Promise.all(locators.map((locator) => locator.boundingBox()));
   expect(boxes.every(Boolean)).toBe(true);
   for (let index = 1; index < boxes.length; index += 1) {
-    expect(boxes[index]?.y ?? 0).toBeGreaterThanOrEqual(
+    expect(boxes[index]?.y ?? 0, JSON.stringify(boxes)).toBeGreaterThanOrEqual(
       (boxes[index - 1]?.y ?? 0) + (boxes[index - 1]?.height ?? 0),
     );
   }
@@ -79,7 +92,7 @@ async function expectOrderedWithoutOverlap(locators: readonly Locator[]) {
 
 for (const app of apps) {
   test.describe(app.id, () => {
-    test(`${app.id} composes its display-only Hero and media`, async ({ page }, testInfo) => {
+    test(`${app.id} composes its Hero content and media`, async ({ page }, testInfo) => {
       test.skip(
         testInfo.project.name !== "chromium",
         "Hero integration runs once per app in a deterministic desktop browser",
@@ -88,23 +101,58 @@ for (const app of apps) {
 
       const hero = page.getByTestId(landingTestIds.hero);
       const heading = hero.getByRole("heading", { level: 1 });
-      const description = hero.locator("p").first();
+      const description = hero.locator(".hero__description");
       const cta = hero.getByTestId(landingTestIds.heroCta);
+      const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
 
-      for (const element of [hero, heading, description, cta, media]) {
+      for (const element of [hero, heading, description, media]) {
         await expect(element).toBeVisible();
       }
-      await expect(cta).toHaveRole("button");
-      await expect(cta).toHaveText(/\S+/);
-      await expect(cta).not.toHaveAttribute("href");
-      await expect(cta).toHaveAttribute("aria-disabled", "true");
-      await expect(media.getByRole("group", { name: /\S+/ })).toBeVisible();
+      if (app.displayOnly) {
+        const label = hero.getByTestId(landingTestIds.heroLabel);
+        const visuals = media.getByRole("img", { name: /\S+/ });
+        await expect(label).toBeVisible();
+        await expect(label).toHaveText(/\S+/);
+        await expect(cta).toBeVisible();
+        await expect(cta).toHaveRole("button");
+        await expect(cta).toHaveText(/\S+/);
+        await expect(cta).not.toHaveAttribute("href");
+        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        await expect(highlights).toBeVisible();
+        await expect(highlights.getByRole("listitem")).toHaveCount(3);
+        await expect(visuals).toHaveCount(3);
+        await expect(media.getByRole("button")).toHaveCount(0);
+        await expect(media.getByRole("link")).toHaveCount(0);
+        await expectCentered(label);
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([
+          label,
+          heading,
+          description,
+          cta,
+          highlights,
+          visuals.first(),
+        ]);
+        await expect
+          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+          .toBe("rgb(255, 255, 255)");
+      } else {
+        await expect(hero.getByTestId(landingTestIds.heroLabel)).toHaveCount(0);
+        await expect(cta).toBeVisible();
+        await expect(cta).toHaveRole("button");
+        await expect(cta).toHaveText(/\S+/);
+        await expect(cta).not.toHaveAttribute("href");
+        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        await expect(highlights).toBeVisible();
+        await expect(media.getByRole("group", { name: /\S+/ })).toBeVisible();
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([heading, description, cta, highlights, media]);
+      }
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
       expect(await hero.getAttribute("aria-labelledby")).toBe(await heading.getAttribute("id"));
       await expect(media.locator("img")).toHaveCount(0);
-      for (const element of [heading, description, cta]) await expectCentered(element);
-      await expectOrderedWithoutOverlap([heading, description, cta, media]);
+      for (const element of [heading, description]) await expectCentered(element);
       await expectNoHorizontalOverflowWithin(hero);
       const { violations } = await new AxeBuilder({ page })
         .include(`[data-testid="${landingTestIds.hero}"]`)
@@ -122,12 +170,40 @@ for (const app of apps) {
       await page.goto(`${app.origin}/en-US/`);
       const hero = page.getByTestId(landingTestIds.hero);
       const heading = hero.getByRole("heading", { level: 1 });
-      const description = hero.locator("p").first();
+      const description = hero.locator(".hero__description");
       const cta = hero.getByTestId(landingTestIds.heroCta);
+      const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
 
-      for (const element of [heading, description, cta]) await expectCentered(element);
-      await expectOrderedWithoutOverlap([heading, description, cta, media]);
+      for (const element of [heading, description]) await expectCentered(element);
+      if (app.displayOnly) {
+        const label = hero.getByTestId(landingTestIds.heroLabel);
+        const visuals = media.getByRole("img", { name: /\S+/ });
+        await expectCentered(label);
+        await expectCentered(cta);
+        await expect(highlights.getByRole("listitem")).toHaveCount(3);
+        await expect(visuals).toHaveCount(3);
+        await expectOrderedWithoutOverlap([
+          label,
+          heading,
+          description,
+          cta,
+          highlights,
+          ...(await visuals.all()),
+        ]);
+        await expect
+          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+          .toBe("rgb(255, 255, 255)");
+      } else {
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([
+          heading,
+          description,
+          cta,
+          hero.getByTestId(landingTestIds.heroHighlights),
+          media,
+        ]);
+      }
       await expectNoHorizontalOverflow(page);
     });
   });
@@ -138,10 +214,7 @@ test("RTL and long pseudo content preserve Hero order without overflow", async (
 }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "Direction and long-copy coverage runs once");
 
-  for (const target of [
-    `${apps[0].origin}/ar/`,
-    `http://127.0.0.1:4273/pseudo.html?app=${apps[0].id}`,
-  ]) {
+  for (const target of [`${apps[0].origin}/ar/`, `${pseudoOrigin}/pseudo.html?app=${apps[0].id}`]) {
     for (const viewport of [
       { width: 1440, height: 900 },
       { width: 320, height: 800 },
@@ -149,13 +222,29 @@ test("RTL and long pseudo content preserve Hero order without overflow", async (
       await page.setViewportSize(viewport);
       await page.goto(target);
       const hero = page.getByTestId(landingTestIds.hero);
+      const label = hero.getByTestId(landingTestIds.heroLabel);
       const heading = hero.getByRole("heading", { level: 1 });
-      const description = hero.locator("p").first();
+      const description = hero.locator(".hero__description");
       const cta = hero.getByTestId(landingTestIds.heroCta);
+      const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
+      const visuals = media.getByRole("img", { name: /\S+/ });
 
-      for (const element of [heading, description, cta]) await expectCentered(element);
-      await expectOrderedWithoutOverlap([heading, description, cta, media]);
+      for (const element of [label, heading, description]) await expectCentered(element);
+      await expect(cta).toBeVisible();
+      await expect(highlights.getByRole("listitem")).toHaveCount(3);
+      await expect(visuals).toHaveCount(3);
+      await expectOrderedWithoutOverlap([
+        label,
+        heading,
+        description,
+        cta,
+        highlights,
+        ...(viewport.width <= 768 ? await visuals.all() : [visuals.first()]),
+      ]);
+      await expect
+        .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+        .toBe("rgb(255, 255, 255)");
       await expectNoHorizontalOverflowWithin(hero);
     }
   }

@@ -38,17 +38,117 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
-          <Hero content={content.hero}>
-            <div
-              className="hero-media-card hero-media-card--drama"
-              role="group"
-              aria-label={t("hero.eyebrow")}
-            >
-              <span>{t("features.speed.title")}</span>
-              <span>{t("features.consistency.title")}</span>
-              <span>{t("features.freedom.title")}</span>
-            </div>
-          </Hero>
+          <div className="k-drama-hero">
+            <Hero content={content.hero}>
+              <div className="k-drama-hero__visuals">
+                <div
+                  className="k-drama-hero-card k-drama-hero-card--video"
+                  role="img"
+                  aria-label={t("hero.visual.video")}
+                >
+                  <div className="k-drama-hero-card__content" aria-hidden="true">
+                    <strong>Don't pause real clips</strong>
+                    <span>Study a real Korean moment frame by frame.</span>
+                    <div className="k-drama-hero-card__captions">
+                      <span>순식간에 배워보세요</span>
+                      <span>Apprenez en un instant</span>
+                      <span>Aprende en minutos</span>
+                    </div>
+                    <div className="k-drama-hero-card__timeline">
+                      <span>0:14</span>
+                      <span>0:42</span>
+                    </div>
+                    <div className="k-drama-hero-card__progress" />
+                  </div>
+                </div>
+                <div
+                  className="k-drama-hero-card k-drama-hero-card--lesson"
+                  role="img"
+                  aria-label={t("hero.visual.lesson")}
+                >
+                  <div className="k-drama-hero-card__content" aria-hidden="true">
+                    <strong>Make your own lesson</strong>
+                    <div className="k-drama-hero-card__url">
+                      <span className="k-drama-hero-card__youtube-icon" aria-hidden="true">
+                        ▶
+                      </span>
+                      <span className="k-drama-hero-card__url-text">youtube.com/shorts/...</span>
+                    </div>
+                    <div className="k-drama-hero-card__download-tile" aria-hidden="true">
+                      <div className="k-drama-hero-card__download-progress">
+                        <div className="k-drama-hero-card__youtube-box">
+                          <span className="k-drama-hero-card__youtube-logo">
+                            <span className="k-drama-hero-card__youtube-play" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <b>
+                      Paste a link.
+                      <br />
+                      Get a lesson.
+                    </b>
+                    <span>Turn clips into captions, saved lines, and review cards.</span>
+                  </div>
+                </div>
+                <div
+                  className="k-drama-hero-card k-drama-hero-card--feed"
+                  role="img"
+                  aria-label={t("hero.visual.feed")}
+                >
+                  <div className="k-drama-hero-card__content" aria-hidden="true">
+                    <div className="k-drama-hero-card__feed-stream">
+                      <div className="k-drama-hero-card__feed-slides">
+                        <div className="k-drama-hero-card__feed-slide">
+                          <strong className="k-drama-hero-card__feed-heading">Too busy?</strong>
+                          <div className="k-drama-hero-card__feed-chips">
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--topic">
+                              K-pop
+                            </span>
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--time">
+                              0:03
+                            </span>
+                          </div>
+                          <span>오늘도 좋은 하루 보내세요</span>
+                        </div>
+                        <div className="k-drama-hero-card__feed-slide">
+                          <strong className="k-drama-hero-card__feed-heading">One more scene</strong>
+                          <div className="k-drama-hero-card__feed-chips">
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--topic">
+                              K-drama
+                            </span>
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--time">
+                              0:08
+                            </span>
+                          </div>
+                          <span>괜찮아, 천천히 해도 돼</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="k-drama-hero-card__feed-actions">
+                      <span>
+                        <i className="k-drama-hero-card__feed-action-icon">♡</i>
+                        <small>12K</small>
+                      </span>
+                      <span>
+                        <i className="k-drama-hero-card__feed-action-icon">◯</i>
+                        <small>342</small>
+                      </span>
+                      <span>
+                        <i className="k-drama-hero-card__feed-action-icon">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-4-6 4Z" />
+                          </svg>
+                        </i>
+                        <small>Save</small>
+                      </span>
+                    </div>
+                    <div className="k-drama-hero-card__progress" />
+                  </div>
+                </div>
+              </div>
+            </Hero>
+          </div>
           <div id="proof">
             <KDramaProofStrip metrics={content.metrics} title={t("proof.title")} />
           </div>

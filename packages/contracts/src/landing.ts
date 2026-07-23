@@ -13,6 +13,8 @@ export interface LandingAction {
 }
 
 export interface HeroContent {
+  /** Optional short label rendered before the primary heading. */
+  label?: string;
   title: string;
   /**
    * Sub-header copy. A newline (`\n`) is rendered as an explicit line break,
@@ -177,6 +179,7 @@ export const landingTestIds = {
   main: "landing-main",
   footer: "landing-footer",
   hero: "hero",
+  heroLabel: "hero-label",
   heroCta: "hero-cta",
   heroHighlights: "hero-highlights",
   heroMedia: "hero-media",

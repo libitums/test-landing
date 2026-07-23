@@ -87,6 +87,7 @@ export function createContent(runtime: I18nRuntime) {
   const t = runtime.translate;
   return {
     hero: {
+      label: t("hero.eyebrow"),
       title: t("hero.title"),
       description: t("hero.description"),
       cta: { label: t("hero.start") },

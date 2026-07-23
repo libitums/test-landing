@@ -22,11 +22,12 @@ describe("shared page sections", () => {
     expect(screen.getByRole("contentinfo")).toHaveTextContent("Footer");
   });
 
-  it("renders hero copy, author line breaks, an extensible highlight checklist, and composed media", () => {
+  it("renders hero label, copy, author line breaks, an extensible highlight checklist, and composed media", () => {
     const { container } = render(
       <Hero
         content={{
-          title: "Title",
+          label: "New experience",
+          title: "First title line\nSecond title line",
           description: "First line\nSecond line",
           cta: { label: "Continue" },
           highlights: [
@@ -41,7 +42,11 @@ describe("shared page sections", () => {
         </div>
       </Hero>,
     );
-    expect(screen.getByRole("heading", { level: 1, name: "Title" })).toBeInTheDocument();
+    expect(screen.getByTestId("hero-label")).toHaveTextContent("New experience");
+    expect(
+      screen.getByRole("heading", { level: 1, name: "First title line Second title line" }),
+    ).toBeInTheDocument();
+    expect(container.querySelector(".hero__copy h1")?.querySelectorAll("br")).toHaveLength(1);
     expect(screen.getByRole("button", { name: "Continue" })).toHaveAttribute(
       "aria-disabled",
       "true",
