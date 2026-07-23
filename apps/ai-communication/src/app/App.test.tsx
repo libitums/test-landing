@@ -40,17 +40,17 @@ describe("AI communication landing", () => {
       },
     ]);
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
-    expect(screen.getByTestId("shared-feature:ai-communication-clarity")).toHaveClass(
-      "shared-feature--white",
-    );
-    expect(screen.getByTestId("shared-feature:ai-communication-access")).toHaveClass(
-      "shared-feature--soft",
-    );
-    expect(screen.getByTestId("shared-feature:ai-communication-global")).toHaveClass(
-      "shared-feature--white",
-    );
+    expect(
+      screen.getByRole("heading", { name: /Role-play the situations/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Get instant corrections/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Chat with your bias/i }),
+    ).toBeInTheDocument();
     const featureAction = screen.getByTestId(
-      "shared-feature:ai-communication-clarity:early-access-cta",
+      "shared-feature:ai-communication-personas:early-access-cta",
     );
     expect(featureAction).toHaveAttribute("href", "/ai-communication/early-access");
     expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
@@ -59,7 +59,7 @@ describe("AI communication landing", () => {
     fireEvent.click(featureAction);
     await waitFor(() => expect(adapter.events).toHaveLength(2));
     expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "feature_cta_clicked", featureId: "clarity" }),
+      expect.objectContaining({ name: "feature_cta_clicked", featureId: "personas" }),
     );
   });
 });

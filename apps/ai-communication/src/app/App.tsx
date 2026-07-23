@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
 import {
-  ButtonLink,
   CtaSection,
   Footer,
   Hero,
   LandingShell,
   Navbar,
-  SharedFeatureTemplate,
   PricingSection,
 } from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
 import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
+import { FeatureRoleplay } from "../features/ai-communication/FeatureRoleplay";
+import { FeatureCorrections } from "../features/ai-communication/FeatureCorrections";
+import { FeatureBias } from "../features/ai-communication/FeatureBias";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 export interface AppProps {
   analytics: AnalyticsTracker;
@@ -54,29 +54,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
             />
           </div>
           <div id="features">
-            {content.features.map((feature, index) => {
-              const featureTestId = `ai-communication-${feature.id}`;
-              return (
-                <SharedFeatureTemplate
-                  key={feature.id}
-                  appearance={index === 1 ? "soft" : "white"}
-                  numberLabel={`0${index + 1}`}
-                  headerText={feature.title}
-                  subheaderText={feature.description}
-                  testId={sharedFeatureTestIds.root(featureTestId)}
-                >
-                  <ButtonLink
-                    className="shared-feature__early-access-cta"
-                    variant="text"
-                    href="/ai-communication/early-access"
-                    data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
-                    onClick={() => trackFeatureCta(feature.id)}
-                  >
-                    Get early access
-                  </ButtonLink>
-                </SharedFeatureTemplate>
-              );
-            })}
+            <FeatureRoleplay />
+            <FeatureCorrections />
+            <FeatureBias onEarlyAccess={() => trackFeatureCta("personas")} />
           </div>
           <div id="pricing">
             <PricingSection content={content.pricing} />
