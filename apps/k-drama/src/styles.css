@@ -1,3 +1,420 @@
+.k-drama-hero .hero {
+  background: var(--color-bg);
+}
+.k-drama-hero .hero__copy {
+  width: 100%;
+  max-width: var(--content-hero-copy);
+  inline-size: 100%;
+  max-inline-size: var(--content-hero-copy);
+}
+.k-drama-hero .hero__label {
+  margin-block-end: var(--space-6);
+}
+.k-drama-hero .hero__copy h1 {
+  max-width: var(--content-hero-headline);
+  max-inline-size: var(--content-hero-headline);
+  color: var(--color-editorial-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-hero-display);
+  line-height: var(--leading-hero-display);
+}
+.k-drama-hero .hero__description {
+  max-width: var(--content-hero-subhead);
+  max-inline-size: var(--content-hero-subhead);
+  color: var(--color-editorial-muted-fg);
+  font-family: var(--font-sans);
+  font-weight: var(--font-normal);
+}
+.k-drama-hero .hero__media {
+  display: block;
+}
+.k-drama-hero__visuals {
+  width: 100%;
+}
+.k-drama-hero-card {
+  width: var(--media-card-compact);
+  max-width: 100%;
+  height: var(--media-card-compact);
+  margin: 0 auto var(--space-6);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  background: var(--color-editorial-fg);
+  box-shadow: var(--shadow-media-card);
+  color: var(--color-bg);
+}
+.k-drama-hero-card--lesson {
+  width: var(--media-card-wide);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-media-card-soft);
+  color: var(--color-fg);
+}
+.k-drama-hero-card--lesson .k-drama-hero-card__content {
+  position: relative;
+}
+.k-drama-hero-card__content {
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.k-drama-hero-card__content strong,
+.k-drama-hero-card__content b {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+.k-drama-hero-card__content > span {
+  color: var(--color-border);
+  font-size: var(--text-xs);
+  line-height: var(--leading-heading);
+}
+.k-drama-hero-card--lesson .k-drama-hero-card__content > span {
+  color: var(--color-muted-fg);
+}
+.k-drama-hero-card--lesson .k-drama-hero-card__content b {
+  margin-block-start: auto;
+  font-size: var(--text-xl);
+}
+.k-drama-hero-card__captions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--color-surface-strong);
+  font-size: var(--text-xs);
+}
+.k-drama-hero-card__captions span {
+  width: fit-content;
+  background: linear-gradient(
+    90deg,
+    #7b61ff 0 50%,
+    var(--color-surface-strong) 50% 100%
+  );
+  background-position: 100% 0;
+  background-size: 200% 100%;
+  background-clip: text;
+  color: transparent;
+  animation: k-drama-caption-highlight 2.4s ease-in-out infinite;
+}
+@keyframes k-drama-caption-highlight {
+  0%,
+  18% {
+    background-position: 100% 0;
+  }
+  72%,
+  100% {
+    background-position: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-drama-hero-card__captions span {
+    animation: none;
+    background-position: 0 0;
+  }
+  .k-drama-hero-card__url-text,
+  .k-drama-hero-card__download-progress {
+    animation: none;
+  }
+  .k-drama-hero-card__feed-slides,
+  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
+    animation: none;
+  }
+  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
+    width: 100%;
+  }
+}
+.k-drama-hero-card__timeline {
+  margin-block-start: auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+}
+.k-drama-hero-card__progress {
+  height: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-muted-fg);
+}
+.k-drama-hero-card__progress::before {
+  content: "";
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-bg);
+}
+.k-drama-hero-card--video .k-drama-hero-card__progress {
+  position: relative;
+}
+.k-drama-hero-card--video .k-drama-hero-card__progress::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 38%;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  transform: translate(-50%, -50%);
+}
+.k-drama-hero-card__url {
+  position: relative;
+  z-index: 2;
+  margin-block-start: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-muted-fg);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+}
+.k-drama-hero-card__youtube-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  flex: 0 0 auto;
+  border: 2px solid currentColor;
+  border-radius: var(--radius-full);
+  color: #ff0033;
+  font-size: var(--text-xs);
+  line-height: 1;
+}
+.k-drama-hero-card__url-text {
+  display: inline-block;
+  width: 18ch;
+  overflow: hidden;
+  border-inline-end: 1px solid currentColor;
+  white-space: nowrap;
+  animation: k-drama-url-typing 6s steps(18, end) infinite;
+}
+@keyframes k-drama-url-typing {
+  0% {
+    width: 0;
+  }
+  38%,
+  92% {
+    width: 18ch;
+  }
+  96%,
+  100% {
+    width: 0;
+  }
+}
+.k-drama-hero-card__download-tile {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--space-16) + var(--space-8));
+  inset-inline-end: var(--space-4);
+  width: calc(var(--space-16) + var(--space-16) + var(--space-3));
+  height: calc(var(--space-16) + var(--space-16) + var(--space-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-2xl);
+  background: rgb(71 85 105 / 12%);
+  box-shadow: var(--shadow-media-card);
+  overflow: hidden;
+}
+.k-drama-hero-card__download-progress {
+  --download-progress: 100%;
+
+  position: relative;
+  z-index: 1;
+  width: calc(var(--space-12) + var(--space-12));
+  height: calc(var(--space-12) + var(--space-12));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    #ff0033 0 var(--download-progress),
+    rgb(255 0 51 / 18%) var(--download-progress) 100%
+  );
+  animation: k-drama-download-progress 6s linear infinite;
+}
+@property --download-progress {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@keyframes k-drama-download-progress {
+  0%,
+  42% {
+    --download-progress: 0%;
+  }
+  82%,
+  100% {
+    --download-progress: 100%;
+  }
+}
+.k-drama-hero-card__youtube-box {
+  width: calc(100% - var(--space-4));
+  height: calc(100% - var(--space-4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-md);
+}
+.k-drama-hero-card__youtube-logo {
+  width: var(--space-10);
+  height: calc(var(--space-6) + var(--space-1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: #ff0033;
+}
+.k-drama-hero-card__youtube-play {
+  width: 0;
+  height: 0;
+  border-block: 0.375rem solid transparent;
+  border-inline-start: var(--space-2) solid var(--color-bg);
+}
+.k-drama-hero-card--feed .k-drama-hero-card__content {
+  position: relative;
+  padding: 0;
+  background: linear-gradient(to bottom, transparent, var(--color-editorial-fg));
+}
+.k-drama-hero-card__feed-stream {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.k-drama-hero-card__feed-slides {
+  height: 200%;
+  animation: k-drama-feed-swipe 7s ease-in-out infinite;
+}
+.k-drama-hero-card__feed-slide {
+  box-sizing: border-box;
+  height: 50%;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+.k-drama-hero-card__feed-slide > span {
+  color: var(--color-border);
+  font-size: var(--text-xs);
+  line-height: var(--leading-heading);
+}
+.k-drama-hero-card__feed-heading {
+  margin-block-end: auto;
+}
+.k-drama-hero-card__feed-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.k-drama-hero-card__feed-chip {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  color: var(--color-bg);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  line-height: 1;
+}
+.k-drama-hero-card__feed-chip--topic {
+  background: #7b61ff;
+}
+.k-drama-hero-card__feed-chip--time {
+  border: 1px solid var(--color-bg);
+  background: transparent;
+}
+.k-drama-hero-card--feed .k-drama-hero-card__progress {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  width: 100%;
+}
+.k-drama-hero-card--feed .k-drama-hero-card__progress::before {
+  width: 0;
+  animation: k-drama-feed-progress 7s linear infinite;
+}
+@keyframes k-drama-feed-progress {
+  0% {
+    width: 0;
+  }
+  52%,
+  100% {
+    width: 100%;
+  }
+}
+@keyframes k-drama-feed-swipe {
+  0%,
+  56% {
+    transform: translateY(0);
+  }
+  64%,
+  100% {
+    transform: translateY(-50%);
+  }
+}
+.k-drama-hero-card__feed-actions {
+  position: absolute;
+  inset-block-start: var(--space-12);
+  inset-inline-end: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.k-drama-hero-card__feed-actions span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+.k-drama-hero-card__feed-action-icon {
+  width: var(--space-8);
+  height: var(--space-8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 15%);
+  color: var(--color-bg);
+  font-size: var(--text-xl);
+  font-style: normal;
+  line-height: 1;
+}
+.k-drama-hero-card__feed-action-icon svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.k-drama-hero-card__feed-actions small {
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+}
+
+@supports (display: grid) {
+  .k-drama-hero__visuals {
+    display: grid;
+    grid-template-columns: var(--media-card-compact) var(--media-card-wide) var(
+        --media-card-compact
+      );
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .k-drama-hero-card {
+    margin: 0;
+  }
+}
+
 .proof-strip {
   background: var(--color-surface);
 }
@@ -31,6 +448,23 @@
   text-decoration-thickness: var(--space-1);
 }
 @media (max-width: 48rem) {
+  .k-drama-hero .hero__copy h1 {
+    font-size: var(--text-display);
+  }
+  .k-drama-hero-card {
+    height: auto;
+    min-height: var(--media-card-compact);
+    aspect-ratio: 1;
+  }
+  .k-drama-hero-card--lesson {
+    aspect-ratio: 3 / 2;
+  }
+  @supports (display: grid) {
+    .k-drama-hero__visuals {
+      grid-template-columns: minmax(0, var(--media-card-wide));
+      gap: var(--space-6);
+    }
+  }
   .proof-grid {
     grid-template-columns: 1fr;
     gap: var(--space-8);

@@ -10,6 +10,7 @@ import {
   LandingShell,
   Navbar,
   SharedFeatureTemplate,
+  PricingSection,
 } from "@landing/ui";
 import { AiCommunicationComparison } from "../features/ai-communication/AiCommunicationComparison";
 import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
@@ -76,6 +77,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                 </SharedFeatureTemplate>
               );
             })}
+          </div>
+          <div id="pricing">
+            <PricingSection content={content.pricing} />
           </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />

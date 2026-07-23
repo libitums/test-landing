@@ -1,10 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const appServers = [
-  ["@landing/k-drama", 4173],
-  ["@landing/ai-communication", 4174],
-  ["@landing/k-culture", 4175],
+  ["@landing/k-drama", Number(process.env.K_DRAMA_E2E_PORT ?? 4173)],
+  ["@landing/ai-communication", Number(process.env.AI_COMMUNICATION_E2E_PORT ?? 4174)],
+  ["@landing/k-culture", Number(process.env.K_CULTURE_E2E_PORT ?? 4175)],
 ] as const;
+const pseudoPort = Number(process.env.PSEUDO_E2E_PORT ?? 4273);
 
 export default defineConfig({
   testDir: ".",
@@ -37,8 +38,8 @@ export default defineConfig({
       timeout: 120_000,
     })),
     {
-      command: "pnpm exec vite --config vite.config.ts --host 127.0.0.1 --port 4273",
-      url: "http://127.0.0.1:4273/pseudo.html",
+      command: `pnpm exec vite --config vite.config.ts --host 127.0.0.1 --port ${pseudoPort}`,
+      url: `http://127.0.0.1:${pseudoPort}/pseudo.html`,
       reuseExistingServer: false,
       timeout: 120_000,
     },
