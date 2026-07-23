@@ -28,3 +28,5 @@ agents/
 skills/
 AGENT.md
 AGENTS.md
+.vercel
+.env*
