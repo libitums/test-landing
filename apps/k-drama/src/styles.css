@@ -101,6 +101,20 @@
   border-radius: inherit;
   background: var(--color-bg);
 }
+.k-drama-hero-card--video .k-drama-hero-card__progress {
+  position: relative;
+}
+.k-drama-hero-card--video .k-drama-hero-card__progress::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 38%;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  transform: translate(-50%, -50%);
+}
 .k-drama-hero-card__url {
   margin-block-start: var(--space-4);
   padding: var(--space-3) var(--space-4);
