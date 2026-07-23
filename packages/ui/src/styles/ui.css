@@ -1100,9 +1100,10 @@ button:focus-visible {
   box-shadow: var(--shadow-sm);
 }
 .pricing__plan--featured {
+  padding-block: var(--space-8);
   border-color: var(--color-editorial-accent);
   border-width: 1px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 20px 48px #6d28d927;
 }
 .pricing__plan-head {
   display: flex;
