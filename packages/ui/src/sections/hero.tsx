@@ -23,7 +23,12 @@ export function Hero({ content, children, testId = "hero" }: HeroProps) {
     <section className="section hero" data-testid={testId} aria-labelledby={`${testId}-title`}>
       <div className="container hero__layout">
         <div className="hero__copy">
-          <h1 id={`${testId}-title`}>{content.title}</h1>
+          {content.label ? (
+            <p className="hero__label" data-testid={landingTestIds.heroLabel}>
+              {content.label}
+            </p>
+          ) : null}
+          <h1 id={`${testId}-title`}>{withLineBreaks(content.title)}</h1>
           <p className="hero__description">{withLineBreaks(content.description)}</p>
           {content.cta ? (
             <button

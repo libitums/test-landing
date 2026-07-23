@@ -39,7 +39,7 @@ describe("k-drama Phase 2 localization integration", () => {
 
       expect(screen.getByTestId("landing:k-drama")).toBeInTheDocument();
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-        resources[localeName]["hero.title"],
+        resources[localeName]["hero.title"].split("\n").join(""),
       );
       expect(document.body.textContent).not.toContain("hero.title");
       expect(runtime.formatNumber(123456.78)).toBe(

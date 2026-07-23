@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { createAnalyticsEventValidator, createInMemoryAnalyticsAdapter } from "@landing/analytics";
+import { landingTestIds } from "@landing/contracts";
 import { describe, expect, it } from "vitest";
 import { createAppAnalytics } from "../analytics";
 import { App } from "./App";
-import { getRuntime } from "../i18n";
+import { getRuntime, resources } from "../i18n";
 
 describe("K-drama landing", () => {
   it("renders the display-only Hero composition and only tracks exposure", async () => {
@@ -16,17 +17,19 @@ describe("K-drama landing", () => {
     render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
     await waitFor(() => expect(adapter.events).toHaveLength(1));
     const hero = screen.getByTestId("hero");
-    const action = screen.getByTestId("hero-cta");
-    const media = screen.getByTestId("hero-media");
+    const label = screen.getByTestId(landingTestIds.heroLabel);
+    const media = screen.getByTestId(landingTestIds.heroMedia);
     expect(hero).toContainElement(screen.getByRole("heading", { level: 1 }));
-    expect(hero).toContainElement(action);
+    expect(hero).toContainElement(label);
     expect(hero).toContainElement(media);
-    expect(action).toHaveRole("button");
-    expect(action).not.toHaveAttribute("href");
-    expect(action).toHaveTextContent(/\S+/);
+    expect(label).toHaveTextContent(resources["en-US"]["hero.eyebrow"]);
+    expect(screen.queryByTestId(landingTestIds.heroCta)).not.toBeInTheDocument();
+    expect(screen.queryByTestId(landingTestIds.heroHighlights)).not.toBeInTheDocument();
     expect(media).toBeInTheDocument();
     expect(media.querySelector("img")).toBeNull();
-    fireEvent.click(action);
+    expect(within(media).getAllByRole("img", { name: /\S+/ })).toHaveLength(3);
+    expect(within(media).queryByRole("button")).not.toBeInTheDocument();
+    expect(within(media).queryByRole("link")).not.toBeInTheDocument();
     expect(adapter.events).toEqual([
       {
         name: "experiment_viewed",

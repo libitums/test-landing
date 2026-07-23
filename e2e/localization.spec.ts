@@ -1,19 +1,23 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { landingTestIds } from "@landing/contracts";
 import { navbarTestIds } from "@landing/contracts/navbar";
 
 const apps = [
   {
     id: "k-drama",
     origin: "http://127.0.0.1:4173",
+    displayOnlyHero: true,
   },
   {
     id: "ai-communication",
     origin: "http://127.0.0.1:4174",
+    displayOnlyHero: false,
   },
   {
     id: "k-culture",
     origin: "http://127.0.0.1:4175",
+    displayOnlyHero: false,
   },
 ] as const;
 const locales = [
@@ -67,9 +71,7 @@ async function expectVisibleFocus(page: Page) {
 
 for (const app of apps) {
   for (const locale of locales) {
-    test(`${app.id} renders ${locale.name} metadata, CTA, and semantic focus order`, async ({
-      page,
-    }) => {
+    test(`${app.id} renders ${locale.name} metadata and semantic focus order`, async ({ page }) => {
       await page.goto(`${app.origin}/${locale.name}/campaign/launch?experiment=phase2`);
 
       await expect(page.locator("html")).toHaveAttribute("lang", locale.name);
@@ -90,10 +92,20 @@ for (const app of apps) {
         );
       }
 
-      const heroCta = page.getByTestId("hero-cta");
-      await expect(heroCta).toBeVisible();
-      await expect(heroCta).toHaveRole("button");
-      await expect(heroCta).not.toHaveAttribute("href");
+      const hero = page.getByTestId(landingTestIds.hero);
+      const heroCta = hero.getByTestId(landingTestIds.heroCta);
+      const heroHighlights = hero.getByTestId(landingTestIds.heroHighlights);
+      if (app.displayOnlyHero) {
+        await expect(hero.getByTestId(landingTestIds.heroLabel)).toBeVisible();
+        await expect(heroCta).toHaveCount(0);
+        await expect(heroHighlights).toHaveCount(0);
+        await expect(hero.getByTestId(landingTestIds.heroMedia).getByRole("img")).toHaveCount(3);
+      } else {
+        await expect(heroCta).toBeVisible();
+        await expect(heroCta).toHaveRole("button");
+        await expect(heroCta).not.toHaveAttribute("href");
+        await expect(heroHighlights).toBeVisible();
+      }
       const sourceOrder = await tabOrder(page);
       expect(sourceOrder.length).toBeGreaterThan(5);
       const navbarOrder = sourceOrder
@@ -185,19 +197,27 @@ for (const app of apps) {
     await expect(page.getByRole("banner")).toBeVisible();
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.getByRole("contentinfo")).toBeVisible();
-    const cta = page.getByTestId("hero-cta");
-    await expect(cta).toBeVisible();
-    await cta.focus();
-    await expect(cta).toBeFocused();
-    const focusStyle = await cta.evaluate((element) => {
-      const style = getComputedStyle(element);
-      return {
-        outlineStyle: style.outlineStyle,
-        outlineWidth: style.outlineWidth,
-      };
-    });
-    expect(focusStyle.outlineStyle).not.toBe("none");
-    expect(Number.parseFloat(focusStyle.outlineWidth)).toBeGreaterThan(0);
+    const hero = page.getByTestId(landingTestIds.hero);
+    const cta = hero.getByTestId(landingTestIds.heroCta);
+    if (app.displayOnlyHero) {
+      await expect(hero.getByTestId(landingTestIds.heroLabel)).toBeVisible();
+      await expect(cta).toHaveCount(0);
+      await expect(hero.getByTestId(landingTestIds.heroHighlights)).toHaveCount(0);
+      await expect(hero.getByTestId(landingTestIds.heroMedia).getByRole("img")).toHaveCount(3);
+    } else {
+      await expect(cta).toBeVisible();
+      await cta.focus();
+      await expect(cta).toBeFocused();
+      const focusStyle = await cta.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          outlineStyle: style.outlineStyle,
+          outlineWidth: style.outlineWidth,
+        };
+      });
+      expect(focusStyle.outlineStyle).not.toBe("none");
+      expect(Number.parseFloat(focusStyle.outlineWidth)).toBeGreaterThan(0);
+    }
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
