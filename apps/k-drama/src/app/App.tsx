@@ -72,7 +72,16 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                       <span className="k-drama-hero-card__youtube-icon" aria-hidden="true">
                         ▶
                       </span>
-                      <span>youtube.com/shorts/...</span>
+                      <span className="k-drama-hero-card__url-text">youtube.com/shorts/...</span>
+                    </div>
+                    <div className="k-drama-hero-card__download-tile" aria-hidden="true">
+                      <div className="k-drama-hero-card__download-progress">
+                        <div className="k-drama-hero-card__youtube-box">
+                          <span className="k-drama-hero-card__youtube-logo">
+                            <span className="k-drama-hero-card__youtube-play" />
+                          </span>
+                        </div>
+                      </div>
                     </div>
                     <b>
                       Paste a link.
@@ -88,17 +97,50 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                   aria-label={t("hero.visual.feed")}
                 >
                   <div className="k-drama-hero-card__content" aria-hidden="true">
-                    <strong>Learn from every scene</strong>
-                    <span>오늘도 좋은 하루 보내세요</span>
+                    <div className="k-drama-hero-card__feed-stream">
+                      <div className="k-drama-hero-card__feed-slides">
+                        <div className="k-drama-hero-card__feed-slide">
+                          <strong className="k-drama-hero-card__feed-heading">Too busy?</strong>
+                          <div className="k-drama-hero-card__feed-chips">
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--topic">
+                              K-pop
+                            </span>
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--time">
+                              0:03
+                            </span>
+                          </div>
+                          <span>오늘도 좋은 하루 보내세요</span>
+                        </div>
+                        <div className="k-drama-hero-card__feed-slide">
+                          <strong className="k-drama-hero-card__feed-heading">One more scene</strong>
+                          <div className="k-drama-hero-card__feed-chips">
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--topic">
+                              K-drama
+                            </span>
+                            <span className="k-drama-hero-card__feed-chip k-drama-hero-card__feed-chip--time">
+                              0:08
+                            </span>
+                          </div>
+                          <span>괜찮아, 천천히 해도 돼</span>
+                        </div>
+                      </div>
+                    </div>
                     <div className="k-drama-hero-card__feed-actions">
                       <span>
-                        ♡<small>12K</small>
+                        <i className="k-drama-hero-card__feed-action-icon">♡</i>
+                        <small>12K</small>
                       </span>
                       <span>
-                        ◯<small>342</small>
+                        <i className="k-drama-hero-card__feed-action-icon">◯</i>
+                        <small>342</small>
                       </span>
                       <span>
-                        ♧<small>Save</small>
+                        <i className="k-drama-hero-card__feed-action-icon">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-4-6 4Z" />
+                          </svg>
+                        </i>
+                        <small>Save</small>
                       </span>
                     </div>
                     <div className="k-drama-hero-card__progress" />
