@@ -177,6 +177,7 @@
   align-self: flex-end;
   background: #7b61ff;
   border-end-end-radius: 4px;
+  font-weight: 700;
 }
 .hero-showcase__feedback {
   display: grid;
