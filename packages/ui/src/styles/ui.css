@@ -1189,7 +1189,7 @@ button:focus-visible {
 .pricing__note {
   max-inline-size: var(--content-reading);
   margin-inline: auto;
-  color: var(--color-muted-fg);
+  color: var(--color-muted-fg-subtle);
   font-size: var(--text-sm);
   line-height: var(--leading-body);
   text-align: center;
