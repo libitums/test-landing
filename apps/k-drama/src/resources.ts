@@ -29,13 +29,16 @@ export const koKR = {
   "proof.reuse.label": "공통 기반",
   "proof.launch.value": "2배",
   "proof.launch.label": "더 빠른 반복",
-  "features.title": "빠른 학습을 위한 설계",
-  "features.speed.title": "빠르게\n출시",
-  "features.speed.description": "재사용 가능한 기반 덕분에\n아이디어 실험에 집중할 수 있습니다.",
-  "features.consistency.title": "일관성 유지",
-  "features.consistency.description": "공통 토큰이 모든 시장에서 하나의 시각 언어를 만듭니다.",
-  "features.freedom.title": "유연성 유지",
-  "features.freedom.description": "실험 전용 UI는 해당 경험 가까이에 유지됩니다.",
+  "features.title": "좋아하는 콘텐츠로 배우는 한국어",
+  "features.subtitles.title": "YouTube와 K-드라마로\n한국어를 배우세요",
+  "features.subtitles.description":
+    "한국어와 내 언어 자막을 나란히 보며 YouTube 클립과 K-드라마 장면을 감상하세요. 자막을 눌러 그 순간을 다시 듣고, 문맥 속 단어를 이해하며 자연스러운 한국어 표현을 저장할 수 있습니다.",
+  "features.youtube.title": "YouTube 링크를\n하나의 수업으로",
+  "features.youtube.description":
+    "URL을 붙여 넣으면 Talkie가 자막을 읽고 한국어 학습 콘텐츠를 만듭니다. 생성된 표현을 복습하고 모든 수업을 재사용 가능한 목록에 보관하세요.",
+  "features.shortform.title": "어떤 콘텐츠든\n짧고 가볍게",
+  "features.shortform.description":
+    "YouTube, K-pop, K-드라마 등 좋아하는 콘텐츠를 짧은 클립으로 보고 바로 따라 말하며 학습하세요.",
   "cta.title": "다음 아이디어를 현실로 만드세요",
   "cta.description": "일관된 기반에서 시작해 실험의 가치를 만드는 일에 에너지를 쓰세요.",
   "cta.action": "실험 만들기",
@@ -119,15 +122,16 @@ export const enUS: Record<keyof typeof koKR, string> = {
   "proof.reuse.label": "Shared foundation",
   "proof.launch.value": "2×",
   "proof.launch.label": "Faster iteration",
-  "features.title": "Built for learning at speed",
-  "features.speed.title": "Ship\nquickly",
-  "features.speed.description": "Reusable foundations\nkeep experimentation focused on the idea.",
-  "features.consistency.title": "Stay coherent",
-  "features.consistency.description":
-    "Shared tokens create one visual language across every market.",
-  "features.freedom.title": "Keep flexibility",
-  "features.freedom.description":
-    "Experiment-specific UI remains close to the experience it serves.",
+  "features.title": "Learn Korean from content you love",
+  "features.subtitles.title": "Learn Korean from\nYouTube & K-Dramas",
+  "features.subtitles.description":
+    "Watch YouTube clips and K-drama scenes with Korean and your language side by side. Tap any subtitle to replay the moment, understand words in context, and save natural Korean phrases for review.",
+  "features.youtube.title": "Turn a YouTube link\ninto a lesson flow",
+  "features.youtube.description":
+    "Paste the URL, watch Talkie read the captions, then review generated Korean study content and keep every lesson in one reusable list.",
+  "features.shortform.title": "Short-form\nany content",
+  "features.shortform.description":
+    "Watch YouTube, K-pop, K-dramas, and more in bite-sized clips made for quick daily Korean practice.",
   "cta.title": "Make the next idea tangible",
   "cta.description":
     "Start from a consistent base and spend your energy on what makes the experiment matter.",
@@ -213,13 +217,16 @@ export const ar: Record<keyof typeof koKR, string> = {
   "proof.reuse.label": "أساس مشترك",
   "proof.launch.value": "ضعفان",
   "proof.launch.label": "تكرار أسرع",
-  "features.title": "مصمم للتعلم بسرعة",
-  "features.speed.title": "أطلق\nبسرعة",
-  "features.speed.description": "تُبقي الأسس القابلة لإعادة الاستخدام\nالتجربة مركزة على الفكرة.",
-  "features.consistency.title": "حافظ على الاتساق",
-  "features.consistency.description": "تصنع الرموز المشتركة لغة بصرية واحدة في كل سوق.",
-  "features.freedom.title": "حافظ على المرونة",
-  "features.freedom.description": "تبقى واجهة كل تجربة قريبة من التجربة التي تخدمها.",
+  "features.title": "تعلّم الكورية من المحتوى الذي تحبه",
+  "features.subtitles.title": "تعلّم الكورية من\nيوتيوب والدراما الكورية",
+  "features.subtitles.description":
+    "شاهد مقاطع يوتيوب ومشاهد الدراما مع الترجمة الكورية ولغتك جنبًا إلى جنب. اضغط على أي ترجمة لإعادة اللحظة وفهم الكلمات في سياقها وحفظ العبارات الطبيعية.",
+  "features.youtube.title": "حوّل رابط يوتيوب\nإلى مسار درس",
+  "features.youtube.description":
+    "ألصق الرابط ودع Talkie يقرأ الترجمة، ثم راجع محتوى الدراسة الكورية الناتج واحتفظ بكل درس في قائمة قابلة لإعادة الاستخدام.",
+  "features.shortform.title": "أي محتوى\nفي مقاطع قصيرة",
+  "features.shortform.description":
+    "شاهد يوتيوب وK-pop والدراما الكورية وغيرها في مقاطع قصيرة مصممة لممارسة الكورية يوميًا بسرعة.",
   "cta.title": "حوّل الفكرة التالية إلى واقع",
   "cta.description": "ابدأ من قاعدة متسقة ووجّه طاقتك إلى ما يجعل التجربة مهمة.",
   "cta.action": "أنشئ تجربة",
