@@ -4,6 +4,7 @@ import { locale, localizePath } from "@landing/i18n";
 import "@landing/ui/styles.css";
 import "./styles.css";
 import { App } from "./app/App";
+import { EarlyAccessPage } from "./app/EarlyAccessPage";
 import { createAppAnalytics } from "./analytics";
 import { applyLocaleMetadata, createTestRegistry, getEntryRuntime } from "./i18n";
 const pseudoEnabled = import.meta.env.DEV || import.meta.env.MODE === "test";
@@ -15,8 +16,15 @@ const metadataPath = pseudoRegistry
   : window.location.pathname;
 applyLocaleMetadata(metadataPath, pseudoRegistry);
 const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+const isEarlyAccessPage = /(?:^|\/)ai-communication\/early-access\/?$/.test(
+  window.location.pathname,
+);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App analytics={analytics} runtime={runtime} location={location} />
+    {isEarlyAccessPage ? (
+      <EarlyAccessPage runtime={runtime} location={location} />
+    ) : (
+      <App analytics={analytics} runtime={runtime} location={location} />
+    )}
   </StrictMode>,
 );

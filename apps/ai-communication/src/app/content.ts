@@ -101,7 +101,10 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
     },
   };
 }
-export function createContent(runtime: I18nRuntime) {
+export function createContent(
+  runtime: I18nRuntime,
+  earlyAccessHref = "/ai-communication/early-access",
+) {
   const t = runtime.translate;
   return {
     hero: {
@@ -144,7 +147,7 @@ export function createContent(runtime: I18nRuntime) {
         {
           id: "choose",
           label: t("cta.action"),
-          href: "/ai-communication/early-access",
+          href: earlyAccessHref,
           variant: "primary",
         },
       ],

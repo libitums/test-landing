@@ -1,5 +1,15 @@
 export { ButtonLink, type ButtonLinkProps } from "./primitives/button";
 export { Card, type CardProps } from "./primitives/card";
+export {
+  Checkbox,
+  Input,
+  Select,
+  Textarea,
+  type CheckboxProps,
+  type InputProps,
+  type SelectProps,
+  type TextareaProps,
+} from "./primitives/form-controls";
 export { LandingShell } from "./sections/landing-shell";
 export { Hero } from "./sections/hero";
 export { FeatureGrid, FeatureCard } from "./sections/feature-grid";

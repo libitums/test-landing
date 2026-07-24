@@ -93,10 +93,15 @@ function CorrectionCard({ t }: { t: I18nRuntime["translate"] }) {
 
 export interface FeatureCorrectionsProps {
   t: I18nRuntime["translate"];
+  earlyAccessHref?: string;
   onEarlyAccess: () => void;
 }
 
-export function FeatureCorrections({ t, onEarlyAccess }: FeatureCorrectionsProps) {
+export function FeatureCorrections({
+  t,
+  earlyAccessHref = "/ai-communication/early-access",
+  onEarlyAccess,
+}: FeatureCorrectionsProps) {
   const featureId = "ai-communication-corrections";
   return (
     <SharedFeatureTemplate
@@ -115,7 +120,7 @@ export function FeatureCorrections({ t, onEarlyAccess }: FeatureCorrectionsProps
         <ButtonLink
           className="shared-feature__early-access-cta"
           variant="text"
-          href="/ai-communication/early-access"
+          href={earlyAccessHref}
           data-testid={sharedFeatureTestIds.earlyAccessCta(featureId)}
           onClick={onEarlyAccess}
         >
