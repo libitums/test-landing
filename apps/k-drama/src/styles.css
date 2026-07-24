@@ -107,52 +107,6 @@
     background-position: 0 0;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .k-drama-hero-card__captions span {
-    animation: none;
-    background-position: 0 0;
-  }
-  .k-drama-hero-card__url-text,
-  .k-drama-hero-card__download-progress {
-    animation: none;
-  }
-  .k-drama-hero-card__feed-slides,
-  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
-    animation: none;
-  }
-  .k-drama-feature__scene-caption strong span,
-  .k-drama-feature__romanization i,
-  .k-drama-feature__scene-words i {
-    animation: none;
-  }
-  .k-drama-feature__scene-caption strong span {
-    color: #fff;
-  }
-  .k-drama-feature__romanization i {
-    color: #a78bfa;
-  }
-  .k-drama-feature__url-value,
-  .k-drama-feature__lesson-progress,
-  .k-drama-feature__saved-card:first-child .k-drama-feature__saved-overlay {
-    animation: none;
-  }
-  .k-drama-feature__url-value {
-    width: 100%;
-  }
-  .k-drama-feature__lesson-progress {
-    --feature-download-progress: 100%;
-  }
-  .k-drama-feature__lesson-skeleton,
-  .k-drama-feature__saved-skeleton {
-    display: none;
-  }
-  .k-drama-feature__saved-card:first-child .k-drama-feature__saved-overlay {
-    opacity: 1;
-  }
-  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
-    width: 100%;
-  }
-}
 .k-drama-hero-card__timeline {
   margin-block-start: auto;
   display: flex;
@@ -1191,7 +1145,12 @@
 .k-drama-feature__lesson-chip {
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-full);
-  background: #7b61ff;
+  /* was #7b61ff: white text at 12px/600 measured 4.20:1, an axe color-contrast
+     failure (WCAG 2.1 AA 1.4.3 needs 4.5:1 for non-large text).
+     --color-editorial-accent-hover (#5b4be7) keeps the same violet family and
+     measures 5.82:1 against #fff. Same substitution as
+     .k-drama-hero-card__feed-chip--topic. */
+  background: var(--color-editorial-accent-hover);
   color: #fff;
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
@@ -1270,7 +1229,10 @@
   letter-spacing: 0;
 }
 .k-drama-feature__youtube-box--lesson > .k-drama-feature__lesson-romanization {
-  color: #7b61ff;
+  /* was #7b61ff: 10px/600 on the #fff lesson card measured 4.20:1, an axe
+     color-contrast failure (WCAG 2.1 AA 1.4.3 needs 4.5:1).
+     --color-editorial-accent-hover (#5b4be7) measures 5.82:1 on #fff. */
+  color: var(--color-editorial-accent-hover);
   font-weight: var(--font-semibold);
 }
 .k-drama-feature__lesson-lines {
@@ -1514,7 +1476,7 @@
   justify-content: space-between;
 }
 .k-drama-feature__challenge-toolbar > span,
-.k-drama-feature__challenge-capture button:not(.is-recording) {
+.k-drama-feature__challenge-action:not(.is-recording) {
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid rgb(255 255 255 / 18%);
@@ -1566,7 +1528,7 @@
   color: rgb(255 255 255 / 72%);
   font-size: 0.75rem;
 }
-.k-drama-feature__challenge-guide button {
+.k-drama-feature__challenge-listen {
   margin-block-start: 1rem;
   padding: 0.55rem 0.85rem;
   border: 1px solid rgb(255 255 255 / 22%);
@@ -1579,7 +1541,7 @@
   font-size: 0.6875rem;
   backdrop-filter: blur(0.75rem);
 }
-.k-drama-feature__challenge-guide button svg {
+.k-drama-feature__challenge-listen svg {
   width: 0.9rem;
   height: 0.9rem;
 }
@@ -1654,7 +1616,7 @@
   align-items: center;
   gap: 0.75rem;
 }
-.k-drama-feature__challenge-start button {
+.k-drama-feature__challenge-trigger {
   width: 4.75rem;
   height: 4.75rem;
   border: 0.25rem solid #fff;
@@ -1664,15 +1626,11 @@
   background: rgb(255 255 255 / 12%);
   box-shadow: 0 0.5rem 1.75rem rgb(0 0 0 / 30%);
 }
-.k-drama-feature__challenge-start button i {
+.k-drama-feature__challenge-trigger i {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
   background: #ff174a;
-  transition: transform 160ms ease;
-}
-.k-drama-feature__challenge-start button:hover i {
-  transform: scale(0.9);
 }
 .k-drama-feature__challenge-start strong {
   font-size: 0.6875rem;
@@ -2085,5 +2043,74 @@
   }
   .k-drama-feature__phone--shortform-secondary {
     display: none;
+  }
+}
+
+/*
+ * Reduced-motion overrides (WCAG 2.1 AA 2.2.2 Pause, Stop, Hide).
+ *
+ * This block must stay LAST in the file. A media query adds no specificity, so
+ * when it sat above the rules it overrides every `animation: none` here lost the
+ * cascade to the later `animation: <name> ... infinite` declaration and the whole
+ * block was inert — 13 infinite animations kept running under
+ * `prefers-reduced-motion: reduce`. Keep new animated rules above this block.
+ *
+ * The decorative mockups are aria-hidden, but motion is a visual/vestibular
+ * concern, so they are covered too. Each override also pins the animation's
+ * resting frame so the composition still reads as finished rather than empty.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .k-drama-hero-card__captions span {
+    animation: none;
+    background-position: 0 0;
+  }
+  .k-drama-hero-card__url-text,
+  .k-drama-hero-card__download-progress {
+    animation: none;
+  }
+  .k-drama-hero-card__feed-slides,
+  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
+    animation: none;
+  }
+  .k-drama-hero-card--feed .k-drama-hero-card__progress::before {
+    width: 100%;
+  }
+  .k-drama-feature__scene-caption strong span,
+  .k-drama-feature__romanization i,
+  .k-drama-feature__scene-words i {
+    animation: none;
+  }
+  .k-drama-feature__scene-caption strong span {
+    color: #fff;
+  }
+  .k-drama-feature__romanization i {
+    color: #a78bfa;
+  }
+  .k-drama-feature__url-value,
+  .k-drama-feature__lesson-progress,
+  .k-drama-feature__saved-card:first-child .k-drama-feature__saved-overlay {
+    animation: none;
+  }
+  .k-drama-feature__url-value {
+    width: 100%;
+  }
+  .k-drama-feature__lesson-progress {
+    --feature-download-progress: 100%;
+  }
+  .k-drama-feature__lesson-skeleton,
+  .k-drama-feature__saved-skeleton {
+    display: none;
+  }
+  .k-drama-feature__saved-card:first-child .k-drama-feature__saved-overlay {
+    opacity: 1;
+  }
+  /* Short-form challenge mockup: the recording waveform loops forever and the
+     count-in / challenge-tap flourishes are still motion. */
+  .k-drama-feature__challenge-wave i {
+    animation: none;
+  }
+  .k-drama-feature__challenge-countdown span,
+  .k-drama-feature__shorts-actions.is-clicking .is-challenge svg {
+    animation: none;
   }
 }
