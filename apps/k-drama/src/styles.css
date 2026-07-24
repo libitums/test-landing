@@ -354,7 +354,10 @@
   line-height: 1;
 }
 .k-drama-hero-card__feed-chip--topic {
-  background: #7b61ff;
+  /* was #7b61ff: 4.2:1 with white text at 12px bold, an axe color-contrast
+     failure (needs 4.5:1). --color-editorial-accent-hover keeps the same
+     violet family but is dark enough to clear 4.5:1 (measured ~5.82:1). */
+  background: var(--color-editorial-accent-hover);
 }
 .k-drama-hero-card__feed-chip--time {
   border: 1px solid var(--color-bg);
@@ -574,9 +577,13 @@
     grid-column: 2;
     grid-row: 1 / 5;
   }
-  #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta {
+  #features > .shared-feature:nth-child(3) .k-drama-feature__shortform-highlights {
     grid-column: 1;
     grid-row: 4;
+  }
+  #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta {
+    grid-column: 1;
+    grid-row: 5;
     justify-self: start;
     margin-block-start: var(--space-8);
   }
@@ -1065,7 +1072,10 @@
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-lg);
   background: #f8fafc;
-  color: #94a3b8;
+  /* was #94a3b8: 2.45:1 on #f8fafc at 10px normal weight, an axe
+     color-contrast failure (needs 4.5:1). --color-muted-fg clears it with
+     margin (measured ~7.24:1). */
+  color: var(--color-muted-fg);
   font-size: 0.625rem;
 }
 .k-drama-feature__url-input > span:last-child {
@@ -1896,26 +1906,6 @@
 .k-drama-feature__shortform-preview small {
   color: rgb(255 255 255 / 65%);
 }
-.k-drama-feature__template-label {
-  padding: var(--space-4) var(--space-4) var(--space-2);
-  color: #fff;
-  font-weight: var(--font-bold);
-}
-.k-drama-feature__template-grid {
-  padding: var(--space-2) var(--space-4) var(--space-4);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-2);
-}
-.k-drama-feature__template-grid span {
-  min-height: var(--space-12);
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(145deg, #312e81, #7b61ff);
-  color: #fff;
-  font-size: 0.625rem;
-}
 .k-drama-feature__shortform-note {
   position: absolute;
   inset-inline-end: var(--space-12);
@@ -1937,6 +1927,50 @@
 .k-drama-feature__shortform-note strong {
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
+}
+
+/*
+ * Feature 03 (short-form) sub-copy boxes (`.pen` node `n9rEb1`): vertical
+ * stack, gap 12, box height ~50, radius 8, fill #F5F3FF, text Inter 600
+ * 22px/1.2, left padding 27, fill #7b61ff.
+ *
+ * Token substitutions (no new raw values introduced):
+ * - gap 12px -> --space-3 (0.75rem = 12px, exact)
+ * - radius 8px -> --radius-md (0.5rem = 8px, exact)
+ * - fill #F5F3FF -> --color-editorial-control (#f5f3ff, exact)
+ * - line-height 1.2 -> --leading-heading (exact)
+ * - font-weight 600 -> --font-semibold (exact)
+ * - font-size 22px -> --text-xl (1.25rem = 20px, nearest token; no 22px token exists)
+ * - left padding 27px -> --space-6 (1.5rem = 24px, nearest token)
+ * - fixed height 50px -> approximated via --space-3 block padding + line-height (no fixed-height token)
+ * - fill #7b61ff -> --color-editorial-accent-active (#4938d2) rather than
+ *   --color-editorial-accent (#6d5dfb): at 22px/600 this text does not
+ *   qualify as WCAG "large text", so it needs 4.5:1 against the box fill.
+ *   --color-editorial-accent only reaches ~4.15:1; --color-editorial-accent-active
+ *   reaches ~6.89:1.
+ * - width 510px has no matching token; the list fills the available column
+ *   width instead of a fixed pixel width.
+ */
+.k-drama-feature__shortform-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  margin: var(--space-0);
+  padding: var(--space-0);
+  list-style: none;
+}
+.k-drama-feature__shortform-highlight {
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-3);
+  padding-inline-start: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--color-editorial-control);
+  color: var(--color-editorial-accent-active);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-heading);
 }
 
 .proof-strip {
@@ -1961,15 +1995,6 @@
   color: var(--color-accent);
   font-size: var(--text-3xl);
   font-weight: var(--font-bold);
-}
-.locale-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-.locale-nav a[aria-current="page"] {
-  font-weight: var(--font-bold);
-  text-decoration-thickness: var(--space-1);
 }
 @media (max-width: 48rem) {
   .k-drama-hero .hero__copy h1 {

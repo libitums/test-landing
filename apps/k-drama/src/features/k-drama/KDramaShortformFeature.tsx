@@ -200,7 +200,7 @@ export function KDramaShortformFeature() {
   }, [sequenceCycle]);
 
   return (
-    <div className="k-drama-feature k-drama-feature--shortform">
+    <div className="k-drama-feature k-drama-feature--shortform" aria-hidden="true">
       <div className="k-drama-feature__shortform-devices">
         <div className="k-drama-feature__phone k-drama-feature__phone--shortform-secondary">
           <ShortformPhoneContent

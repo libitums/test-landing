@@ -2,6 +2,7 @@ import type {
   CtaContent,
   FeatureItem,
   HeroContent,
+  HeroHighlight,
   PricingContent,
   ProofMetric,
 } from "@landing/contracts";
@@ -62,14 +63,24 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
         heading: t("footer.faq.heading"),
         items: [
           {
-            id: "availability",
-            question: t("footer.faq.availability.question"),
-            answer: t("footer.faq.availability.answer"),
+            id: "what",
+            question: t("footer.faq.what.question"),
+            answer: t("footer.faq.what.answer"),
           },
           {
-            id: "workflow",
-            question: t("footer.faq.workflow.question"),
-            answer: t("footer.faq.workflow.answer"),
+            id: "clips",
+            question: t("footer.faq.clips.question"),
+            answer: t("footer.faq.clips.answer"),
+          },
+          {
+            id: "practice",
+            question: t("footer.faq.practice.question"),
+            answer: t("footer.faq.practice.answer"),
+          },
+          {
+            id: "learners",
+            question: t("footer.faq.learners.question"),
+            answer: t("footer.faq.learners.answer"),
           },
         ],
       },
@@ -119,6 +130,12 @@ export function createContent(runtime: I18nRuntime) {
       { id: "reuse", value: t("proof.reuse.value"), label: t("proof.reuse.label") },
       { id: "launch", value: t("proof.launch.value"), label: t("proof.launch.label") },
     ] satisfies readonly ProofMetric[],
+    shortformHighlights: [
+      { id: "one-minute", label: t("features.shortform.highlight.oneMinute") },
+      { id: "key-moments", label: t("features.shortform.highlight.keyMoments") },
+      { id: "simple", label: t("features.shortform.highlight.simple") },
+      { id: "instant", label: t("features.shortform.highlight.instant") },
+    ] satisfies readonly HeroHighlight[],
     cta: {
       badge: t("cta.badge"),
       title: t("cta.title"),

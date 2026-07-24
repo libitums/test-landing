@@ -13,6 +13,7 @@ import {
   PricingSection,
 } from "@landing/ui";
 import { KDramaProofStrip } from "../features/k-drama/KDramaProofStrip";
+import { KDramaShortformHighlights } from "../features/k-drama/KDramaShortformHighlights";
 import {
   KDramaDualSubtitleFeature,
   KDramaShortformFeature,
@@ -180,6 +181,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                 >
                   <div className="k-drama-feature-composition">
                     {featureVisuals[feature.id as keyof typeof featureVisuals]}
+                    {feature.id === "shortform" ? (
+                      <KDramaShortformHighlights items={content.shortformHighlights} />
+                    ) : null}
                     <ButtonLink
                       className="shared-feature__early-access-cta"
                       variant="text"
@@ -194,11 +198,11 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
               );
             })}
           </div>
-          <div id="pricing">
-            <PricingSection content={content.pricing} />
-          </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />
+          </div>
+          <div id="pricing">
+            <PricingSection content={content.pricing} />
           </div>
         </LandingShell.Main>
       </LandingShell>

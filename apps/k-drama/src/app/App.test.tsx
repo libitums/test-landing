@@ -75,4 +75,61 @@ describe("K-drama landing", () => {
       expect.objectContaining({ name: "feature_cta_clicked", featureId: "subtitles" }),
     );
   });
+
+  it("renders sections in features -> cta -> pricing -> footer order", () => {
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter: createInMemoryAnalyticsAdapter(),
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+    const root = screen.getByTestId("landing:k-drama");
+    const sectionIds = ["features", "cta", "pricing"];
+    const positions = sectionIds.map((id) => {
+      const element = root.querySelector(`#${id}`);
+      expect(element).not.toBeNull();
+      return Array.from(root.querySelectorAll("*")).indexOf(element as Element);
+    });
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+    const footer = screen.getByTestId("footer");
+    const pricing = root.querySelector("#pricing");
+    expect(
+      Array.from(root.querySelectorAll("*")).indexOf(pricing as Element),
+    ).toBeLessThan(Array.from(root.querySelectorAll("*")).indexOf(footer));
+  });
+
+  it("renders the four 'Before you start' footer notices", () => {
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter: createInMemoryAnalyticsAdapter(),
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+    expect(screen.getByRole("heading", { name: "Before you start" })).toBeInTheDocument();
+    const faq = screen.getByTestId("footer-faq");
+    expect(within(faq).getAllByRole("button")).toHaveLength(4);
+    expect(within(faq).getByText("What is this app?")).toBeInTheDocument();
+    expect(within(faq).getByText("Clips")).toBeInTheDocument();
+    expect(within(faq).getByText("Practice")).toBeInTheDocument();
+    expect(within(faq).getByText("For learners")).toBeInTheDocument();
+  });
+
+  it("renders the four short-form sub-copy boxes with accessible text", () => {
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter: createInMemoryAnalyticsAdapter(),
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+    const highlights = screen.getByTestId("k-drama-shortform-highlights");
+    expect(highlights).not.toHaveAttribute("aria-hidden");
+    const items = within(highlights).getAllByRole("listitem");
+    expect(items).toHaveLength(4);
+    expect(items.map((item) => item.textContent)).toEqual([
+      "Start with 1-minute clips",
+      "Skip straight to key moments",
+      "YouTube, K-pop, and more made simple",
+      "Save clips and pick up instantly",
+    ]);
+  });
 });
