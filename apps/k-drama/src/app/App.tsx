@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type MouseEvent } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
@@ -42,6 +42,12 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   const openEarlyAccess = () => {
     setEarlyAccessOpen(true);
     void analytics.track({ name: "cta_clicked" });
+  };
+  // The shared CtaSection renders its action as an anchor (href="#top"); since
+  // the final CTA opens the modal instead of navigating, swallow the anchor's
+  // default jump. openEarlyAccess still fires from the anchor's own onClick.
+  const preventCtaJump = (event: MouseEvent<HTMLDivElement>) => {
+    if ((event.target as Element).closest("a[href]")) event.preventDefault();
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
@@ -202,7 +208,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
               );
             })}
           </div>
-          <div id="cta">
+          <div id="cta" onClickCapture={preventCtaJump}>
             <CtaSection content={content.cta} onAction={openEarlyAccess} />
           </div>
           <div id="pricing">

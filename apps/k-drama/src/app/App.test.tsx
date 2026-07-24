@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { createEvent, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { createAnalyticsEventValidator, createInMemoryAnalyticsAdapter } from "@landing/analytics";
 import { landingTestIds } from "@landing/contracts";
 import { describe, expect, it } from "vitest";
@@ -96,6 +96,23 @@ describe("K-drama landing", () => {
 
     fireEvent.keyDown(document, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+  });
+
+  it("opens the modal from the final CTA without letting its anchor jump the page", () => {
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter: createInMemoryAnalyticsAdapter(),
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+    const finalCta = screen.getByTestId("cta-action:create");
+    expect(finalCta).toHaveAttribute("href", "#top");
+    // The anchor default must be prevented so the page does not jump to #top;
+    // the click still opens the modal.
+    const clickEvent = createEvent.click(finalCta);
+    fireEvent(finalCta, clickEvent);
+    expect(clickEvent.defaultPrevented).toBe(true);
+    expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
   });
 
   it("renders sections in features -> cta -> pricing -> footer order", () => {
