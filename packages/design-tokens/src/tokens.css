@@ -62,6 +62,58 @@
   --color-conversation-scrim-bottom: rgb(0 0 0 / 73%);
   --color-conversation-scrim-soft: rgb(0 0 0 / 60%);
   --color-conversation-decoration-border: rgb(255 79 182 / 20%);
+  /* K-drama media compositions (phone/camera mockups): the same opaque-on-media
+     rule applies, plus a small set of app-owned violet accent steps that are
+     close to but distinct from --color-editorial-accent. */
+  --color-drama-accent: #7b61ff;
+  --color-drama-accent-bright: #a78bfa;
+  --color-drama-accent-alt: #635bff;
+  --color-drama-accent-soft-media: #a99cff;
+  --color-drama-accent-chip-fg: #c4b5fd;
+  --color-drama-accent-deep: #312e81;
+  --color-drama-accent-shadow: #30225f;
+  --color-drama-accent-midnight: #1e1b4b;
+  --color-drama-ink-deep: #172033;
+  --color-drama-ink-deepest: #111827;
+  --color-drama-icon-default: #334155;
+  --color-drama-surface-muted: #f1f5f9;
+  --color-drama-device: #000000;
+  --color-drama-progress-caption: #ff174a;
+  --color-drama-progress-youtube: #ff0033;
+  --color-drama-on-media: #ffffff;
+  /* White-on-media alpha steps consolidated from a 17-value staircase down to
+     8 role-based tiers (border / inactive fill / muted text / secondary text
+     / glass badge, see the k-drama tokenization PR description for the
+     value-by-value merge table). */
+  --color-drama-chip-fill: rgb(255 255 255 / 12%);
+  --color-drama-chip-border: rgb(255 255 255 / 18%);
+  --color-drama-control-fill: rgb(255 255 255 / 20%);
+  --color-drama-glass-border: rgb(255 255 255 / 22%);
+  --color-drama-track: rgb(255 255 255 / 24%);
+  --color-drama-chip-border-strong: rgb(255 255 255 / 55%);
+  --color-drama-on-media-muted: rgb(255 255 255 / 65%);
+  --color-drama-on-media-secondary: rgb(255 255 255 / 72%);
+  /* Black scrim steps (vignettes over photo/video mockups). */
+  --color-drama-scrim-faint: rgb(0 0 0 / 10%);
+  --color-drama-scrim-top: rgb(0 0 0 / 38%);
+  --color-drama-scrim-soft: rgb(0 0 0 / 58%);
+  --color-drama-scrim-strong: rgb(0 0 0 / 76%);
+  --color-drama-scrim-bottom: rgb(0 0 0 / 90%);
+  /* Slate scrim steps (distinct from black scrims above: these sit over
+     lighter media and pair with the badge/pill glass pattern). */
+  --color-drama-overlay-light: rgb(15 23 42 / 18%);
+  --color-drama-scrim-tint: rgb(15 23 42 / 42%);
+  --color-drama-glass-fill: rgb(15 23 42 / 62%);
+  --color-drama-vignette: rgb(15 23 42 / 78%);
+  --color-drama-panel-overlay: rgb(15 23 42 / 82%);
+  --color-drama-scrim-deep: rgb(15 23 42 / 92%);
+  /* Accent-tinted alphas (badges, chips, glows on dark media). */
+  --color-drama-accent-glow: rgb(123 97 255 / 85%);
+  --color-drama-accent-chip: rgb(123 97 255 / 22%);
+  --color-drama-accent-badge: rgb(99 91 255 / 82%);
+  --color-drama-progress-track-youtube: rgb(255 0 51 / 18%);
+  --color-drama-progress-track-caption: rgb(255 23 74 / 16%);
+  --color-drama-tile-surface: rgb(71 85 105 / 12%);
 
   --font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -146,6 +198,18 @@
   --shadow-conversation-float: 0 16px 30px rgb(0 0 0 / 26%);
   --shadow-conversation-device: 0 22px 44px rgb(0 0 0 / 25%);
   --shadow-conversation-glass: 0 16px 32px rgb(0 0 0 / 24%);
+  --shadow-drama-notch-ring: inset 0 0 0 1px rgb(255 255 255 / 5%);
+  --shadow-drama-side-actions: 0 0.75rem 2rem rgb(15 23 42 / 16%);
+  --shadow-drama-heading-glow: 0 1px 8px rgb(0 0 0 / 65%);
+  --shadow-drama-progress-dot: 0 2px 8px rgb(255 23 74 / 45%);
+  --shadow-drama-youtube-panel: 0 1rem 2.5rem rgb(15 23 42 / 14%);
+  --shadow-drama-download-core: 0 0.5rem 1.25rem rgb(15 23 42 / 12%);
+  --shadow-drama-guide-glow: 0 0.125rem 0.75rem rgb(0 0 0 / 45%);
+  --shadow-drama-record-ring: 0 0 0 0.25rem rgb(255 23 74 / 16%);
+  --shadow-drama-trigger-float: 0 0.5rem 1.75rem rgb(0 0 0 / 30%);
+  --shadow-drama-countdown-glow: 0 0 2rem rgb(99 91 255 / 72%);
+  --shadow-drama-challenge-badge: 0 0.375rem 1rem rgb(99 91 255 / 38%);
+  --shadow-drama-challenge-tap-ring: 0 0 0 0.8rem rgb(99 91 255 / 18%);
   --focus-ring: 0 0 0 3px rgb(29 78 216 / 32%);
 
   --duration-fast: 120ms;
