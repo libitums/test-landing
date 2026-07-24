@@ -19,8 +19,8 @@ export function createNavbarProps(runtime: I18nRuntime, location: string): Navba
     appearance: "warm-editorial",
     content: {
       logo: { kind: "image", src: baetterLogo, alt: t("brand"), href: "#top" },
-      howItWorks: { label: t("nav.product"), href: "#features" },
-      pricing: { label: t("nav.proof"), href: "#proof" },
+      howItWorks: { label: t("nav.whyBaetter"), href: "#proof" },
+      pricing: { label: t("nav.pricing"), href: "#pricing" },
       language: {
         label: t("locale.label"),
         accessibleLabel: t("locale.label"),
