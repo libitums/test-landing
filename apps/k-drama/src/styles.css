@@ -1,3 +1,22 @@
+/* Navbar brand logo — same sizing as ai-communication so the mark reads
+   identically across apps: a wide crop of the wordmark clipped to the control
+   height. */
+[data-testid="landing:k-drama"] .navbar__logo {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  inline-size: calc(var(--control-height) * 4);
+  block-size: var(--control-height);
+}
+[data-testid="landing:k-drama"] .navbar__logo-image {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: calc(var(--control-height) * 4);
+  max-inline-size: none;
+  block-size: auto;
+  transform: translate(-50%, -50%);
+}
 .k-drama-hero .hero {
   background: var(--color-bg);
 }

@@ -10,6 +10,7 @@ import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
 import type { NavbarProps } from "@landing/contracts/navbar";
 import { localizePath } from "@landing/i18n";
+import { baetterLogo } from "@landing/ui";
 import { registry } from "../i18n";
 
 export function createNavbarProps(runtime: I18nRuntime, location: string): NavbarProps {
@@ -17,7 +18,7 @@ export function createNavbarProps(runtime: I18nRuntime, location: string): Navba
   return {
     appearance: "warm-editorial",
     content: {
-      logo: { kind: "text", label: t("brand"), accessibleLabel: t("brand"), href: "#top" },
+      logo: { kind: "image", src: baetterLogo, alt: t("brand"), href: "#top" },
       howItWorks: { label: t("nav.product"), href: "#features" },
       pricing: { label: t("nav.proof"), href: "#proof" },
       language: {

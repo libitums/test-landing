@@ -22,7 +22,12 @@ const ids = {
 async function expectNamed(locator: Locator) {
   const name = await locator.getAttribute("aria-label");
   const visibleText = (await locator.textContent())?.trim();
-  expect(name?.trim() || visibleText).toBeTruthy();
+  // An image logo carries its accessible name on the nested <img alt>, not on
+  // the link's own aria-label or text. Only read it when an image is actually
+  // present — a bare getAttribute would block for the full timeout otherwise.
+  const image = locator.locator("img[alt]").first();
+  const imageAlt = (await image.count()) > 0 ? (await image.getAttribute("alt"))?.trim() : "";
+  expect(name?.trim() || visibleText || imageAlt).toBeTruthy();
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
