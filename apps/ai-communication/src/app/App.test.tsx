@@ -23,32 +23,19 @@ describe("AI communication landing", () => {
     expect(hero).toContainElement(media);
     expect(action).toHaveRole("button");
     expect(action).not.toHaveAttribute("href");
+    expect(action).not.toHaveAttribute("aria-disabled");
     expect(action).toHaveTextContent(/\S+/);
     expect(media).toBeInTheDocument();
     expect(media.querySelector("img")).toBeNull();
     fireEvent.click(action);
-    expect(adapter.events).toEqual([
-      {
-        name: "experiment_viewed",
-        version: 1,
-        projectId: "ai-communication",
-        experimentId: "landing-phase-1",
-        variantId: "ai-communication-v1",
-        locale: "en-US",
-        pageId: "home",
-        countryHint: "KR",
-      },
-    ]);
+    expect(adapter.events.map((event) => event.name)).toEqual(["experiment_viewed", "cta_clicked"]);
+    expect(screen.getByRole("dialog", { name: "Reserve your spot" })).toBeInTheDocument();
+    fireEvent.mouseDown(screen.getByTestId("early-access-page"));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: /Role-play the situations/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: /Get instant corrections/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: /Chat with your bias/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Role-play the situations/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Get instant corrections/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Chat with your bias/i })).toBeInTheDocument();
     const features = [
       ["ai-communication-roleplay", "roleplay", "shared-feature--white"],
       ["ai-communication-corrections", "corrections", "shared-feature--soft"],
@@ -63,7 +50,7 @@ describe("AI communication landing", () => {
       expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:content`));
       const featureAction = screen.getByTestId(`shared-feature:${testId}:early-access-cta`);
       expect(featureAction).toHaveAccessibleName("Get early access");
-      expect(featureAction).toHaveAttribute("href", "/ai-communication/early-access");
+      expect(featureAction).toHaveAttribute("href", "/en-US/ai-communication/early-access");
       expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
       expect(featureAction).not.toHaveClass("button--secondary");
       featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });

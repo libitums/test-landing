@@ -15,7 +15,7 @@ function withLineBreaks(text: string): ReactNode {
   ));
 }
 
-export function Hero({ content, children, testId = "hero" }: HeroProps) {
+export function Hero({ content, children, onAction, testId = "hero" }: HeroProps) {
   const media = renderSlot(children);
   const highlights = content.highlights ?? [];
 
@@ -34,7 +34,8 @@ export function Hero({ content, children, testId = "hero" }: HeroProps) {
             <button
               className="button hero__cta"
               type="button"
-              aria-disabled="true"
+              aria-disabled={onAction ? undefined : "true"}
+              onClick={onAction}
               data-testid={landingTestIds.heroCta}
             >
               <span className="hero__cta-fill" aria-hidden="true" />

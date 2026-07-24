@@ -9,7 +9,7 @@ const features = [
 
 const desktopProjects = new Set(["chromium", "firefox", "webkit"]);
 const mobileProjects = new Set(["mobile-chromium", "mobile-webkit", "mobile-320-chromium"]);
-const earlyAccessPath = "/ai-communication/early-access";
+const earlyAccessPath = "/en-US/ai-communication/early-access";
 const localizedCtaNames = {
   "en-US": "Get early access",
   "ko-KR": "얼리 액세스 신청",
@@ -191,15 +191,20 @@ test.describe("ai-communication shared features", () => {
     await expectNoHorizontalOverflow(page);
   });
 
-  test("every native feature CTA preserves click navigation", async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name !== "chromium", "Navigation is engine-independent");
+  test("every native feature CTA opens the early-access modal without navigation", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Modal activation is engine-independent");
 
     for (const feature of features) {
       await page.goto("/en-US/");
       const cta = page.getByTestId(slotTestId(feature.id, "early-access-cta"));
       await expect(cta).toHaveJSProperty("tagName", "A");
       await cta.click();
-      await expect(page).toHaveURL(new RegExp(`${earlyAccessPath}$`));
+      await expect(page).toHaveURL(/\/en-US\/$/);
+      await expect(page.getByRole("dialog", { name: "Reserve your spot" })).toBeVisible();
+      await page.getByRole("button", { name: "Close early-access form" }).click();
+      await expect(page.getByRole("dialog")).toHaveCount(0);
     }
   });
 

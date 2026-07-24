@@ -28,16 +28,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", true).locale).toBe("en-XA");
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", false).locale).toBe("ko-KR");
   });
-  it.each([
-    "ko-KR",
-    "en-US",
-    "ja-JP",
-    "vi-VN",
-    "th-TH",
-    "zh-CN",
-    "zh-TW",
-    "ar",
-  ] as const)(
+  it.each(["ko-KR", "en-US", "ja-JP", "vi-VN", "th-TH", "zh-CN", "zh-TW", "ar"] as const)(
     "renders real %s translations with a complete key set and locale Intl formatting",
     (localeName) => {
       const runtime = getRuntime(`/${localeName}/campaign`);
@@ -142,7 +133,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     );
     expect(screen.getByRole("link", { name: resources.ar["cta.action"] })).toHaveAttribute(
       "href",
-      "/ai-communication/early-access",
+      "/ar/ai-communication/early-access",
     );
     expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.lastIndexOf("#top"));
     for (const link of links) {
