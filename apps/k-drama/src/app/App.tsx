@@ -165,7 +165,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
             </Hero>
           </div>
           <div id="proof">
-            <KDramaProofStrip metrics={content.metrics} title={t("proof.title")} />
+            <KDramaProofStrip items={content.proofChecks} title={t("proof.title")} />
           </div>
           <div id="features">
             {content.features.map((feature, index) => {
