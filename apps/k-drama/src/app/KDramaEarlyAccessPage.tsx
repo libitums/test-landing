@@ -1,18 +1,14 @@
 import { useEffect, useState, type FormEvent } from "react";
 import type { I18nRuntime } from "@landing/contracts/i18n";
+import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { localizePath } from "@landing/i18n";
 import { baetterLogo, Checkbox, Input } from "@landing/ui";
 import { registry } from "../i18n";
 
-export interface EarlyAccessSubmission {
-  email: string;
-  marketingConsent: boolean;
-}
-
 export interface KDramaEarlyAccessPageProps {
   runtime: I18nRuntime;
   location: string;
-  submitRegistration?: (submission: EarlyAccessSubmission) => Promise<void>;
+  submitRegistration?: SubmitEarlyAccessRegistration;
   overlay?: boolean;
   onClose?: () => void;
 }

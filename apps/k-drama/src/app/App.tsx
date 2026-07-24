@@ -1,6 +1,7 @@
-import { useState, useEffect, type MouseEvent } from "react";
+import { useState, useEffect, type KeyboardEvent, type MouseEvent } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
+import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
 import {
   CtaSection,
@@ -20,6 +21,7 @@ import {
 } from "../features/k-drama/KDramaFeatureVisuals";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 import { KDramaEarlyAccessPage } from "./KDramaEarlyAccessPage";
+import { unavailableEarlyAccessRegistration } from "../early-access";
 
 const featureVisuals = {
   subtitles: <KDramaDualSubtitleFeature />,
@@ -27,12 +29,27 @@ const featureVisuals = {
   shortform: <KDramaShortformFeature />,
 };
 
+// The shared CtaSection renders its action as an anchor (href="#top"); since the
+// final CTA opens the modal instead of navigating, swallow the anchor's default
+// jump on both pointer and keyboard (Enter) activation. openEarlyAccess still
+// fires from the anchor's own onClick.
+function preventCtaJump(event: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
+  if ("key" in event && event.key !== "Enter") return;
+  if ((event.target as Element).closest("a[href]")) event.preventDefault();
+}
+
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
   location?: string;
+  submitEarlyAccessRegistration?: SubmitEarlyAccessRegistration;
 }
-export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+export function App({
+  analytics,
+  runtime,
+  location = `/${runtime.locale}/`,
+  submitEarlyAccessRegistration = unavailableEarlyAccessRegistration,
+}: AppProps) {
   const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
@@ -42,12 +59,6 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
   const openEarlyAccess = () => {
     setEarlyAccessOpen(true);
     void analytics.track({ name: "cta_clicked" });
-  };
-  // The shared CtaSection renders its action as an anchor (href="#top"); since
-  // the final CTA opens the modal instead of navigating, swallow the anchor's
-  // default jump. openEarlyAccess still fires from the anchor's own onClick.
-  const preventCtaJump = (event: MouseEvent<HTMLDivElement>) => {
-    if ((event.target as Element).closest("a[href]")) event.preventDefault();
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
@@ -208,7 +219,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
               );
             })}
           </div>
-          <div id="cta" onClickCapture={preventCtaJump}>
+          <div id="cta" onClickCapture={preventCtaJump} onKeyDownCapture={preventCtaJump}>
             <CtaSection content={content.cta} onAction={openEarlyAccess} />
           </div>
           <div id="pricing">
@@ -221,6 +232,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
           runtime={runtime}
           location={location}
           overlay
+          submitRegistration={submitEarlyAccessRegistration}
           onClose={() => setEarlyAccessOpen(false)}
         />
       ) : null}
