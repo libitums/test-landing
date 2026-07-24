@@ -9,7 +9,7 @@ import { FeatureRoleplay } from "../features/ai-communication/FeatureRoleplay";
 import { FeatureCorrections } from "../features/ai-communication/FeatureCorrections";
 import { FeatureBias } from "../features/ai-communication/FeatureBias";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
-import { EarlyAccessPage } from "./EarlyAccessPage";
+import { EarlyAccessModal } from "./EarlyAccessModal";
 import { useConversationBreakpoints } from "./useConversationBreakpoints";
 import { unavailableEarlyAccessRegistration } from "../early-access";
 export interface AppProps {
@@ -102,7 +102,7 @@ export function App({
         </LandingShell.Main>
       </LandingShell>
       {isEarlyAccessOpen ? (
-        <EarlyAccessPage
+        <EarlyAccessModal
           runtime={runtime}
           onClose={() => setEarlyAccessOpen(false)}
           submitRegistration={submitEarlyAccessRegistration}

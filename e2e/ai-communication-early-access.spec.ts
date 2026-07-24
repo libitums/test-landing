@@ -203,7 +203,7 @@ test.describe("ai-communication early-access boundary", () => {
     await page.getByTestId("early-access-submit").click();
     await expect(page.getByTestId("early-access-status")).toContainText("You are on the list");
     await expect(dialog).toBeVisible();
-    expect((await new AxeBuilder({ page }).include("[role=dialog]").analyze()).violations).toEqual(
+    expect((await new AxeBuilder({ page }).include("dialog").analyze()).violations).toEqual(
       [],
     );
 

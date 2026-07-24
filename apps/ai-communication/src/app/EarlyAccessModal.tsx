@@ -14,7 +14,7 @@ type FormStatus =
 
 type FieldErrors = Partial<Record<"email" | "marketingConsent", true>>;
 
-export interface EarlyAccessPageProps {
+export interface EarlyAccessModalProps {
   runtime: I18nRuntime;
   submitRegistration: SubmitEarlyAccessRegistration;
   onClose: () => void;
@@ -70,11 +70,11 @@ function withoutField(errors: FieldErrors, field: keyof FieldErrors): FieldError
   return next;
 }
 
-export function EarlyAccessPage({
+export function EarlyAccessModal({
   runtime,
   submitRegistration,
   onClose,
-}: EarlyAccessPageProps) {
+}: EarlyAccessModalProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [email, setEmail] = useState("");
   const [marketingConsent, setMarketingConsent] = useState(false);
@@ -82,7 +82,7 @@ export function EarlyAccessPage({
   const submittingRef = useRef(false);
   const consentRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
   const t = runtime.translate;
 
   useEffect(() => {
@@ -220,10 +220,10 @@ export function EarlyAccessPage({
           aria-label={t("earlyAccess.dismiss")}
           data-testid="early-access-backdrop"
         />
-        <div
+        <dialog
           ref={modalRef}
           className="early-access__modal"
-          role="dialog"
+          open
           aria-modal="true"
           aria-labelledby="early-access-form-title"
         >
@@ -313,7 +313,7 @@ export function EarlyAccessPage({
               </button>
             </form>
           </section>
-        </div>
+        </dialog>
       </div>
     </div>
   );

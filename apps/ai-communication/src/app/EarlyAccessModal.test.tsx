@@ -2,13 +2,13 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { EarlyAccessSubmissionError } from "@landing/contracts/early-access";
 import { describe, expect, it, vi } from "vitest";
 import { getRuntime } from "../i18n";
-import { EarlyAccessPage } from "./EarlyAccessPage";
+import { EarlyAccessModal } from "./EarlyAccessModal";
 
 const location = "/en-US/";
 
 function renderPage(submitRegistration = vi.fn().mockResolvedValue(undefined)) {
   render(
-    <EarlyAccessPage
+    <EarlyAccessModal
       runtime={getRuntime(location)}
       submitRegistration={submitRegistration}
       onClose={vi.fn()}
@@ -50,7 +50,7 @@ function rejection(code: EarlyAccessSubmissionError["code"]): EarlyAccessSubmiss
   return { name: "EarlyAccessSubmissionError", code };
 }
 
-describe("EarlyAccessPage", () => {
+describe("EarlyAccessModal", () => {
   it("renders the stable accessible modal form contract", () => {
     renderPage();
     expect(screen.getByTestId("early-access-page")).toBeInTheDocument();
@@ -156,7 +156,7 @@ describe("EarlyAccessPage", () => {
     opener.focus();
     const onClose = vi.fn();
     const { unmount } = render(
-      <EarlyAccessPage
+      <EarlyAccessModal
         runtime={getRuntime(location)}
         submitRegistration={vi.fn().mockResolvedValue(undefined)}
         onClose={onClose}

@@ -5,7 +5,7 @@
 This is the frozen visual, interaction, and accessibility contract for connecting
 the existing `ai-communication` early-access form to the shared Supabase
 submission boundary. It follows `DESIGN.md` with no deviation. The existing modal
-composition in `EarlyAccessPage` is the visual reference: its
+composition in `EarlyAccessModal` is the visual reference: its
 content order, card geometry, field layout, and responsive behavior do not change.
 
 Only `ai-communication` receives an interactive form in this phase. Admin UI and
