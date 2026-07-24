@@ -49,17 +49,35 @@ describe("AI communication landing", () => {
     expect(
       screen.getByRole("heading", { name: /Chat with your bias/i }),
     ).toBeInTheDocument();
-    const featureAction = screen.getByTestId(
-      "shared-feature:ai-communication-personas:early-access-cta",
-    );
-    expect(featureAction).toHaveAttribute("href", "/ai-communication/early-access");
-    expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
-    expect(featureAction).not.toHaveClass("button--secondary");
-    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
-    fireEvent.click(featureAction);
-    await waitFor(() => expect(adapter.events).toHaveLength(2));
-    expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "feature_cta_clicked", featureId: "personas" }),
-    );
+    const features = [
+      ["ai-communication-roleplay", "roleplay", "shared-feature--white"],
+      ["ai-communication-corrections", "corrections", "shared-feature--soft"],
+      ["ai-communication-personas", "personas", "shared-feature--white"],
+    ] as const;
+    for (const [testId, featureId, appearance] of features) {
+      const root = screen.getByTestId(`shared-feature:${testId}`);
+      expect(root).toHaveClass(appearance);
+      expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:number-label`));
+      expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:header`));
+      expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:subheader`));
+      expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:content`));
+      const featureAction = screen.getByTestId(`shared-feature:${testId}:early-access-cta`);
+      expect(featureAction).toHaveAccessibleName("Get early access");
+      expect(featureAction).toHaveAttribute("href", "/ai-communication/early-access");
+      expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
+      expect(featureAction).not.toHaveClass("button--secondary");
+      featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      fireEvent.click(featureAction);
+      await waitFor(() =>
+        expect(adapter.events.filter((event) => event.name === "feature_cta_clicked")).toHaveLength(
+          features.indexOf(features.find((item) => item[1] === featureId)!) + 1,
+        ),
+      );
+    }
+    expect(
+      adapter.events
+        .filter((event) => event.name === "feature_cta_clicked")
+        .map((event) => ("featureId" in event ? event.featureId : undefined)),
+    ).toEqual(["roleplay", "corrections", "personas"]);
   });
 });
