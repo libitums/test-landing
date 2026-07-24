@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { createRegisterEarlyAccessHandler, parseAllowedOrigins } from "./handler.ts";
+import { createRegisterEarlyAccessHandler } from "./handler.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -12,8 +12,7 @@ const admin =
     : null;
 
 const handler = createRegisterEarlyAccessHandler({
-  allowedOrigins: parseAllowedOrigins(Deno.env.get("EARLY_ACCESS_ALLOWED_ORIGINS")),
-  ipHashSecret: Deno.env.get("EARLY_ACCESS_IP_HASH_SECRET") ?? null,
+  clientKeySecret: serviceKey ?? null,
   async consumeRateLimit(clientKey) {
     if (!admin) throw new Error("server configuration unavailable");
     const { data, error } = await admin.rpc("consume_early_access_rate_limit", {

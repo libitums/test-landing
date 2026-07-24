@@ -1,11 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { earlyAccessTableByProject as frozenTables } from "../../../packages/contracts/src/early-access";
 import { earlyAccessTableByProject as functionTables } from "../_shared/early-access-contract";
-import {
-  createRegisterEarlyAccessHandler,
-  parseAllowedOrigins,
-  type RegisterEarlyAccessDependencies,
-} from "./handler";
+import { createRegisterEarlyAccessHandler, type RegisterEarlyAccessDependencies } from "./handler";
 
 const origin = "https://landing.example.com";
 const baseRequest = (body: unknown, method = "POST") =>
@@ -26,8 +22,7 @@ function setup(overrides: Partial<RegisterEarlyAccessDependencies> = {}) {
     createdAt: "2026-07-24T00:00:00.000Z",
   }));
   const handler = createRegisterEarlyAccessHandler({
-    allowedOrigins: new Set([origin]),
-    ipHashSecret: "a-secret-that-is-at-least-32-characters",
+    clientKeySecret: "server-injected-service-role-key",
     consumeRateLimit,
     insertRegistration,
     ...overrides,
@@ -36,6 +31,10 @@ function setup(overrides: Partial<RegisterEarlyAccessDependencies> = {}) {
 }
 
 describe("register-early-access handler", () => {
+  it("constructs without a separate origin allowlist or IP-hash secret", () => {
+    expect(() => setup()).not.toThrow();
+  });
+
   it("keeps the deploy-local routing contract in sync with the frozen contract", () => {
     expect(functionTables).toEqual(frozenTables);
   });
@@ -48,6 +47,7 @@ describe("register-early-access handler", () => {
         baseRequest({ projectId, email: "  a@example.com\u3000", marketingConsent: true }),
       );
       expect(response.status).toBe(201);
+      expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
       expect(insertRegistration).toHaveBeenCalledWith(projectId, "a@example.com");
       expect(await response.json()).toMatchObject({ status: "success" });
     },
@@ -197,8 +197,8 @@ describe("register-early-access handler", () => {
   });
 
   it.each([
-    ["missing IP", { ipHashSecret: "a-secret-that-is-at-least-32-characters" }],
-    ["missing hash configuration", { ipHashSecret: null }],
+    ["missing IP", { clientKeySecret: "server-injected-service-role-key" }],
+    ["missing server secret", { clientKeySecret: null }],
   ] as const)("fails closed for %s", async (_label, overrides) => {
     const { handler, consumeRateLimit } = setup(overrides);
     const request = baseRequest({
@@ -206,7 +206,7 @@ describe("register-early-access handler", () => {
       email: "a@example.com",
       marketingConsent: true,
     });
-    if (overrides.ipHashSecret !== null) request.headers.delete("x-forwarded-for");
+    if (overrides.clientKeySecret !== null) request.headers.delete("x-forwarded-for");
     const response = await handler(request);
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ status: "server_error" });
@@ -250,41 +250,35 @@ describe("register-early-access handler", () => {
     const { handler, consumeRateLimit } = setup();
     const response = await handler(baseRequest(undefined, "OPTIONS"));
     expect(response.status).toBe(204);
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
+    expect(response.headers.get("Vary")).toBeNull();
     expect(consumeRateLimit).not.toHaveBeenCalled();
   });
 
-  it("fails closed for missing/wildcard/invalid origin configuration", () => {
-    expect(parseAllowedOrigins(undefined)).toBeNull();
-    expect(parseAllowedOrigins("*")).toBeNull();
-    expect(parseAllowedOrigins("https://example.com/path")).toBeNull();
-    expect(parseAllowedOrigins(origin)).toEqual(new Set([origin]));
-  });
-
-  it.each([
-    ["missing allowlist", null, origin],
-    ["missing request origin", new Set([origin]), null],
-    ["disallowed request origin", new Set([origin]), "https://evil.example.com"],
-  ] as const)("rejects %s before rate limiting", async (_label, allowedOrigins, requestOrigin) => {
-    const { handler, consumeRateLimit, insertRegistration } = setup({ allowedOrigins });
-    const headers: Record<string, string> = {
-      "x-forwarded-for": "203.0.113.9",
-      "content-type": "application/json",
-    };
-    if (requestOrigin) headers.origin = requestOrigin;
-    const response = await handler(
-      new Request("https://project.supabase.co/functions/v1/register-early-access", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          projectId: "ai-communication",
-          email: "a@example.com",
-          marketingConsent: true,
+  it.each([undefined, "https://another.example.com"])(
+    "allows public testing requests with origin %s",
+    async (requestOrigin) => {
+      const { handler, consumeRateLimit, insertRegistration } = setup();
+      const headers: Record<string, string> = {
+        "x-forwarded-for": "203.0.113.9",
+        "content-type": "application/json",
+      };
+      if (requestOrigin) headers.origin = requestOrigin;
+      const response = await handler(
+        new Request("https://project.supabase.co/functions/v1/register-early-access", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            projectId: "ai-communication",
+            email: "a@example.com",
+            marketingConsent: true,
+          }),
         }),
-      }),
-    );
-    expect(response.status).toBe(400);
-    expect(response.headers.get("Access-Control-Allow-Origin")).toBeNull();
-    expect(consumeRateLimit).not.toHaveBeenCalled();
-    expect(insertRegistration).not.toHaveBeenCalled();
-  });
+      );
+      expect(response.status).toBe(201);
+      expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
+      expect(consumeRateLimit).toHaveBeenCalledOnce();
+      expect(insertRegistration).toHaveBeenCalledOnce();
+    },
+  );
 });

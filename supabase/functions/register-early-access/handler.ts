@@ -15,8 +15,7 @@ export interface RegistrationReceipt {
 }
 
 export interface RegisterEarlyAccessDependencies {
-  allowedOrigins: ReadonlySet<string> | null;
-  ipHashSecret: string | null;
+  clientKeySecret: string | null;
   consumeRateLimit(clientKey: string): Promise<RateLimitDecision>;
   insertRegistration(projectId: EarlyAccessProjectId, email: string): Promise<RegistrationReceipt>;
 }
@@ -32,28 +31,13 @@ const allowedKeys = new Set(["projectId", "email", "marketingConsent"]);
 const emailPattern =
   /^[^\s@\u0000-\u001f\u007f]+@[^\s@\u0000-\u001f\u007f]+\.[^\s@\u0000-\u001f\u007f]+$/u;
 
-function json(body: unknown, status: number, origin?: string, extra: HeadersInit = {}) {
-  const headers = new Headers({ "Content-Type": "application/json", ...extra });
-  if (origin) {
-    headers.set("Access-Control-Allow-Origin", origin);
-    headers.set("Vary", "Origin");
-  }
+function json(body: unknown, status: number, extra: HeadersInit = {}) {
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    ...extra,
+  });
   return new Response(JSON.stringify(body), { status, headers });
-}
-
-export function parseAllowedOrigins(raw: string | undefined): Set<string> | null {
-  if (!raw) return null;
-  const values = raw
-    .split(",")
-    .map((value) => value.trim())
-    .filter(Boolean);
-  if (values.length === 0 || values.includes("*")) return null;
-  try {
-    if (values.some((value) => new URL(value).origin !== value)) return null;
-  } catch {
-    return null;
-  }
-  return new Set(values);
 }
 
 export function trustedClientIp(request: Request): string | null {
@@ -110,38 +94,32 @@ export function validateBody(value: unknown): {
 
 export function createRegisterEarlyAccessHandler(dependencies: RegisterEarlyAccessDependencies) {
   return async (request: Request): Promise<Response> => {
-    const origin = request.headers.get("origin") ?? undefined;
-    if (!dependencies.allowedOrigins || !origin || !dependencies.allowedOrigins.has(origin)) {
-      return json({ status: "invalid", issues: [{ field: "body", code: "invalid" }] }, 400);
-    }
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
         headers: {
-          "Access-Control-Allow-Origin": origin,
+          "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "authorization, apikey, content-type",
           "Access-Control-Allow-Methods": "POST, OPTIONS",
           "Access-Control-Max-Age": "86400",
-          Vary: "Origin",
         },
       });
     }
     if (request.method !== "POST")
-      return json({ status: "invalid", issues: [{ field: "body", code: "invalid" }] }, 400, origin);
+      return json({ status: "invalid", issues: [{ field: "body", code: "invalid" }] }, 400);
 
     const ip = trustedClientIp(request);
-    if (!dependencies.ipHashSecret || dependencies.ipHashSecret.length < 32 || !ip)
-      return json({ status: "server_error" }, 500, origin);
+    if (!dependencies.clientKeySecret || !ip) return json({ status: "server_error" }, 500);
 
     try {
       const limit = await dependencies.consumeRateLimit(
-        await clientKey(ip, dependencies.ipHashSecret),
+        await clientKey(ip, dependencies.clientKeySecret),
       );
       if (limit.allowed !== true) {
         const retryAfterSeconds = Number(limit.retryAfterSeconds);
         if (!Number.isInteger(retryAfterSeconds) || retryAfterSeconds < 1 || retryAfterSeconds > 60)
-          return json({ status: "server_error" }, 500, origin);
-        return json({ status: "rate_limited", retryAfterSeconds }, 429, origin, {
+          return json({ status: "server_error" }, 500);
+        return json({ status: "rate_limited", retryAfterSeconds }, 429, {
           "Retry-After": String(retryAfterSeconds),
         });
       }
@@ -150,27 +128,23 @@ export function createRegisterEarlyAccessHandler(dependencies: RegisterEarlyAcce
       try {
         parsed = await request.json();
       } catch {
-        return json(
-          { status: "invalid", issues: [{ field: "body", code: "invalid" }] },
-          400,
-          origin,
-        );
+        return json({ status: "invalid", issues: [{ field: "body", code: "invalid" }] }, 400);
       }
       const validated = validateBody(parsed);
-      if (validated.unknownProject) return json({ status: "unknown_project" }, 404, origin);
+      if (validated.unknownProject) return json({ status: "unknown_project" }, 404);
       if (
         validated.issues.length > 0 ||
         !validated.projectId ||
         !validated.email ||
         !validated.consent
       ) {
-        return json({ status: "invalid", issues: validated.issues }, 400, origin);
+        return json({ status: "invalid", issues: validated.issues }, 400);
       }
       const receipt = await dependencies.insertRegistration(validated.projectId, validated.email);
-      if (!isReceipt(receipt)) return json({ status: "server_error" }, 500, origin);
-      return json({ status: "success", registration: receipt }, 201, origin);
+      if (!isReceipt(receipt)) return json({ status: "server_error" }, 500);
+      return json({ status: "success", registration: receipt }, 201);
     } catch {
-      return json({ status: "server_error" }, 500, origin);
+      return json({ status: "server_error" }, 500);
     }
   };
 }
