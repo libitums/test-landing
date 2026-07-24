@@ -1,6 +1,7 @@
 const featureCopy = {
   "earlyAccess.back": "Back to Baetter",
   "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
   "earlyAccess.eyebrow": "Early access reservation",
   "earlyAccess.title": "Be first to practice Korean with Baetter",
   "earlyAccess.description":
@@ -83,6 +84,7 @@ const featureCopy = {
 const koFeatureCopy: Record<keyof typeof featureCopy, string> = {
   "earlyAccess.back": "Baetter로 돌아가기",
   "earlyAccess.close": "사전등록 폼 닫기",
+  "earlyAccess.dismiss": "사전등록 폼 바깥 영역 닫기",
   "earlyAccess.eyebrow": "얼리 액세스 사전 등록",
   "earlyAccess.title": "Baetter와 가장 먼저 한국어로 말해 보세요",
   "earlyAccess.description": "이메일만 남겨주세요. 초대 순서가 되면 가장 먼저 알려드릴게요.",

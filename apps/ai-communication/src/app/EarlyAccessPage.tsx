@@ -68,13 +68,6 @@ export function EarlyAccessPage({
     <div
       className={`early-access${overlay ? " early-access--overlay" : ""}`}
       data-testid="early-access-page"
-      onMouseDown={
-        overlay
-          ? (event) => {
-              if (!(event.target as Element).closest(".early-access__modal")) onClose?.();
-            }
-          : undefined
-      }
     >
       {!overlay ? (
         <header className="early-access__header">
@@ -99,6 +92,15 @@ export function EarlyAccessPage({
       ) : null}
 
       <main className="early-access__main">
+        {overlay ? (
+          <button
+            className="early-access__backdrop"
+            type="button"
+            onClick={onClose}
+            aria-label={t("earlyAccess.dismiss")}
+            data-testid="early-access-backdrop"
+          />
+        ) : null}
         <div
           className="early-access__modal"
           role={overlay ? "dialog" : undefined}

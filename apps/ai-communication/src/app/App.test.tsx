@@ -30,7 +30,7 @@ describe("AI communication landing", () => {
     fireEvent.click(action);
     expect(adapter.events.map((event) => event.name)).toEqual(["experiment_viewed", "cta_clicked"]);
     expect(screen.getByRole("dialog", { name: "Reserve your spot" })).toBeInTheDocument();
-    fireEvent.mouseDown(screen.getByTestId("early-access-page"));
+    fireEvent.click(screen.getByTestId("early-access-backdrop"));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Role-play the situations/i })).toBeInTheDocument();
