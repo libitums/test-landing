@@ -89,6 +89,7 @@ export interface LandingShellSlotProps {
 export interface HeroProps {
   content: HeroContent;
   children: ContentSlot;
+  onAction?: () => void;
   testId?: "hero";
 }
 

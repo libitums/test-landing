@@ -16,6 +16,7 @@ export interface FeatureBiasProps {
   /** Fired when the early-access link is activated. */
   onEarlyAccess: () => void;
   t: I18nRuntime["translate"];
+  earlyAccessHref?: string;
 }
 
 const PERSONA_IDS = ["midnight", "offrecord", "order", "closer"] as const;
@@ -33,7 +34,11 @@ function PersonaCard({ id, t }: { id: (typeof PERSONA_IDS)[number]; t: I18nRunti
   );
 }
 
-export function FeatureBias({ t, onEarlyAccess }: FeatureBiasProps) {
+export function FeatureBias({
+  t,
+  earlyAccessHref = "/ai-communication/early-access",
+  onEarlyAccess,
+}: FeatureBiasProps) {
   const featureId = "ai-communication-personas";
   const benefits = [
     t("feature.bias.benefit.one"),
@@ -53,7 +58,7 @@ export function FeatureBias({ t, onEarlyAccess }: FeatureBiasProps) {
           <ButtonLink
             className="shared-feature__early-access-cta feature-bias__cta"
             variant="text"
-            href="/ai-communication/early-access"
+            href={earlyAccessHref}
             data-testid={sharedFeatureTestIds.earlyAccessCta(featureId)}
             onClick={onEarlyAccess}
           >

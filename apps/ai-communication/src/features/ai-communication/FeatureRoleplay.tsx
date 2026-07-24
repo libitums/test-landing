@@ -124,10 +124,15 @@ function ScenarioCard({ variant, title }: { variant: "taxi" | "cosmetic"; title:
 
 export interface FeatureRoleplayProps {
   t: I18nRuntime["translate"];
+  earlyAccessHref?: string;
   onEarlyAccess: () => void;
 }
 
-export function FeatureRoleplay({ t, onEarlyAccess }: FeatureRoleplayProps) {
+export function FeatureRoleplay({
+  t,
+  earlyAccessHref = "/ai-communication/early-access",
+  onEarlyAccess,
+}: FeatureRoleplayProps) {
   const featureId = "ai-communication-roleplay";
   const pills = [
     t("feature.roleplay.pill.one"),
@@ -170,7 +175,7 @@ export function FeatureRoleplay({ t, onEarlyAccess }: FeatureRoleplayProps) {
         <ButtonLink
           className="shared-feature__early-access-cta feature-roleplay__cta"
           variant="text"
-          href="/ai-communication/early-access"
+          href={earlyAccessHref}
           data-testid={sharedFeatureTestIds.earlyAccessCta(featureId)}
           onClick={onEarlyAccess}
         >
