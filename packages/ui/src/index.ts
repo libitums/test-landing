@@ -8,6 +8,7 @@ export { SharedFeatureTemplate } from "./sections/shared-feature-template";
 export { PricingSection } from "./sections/pricing-section";
 export { Navbar } from "./sections/navbar";
 export { Footer } from "./sections/footer";
+export { default as baetterLogo } from "./assets/images/logo-a.png";
 export {
   Accordion,
   AccordionContent,

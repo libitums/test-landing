@@ -34,6 +34,34 @@
   --color-cta-on-surface: #fefefe;
   --color-cta-on-fill: var(--color-editorial-accent);
   --color-cta-ghost: rgb(123 97 255 / 5%);
+  /* Media-rich conversation compositions: opaque foregrounds preserve AA over imagery. */
+  --color-conversation-accent: #6d28d9;
+  --color-conversation-accent-fg: #ffffff;
+  --color-conversation-accent-soft: #f5f3ff;
+  --color-conversation-accent-soft-fg: #6d28d9;
+  --color-conversation-canvas: #fbf9f8;
+  --color-conversation-canvas-warm: #fcfaf7;
+  --color-conversation-panel: #f6f5f9;
+  --color-conversation-selected: #e8e8e8;
+  --color-conversation-avatar: #e5e5ea;
+  --color-conversation-bubble: #ededf0;
+  --color-conversation-ink: #111827;
+  --color-conversation-ink-soft: #374151;
+  --color-conversation-ink-muted: #5f6368;
+  --color-conversation-icon-muted: #9ca3af;
+  --color-conversation-media: #0b0b0f;
+  --color-conversation-media-strong: #050505;
+  --color-conversation-on-media: #ffffff;
+  --color-conversation-on-media-muted: #d2d7dc;
+  --color-conversation-link: #0066ff;
+  --color-conversation-glass: rgb(17 24 39 / 50%);
+  --color-conversation-glass-strong: rgb(26 26 31 / 50%);
+  --color-conversation-glass-light: rgb(255 255 255 / 18%);
+  --color-conversation-glass-border: rgb(255 255 255 / 25%);
+  --color-conversation-scrim-top: rgb(0 0 0 / 48%);
+  --color-conversation-scrim-bottom: rgb(0 0 0 / 73%);
+  --color-conversation-scrim-soft: rgb(0 0 0 / 60%);
+  --color-conversation-decoration-border: rgb(255 79 182 / 20%);
 
   --font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -46,6 +74,11 @@
   --font-semibold: 600;
   --font-bold: 700;
   --text-xs: 0.75rem;
+  --text-2xs: 0.5625rem;
+  --text-compact: 0.625rem;
+  --text-caption: 0.6875rem;
+  --text-ui-sm: 0.8125rem;
+  --text-body-sm: 0.9375rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
@@ -54,7 +87,11 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   --text-display: clamp(2.5rem, 5vw, 4.5rem);
+  --text-feature-display: clamp(2.125rem, 4vw, 3.75rem);
+  --text-feature-display-compact: clamp(2rem, 3.8vw, 3.75rem);
+  --text-feature-display-narrow: clamp(2.125rem, 4vw, 3.625rem);
   --text-hero-display: 3.875rem;
+  --tracking-tight: -0.02em;
   --leading-tight: 1.1;
   --leading-hero-display: 1.06;
   --leading-heading: 1.2;
@@ -62,11 +99,17 @@
 
   --space-0: 0;
   --space-1: 0.25rem;
+  --space-1-5: 0.375rem;
   --space-2: 0.5rem;
+  --space-2-5: 0.625rem;
   --space-3: 0.75rem;
+  --space-3-5: 0.875rem;
   --space-4: 1rem;
+  --space-4-5: 1.125rem;
   --space-5: 1.25rem;
+  --space-5-5: 1.375rem;
   --space-6: 1.5rem;
+  --space-7: 1.75rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3rem;
@@ -79,6 +122,9 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
+  --radius-bubble: 1.125rem;
+  --radius-panel: 1.375rem;
+  --radius-device: 3rem;
   --radius-full: 9999px;
 
   --shadow-sm: 0 1px 2px rgb(15 23 42 / 8%);
@@ -87,14 +133,59 @@
   --shadow-media-card: 0 16px 34px rgb(0 0 0 / 9.4%);
   --shadow-media-card-soft: 0 16px 34px rgb(0 0 0 / 6.3%);
   --shadow-cta: 0 12px 28px -6px rgb(109 40 217 / 20%);
+  --shadow-conversation-bubble: 0 2px 8px rgb(0 0 0 / 8%);
+  --shadow-conversation-panel: 0 10px 24px rgb(0 0 0 / 8%);
+  --shadow-conversation-tag: 0 8px 18px rgb(0 0 0 / 13%);
+  --shadow-conversation-control: 0 8px 18px rgb(0 0 0 / 24%);
+  --shadow-conversation-card: 0 14px 28px rgb(0 0 0 / 16%);
+  --shadow-conversation-media: 0 16px 34px rgb(0 0 0 / 18%);
+  --shadow-conversation-rail: 0 2px 8px rgb(0 0 0 / 6%), 0 18px 34px rgb(0 0 0 / 13%);
+  --shadow-conversation-feedback: 0 1px 3px rgb(0 0 0 / 6%), 0 16px 30px rgb(0 0 0 / 16%);
+  --shadow-conversation-inset: inset 0 0 0 1px rgb(17 24 39 / 4%);
+  --shadow-conversation-float: 0 16px 30px rgb(0 0 0 / 26%);
+  --shadow-conversation-device: 0 22px 44px rgb(0 0 0 / 25%);
+  --shadow-conversation-glass: 0 16px 32px rgb(0 0 0 / 24%);
   --focus-ring: 0 0 0 3px rgb(29 78 216 / 32%);
 
   --duration-fast: 120ms;
   --duration-normal: 200ms;
   --duration-slow: 320ms;
+  --duration-conversation-dot: 1s;
+  --duration-conversation-wave: 1.9s;
+  --duration-conversation-press: 2.4s;
+  --duration-conversation-reply: 3.6s;
+  --duration-conversation-arrival: 4.4s;
+  --duration-conversation-card: 4.6s;
+  --duration-conversation-message: 5s;
+  --duration-conversation-highlight: 8s;
+  --delay-conversation-dot: 160ms;
+  --delay-conversation-card: 280ms;
+  --delay-conversation-dot-late: 320ms;
+  --delay-conversation-press: 1.2s;
+  --delay-conversation-alternate: 2.2s;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-conversation: ease-in-out;
+  --ease-conversation-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --control-height: 2.75rem;
+  /* Reusable illustration geometry; compositions assign these to local roles. */
+  --geometry-glyph-lg: 2.125rem;
+  --geometry-tile: 5.5rem;
+  --geometry-wave-block: 5.125rem;
+  --geometry-notice-inline: 7rem;
+  --geometry-card-inline-xs: 8.625rem;
+  --geometry-offset-sm: 9.375rem;
+  --geometry-card-block-sm: 11.25rem;
+  --geometry-card-inline-sm: 12.5rem;
+  --geometry-card-inline-md: 13.5625rem;
+  --geometry-offset-lg: 14.6875rem;
+  --geometry-card-block-lg: 15rem;
+  --geometry-device-inline: 16.875rem;
+  --geometry-offset-xl: 17.375rem;
+  --geometry-panel-inline: 18.75rem;
+  --geometry-panel-inline-lg: 21.25rem;
+  --geometry-visual-block-compact: 35rem;
+  --geometry-visual-block: 38.75rem;
   --content-max: 75rem;
   --content-reading: 44rem;
   --content-hero-copy: 48.75rem;
@@ -103,6 +194,8 @@
   --media-card-compact: 17.5rem;
   --media-card-wide: 26.25rem;
   --breakpoint-mobile: 48rem;
+  --breakpoint-conversation-compact: 45rem;
+  --breakpoint-conversation-stack: 56.25rem;
   --layer-header: 20;
   --layer-overlay: 40;
   --layer-dialog: 50;

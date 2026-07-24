@@ -1,7 +1,7 @@
 /**
  * Decorative hero media for the ai-communication landing page.
  *
- * Reproduces the "Talkie Landing Hero" media from `ai-community.pen`
+ * Reproduces the "Baetter Landing Hero" media from `ai-community.pen`
  * (role-play conversation + on-the-spot correction): two photo scenario
  * cards, mic/plus capture tiles, and the focal AI correction card. The
  * cards are purely visual — the wrapper exposes a single localized

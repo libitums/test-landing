@@ -9,15 +9,16 @@ import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
 import type { NavbarProps } from "@landing/contracts/navbar";
 import { localizePath } from "@landing/i18n";
+import { baetterLogo } from "@landing/ui";
 import { registry } from "../i18n";
 export function createNavbarProps(runtime: I18nRuntime, location: string): NavbarProps {
   const t = runtime.translate;
   return {
     appearance: "violet-editorial",
     content: {
-      logo: { kind: "text", label: t("brand"), accessibleLabel: t("brand"), href: "#top" },
+      logo: { kind: "image", src: baetterLogo, alt: t("brand"), href: "#top" },
       howItWorks: { label: t("nav.proof"), href: "#proof" },
-      pricing: { label: t("nav.benefits"), href: "#features" },
+      pricing: { label: t("nav.pricing"), href: "#pricing" },
       language: {
         label: t("locale.label"),
         accessibleLabel: t("locale.label"),
@@ -69,6 +70,26 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
             question: t("footer.faq.comparison.question"),
             answer: t("footer.faq.comparison.answer"),
           },
+          {
+            id: "practice",
+            question: t("footer.faq.practice.question"),
+            answer: t("footer.faq.practice.answer"),
+          },
+          {
+            id: "personas",
+            question: t("footer.faq.personas.question"),
+            answer: t("footer.faq.personas.answer"),
+          },
+          {
+            id: "plans",
+            question: t("footer.faq.plans.question"),
+            answer: t("footer.faq.plans.answer"),
+          },
+          {
+            id: "privacy",
+            question: t("footer.faq.privacy.question"),
+            answer: t("footer.faq.privacy.answer"),
+          },
         ],
       },
     },
@@ -88,9 +109,9 @@ export function createContent(runtime: I18nRuntime) {
       description: t("hero.description"),
       cta: { label: t("hero.action") },
       highlights: [
-        { id: "clarity", label: t("features.clarity.title") },
-        { id: "access", label: t("features.access.title") },
-        { id: "global", label: t("features.global.title") },
+        { id: "roleplay", label: t("hero.highlight.roleplay") },
+        { id: "corrections", label: t("hero.highlight.corrections") },
+        { id: "personas", label: t("hero.highlight.personas") },
       ],
     } satisfies HeroContent,
     metrics: [
@@ -119,12 +140,19 @@ export function createContent(runtime: I18nRuntime) {
       badge: t("cta.badge"),
       title: t("cta.title"),
       description: t("cta.description"),
-      actions: [{ id: "choose", label: t("cta.action"), href: "#top", variant: "primary" }],
+      actions: [
+        {
+          id: "choose",
+          label: t("cta.action"),
+          href: "/ai-communication/early-access",
+          variant: "primary",
+        },
+      ],
       notes: [
         { id: "card", label: t("cta.note.card") },
         { id: "access", label: t("cta.note.access") },
       ],
-      ghostWords: ["CLEAR", "GLOBAL"],
+      ghostWords: [t("cta.ghost.start"), t("cta.ghost.end")],
     } satisfies CtaContent,
     pricing: {
       kicker: t("pricing.kicker"),

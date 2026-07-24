@@ -28,7 +28,16 @@ describe("ai-communication Phase 2 localization integration", () => {
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", true).locale).toBe("en-XA");
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", false).locale).toBe("ko-KR");
   });
-  it.each(["ko-KR", "en-US", "ar"] as const)(
+  it.each([
+    "ko-KR",
+    "en-US",
+    "ja-JP",
+    "vi-VN",
+    "th-TH",
+    "zh-CN",
+    "zh-TW",
+    "ar",
+  ] as const)(
     "renders real %s translations with a complete key set and locale Intl formatting",
     (localeName) => {
       const runtime = getRuntime(`/${localeName}/campaign`);
@@ -53,6 +62,46 @@ describe("ai-communication Phase 2 localization integration", () => {
     },
   );
 
+  it.each(["ko-KR", "ar"] as const)(
+    "keeps representative %s feature copy localized instead of inheriting English",
+    (localeName) => {
+      expect(resources[localeName]["hero.title"]).not.toBe(resources["en-US"]["hero.title"]);
+      expect(resources[localeName]["feature.cta"]).not.toBe(resources["en-US"]["feature.cta"]);
+      expect(resources[localeName]["feature.roleplay.title"]).not.toBe(
+        resources["en-US"]["feature.roleplay.title"],
+      );
+      expect(resources[localeName]["feature.corrections.feedback"]).not.toBe(
+        resources["en-US"]["feature.corrections.feedback"],
+      );
+      expect(resources[localeName]["feature.bias.title"]).not.toBe(
+        resources["en-US"]["feature.bias.title"],
+      );
+    },
+  );
+
+  it.each(["ja-JP", "vi-VN", "th-TH", "zh-CN", "zh-TW"] as const)(
+    "localizes mockup and persona copy for %s while preserving Korean practice phrases",
+    (localeName) => {
+      const copy = resources[localeName];
+      const localizedUiKeys = [
+        "feature.roleplay.phone.title",
+        "feature.roleplay.phone.translation",
+        "feature.roleplay.tag.travel",
+        "feature.roleplay.scene.taxi",
+        "feature.corrections.feedback",
+        "feature.corrections.explanation",
+        "feature.bias.persona.midnight.name",
+        "feature.bias.persona.midnight.quote",
+        "feature.bias.persona.closer.tags",
+        "feature.bias.persona.closer.streak",
+      ] as const;
+      for (const key of localizedUiKeys) expect(copy[key]).not.toBe(resources["en-US"][key]);
+      expect(copy["feature.roleplay.phone.prompt"]).toBe(
+        resources["ko-KR"]["feature.roleplay.phone.prompt"],
+      );
+    },
+  );
+
   it("normalizes unsupported/missing locales and applies route-preserving metadata idempotently", () => {
     expect(getRuntime("/fr-FR/campaign/launch").locale).toBe("ko-KR");
     expect(getRuntime("/campaign/launch").locale).toBe("ko-KR");
@@ -73,6 +122,11 @@ describe("ai-communication Phase 2 localization integration", () => {
     expect(Object.fromEntries(alternates.map((link) => [link.hreflang, link.href]))).toEqual({
       "ko-KR": "http://localhost:3000/ko-KR/campaign/launch",
       "en-US": "http://localhost:3000/en-US/campaign/launch",
+      "ja-JP": "http://localhost:3000/ja-JP/campaign/launch",
+      "vi-VN": "http://localhost:3000/vi-VN/campaign/launch",
+      "th-TH": "http://localhost:3000/th-TH/campaign/launch",
+      "zh-CN": "http://localhost:3000/zh-CN/campaign/launch",
+      "zh-TW": "http://localhost:3000/zh-TW/campaign/launch",
       ar: "http://localhost:3000/ar/campaign/launch",
     });
   });
@@ -88,7 +142,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     );
     expect(screen.getByRole("link", { name: resources.ar["cta.action"] })).toHaveAttribute(
       "href",
-      "#top",
+      "/ai-communication/early-access",
     );
     expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.lastIndexOf("#top"));
     for (const link of links) {
@@ -109,7 +163,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     languageTrigger.focus();
     fireEvent.keyDown(languageTrigger, { key: "ArrowDown" });
     const menu = await screen.findByRole("menu", { name: resources.ar["locale.label"] });
-    expect(menu.querySelectorAll("a")).toHaveLength(3);
+    expect(menu.querySelectorAll("a")).toHaveLength(registry.supportedLocales.length);
     expect(screen.getByRole("menuitem", { name: resources.ar["locale.ar"] })).toHaveAttribute(
       "aria-current",
       "page",
