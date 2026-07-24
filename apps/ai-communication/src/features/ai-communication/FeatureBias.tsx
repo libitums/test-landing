@@ -36,7 +36,7 @@ function PersonaCard({ id, t }: { id: (typeof PERSONA_IDS)[number]; t: I18nRunti
 
 export function FeatureBias({
   t,
-  earlyAccessHref = "/ai-communication/early-access",
+  earlyAccessHref = "#early-access",
   onEarlyAccess,
 }: FeatureBiasProps) {
   const featureId = "ai-communication-personas";

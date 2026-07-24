@@ -9,7 +9,7 @@ const features = [
 
 const desktopProjects = new Set(["chromium", "firefox", "webkit"]);
 const mobileProjects = new Set(["mobile-chromium", "mobile-webkit", "mobile-320-chromium"]);
-const earlyAccessPath = "/en-US/ai-communication/early-access";
+const earlyAccessPath = "#early-access";
 const localizedCtaNames = {
   "en-US": "Get early access",
   "ko-KR": "얼리 액세스 신청",

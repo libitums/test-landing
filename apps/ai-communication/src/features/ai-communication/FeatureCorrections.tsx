@@ -99,7 +99,7 @@ export interface FeatureCorrectionsProps {
 
 export function FeatureCorrections({
   t,
-  earlyAccessHref = "/ai-communication/early-access",
+  earlyAccessHref = "#early-access",
   onEarlyAccess,
 }: FeatureCorrectionsProps) {
   const featureId = "ai-communication-corrections";

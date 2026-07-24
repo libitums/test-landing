@@ -1,0 +1,5 @@
+project_id = "test-landing"
+
+[functions.register-early-access]
+verify_jwt = false
+

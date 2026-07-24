@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
+import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { CtaSection, Footer, Hero, LandingShell, Navbar, PricingSection } from "@landing/ui";
 import { AiCommunicationProofStrip } from "../features/ai-communication/AiCommunicationProofStrip";
 import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
@@ -8,21 +9,28 @@ import { FeatureRoleplay } from "../features/ai-communication/FeatureRoleplay";
 import { FeatureCorrections } from "../features/ai-communication/FeatureCorrections";
 import { FeatureBias } from "../features/ai-communication/FeatureBias";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
-import { EarlyAccessPage } from "./EarlyAccessPage";
+import { EarlyAccessModal } from "./EarlyAccessModal";
 import { useConversationBreakpoints } from "./useConversationBreakpoints";
+import { unavailableEarlyAccessRegistration } from "../early-access";
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
   location?: string;
+  submitEarlyAccessRegistration?: SubmitEarlyAccessRegistration;
 }
-export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+export function App({
+  analytics,
+  runtime,
+  location = `/${runtime.locale}/`,
+  submitEarlyAccessRegistration = unavailableEarlyAccessRegistration,
+}: AppProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
   useConversationBreakpoints(rootRef);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
-  const earlyAccessHref = `/${runtime.locale}/ai-communication/early-access`;
+  const earlyAccessHref = "#early-access";
   const content = createContent(runtime, earlyAccessHref);
   const t = runtime.translate;
   const openEarlyAccess = () => {
@@ -94,11 +102,10 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
         </LandingShell.Main>
       </LandingShell>
       {isEarlyAccessOpen ? (
-        <EarlyAccessPage
+        <EarlyAccessModal
           runtime={runtime}
-          location={location}
-          overlay
           onClose={() => setEarlyAccessOpen(false)}
+          submitRegistration={submitEarlyAccessRegistration}
         />
       ) : null}
     </div>

@@ -103,7 +103,7 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
 }
 export function createContent(
   runtime: I18nRuntime,
-  earlyAccessHref = "/ai-communication/early-access",
+  earlyAccessHref = "#early-access",
 ) {
   const t = runtime.translate;
   return {

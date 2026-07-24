@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/landing.ts",
     "./analytics": "./src/analytics.ts",
+    "./early-access": "./src/early-access.ts",
     "./i18n": "./src/i18n.ts",
     "./footer": "./src/footer.ts",
     "./navbar": "./src/navbar.ts",
