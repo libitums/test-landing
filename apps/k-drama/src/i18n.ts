@@ -9,9 +9,18 @@ import {
   localizePath,
   pseudoLocale,
 } from "@landing/i18n";
-import { ar, enUS, koKR } from "./resources";
+import { ar, enUS, jaJP, koKR, thTH, viVN, zhCN, zhTW } from "./resources";
 
-export const resources = { "ko-KR": koKR, "en-US": enUS, ar } as const;
+export const resources = {
+  "ko-KR": koKR,
+  "en-US": enUS,
+  "ja-JP": jaJP,
+  "vi-VN": viVN,
+  "th-TH": thTH,
+  "zh-CN": zhCN,
+  "zh-TW": zhTW,
+  ar,
+} as const;
 const definitions = Object.entries(resources).map(([key, resource]) => ({
   locale: locale(key),
   direction: directionForLocale(locale(key)),

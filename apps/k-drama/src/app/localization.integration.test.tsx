@@ -70,11 +70,14 @@ describe("k-drama Phase 2 localization integration", () => {
       ...document.head.querySelectorAll<HTMLLinkElement>('link[rel="alternate"]'),
     ];
     expect(alternates).toHaveLength(registry.supportedLocales.length);
-    expect(Object.fromEntries(alternates.map((link) => [link.hreflang, link.href]))).toEqual({
-      "ko-KR": "http://localhost:3000/ko-KR/campaign/launch",
-      "en-US": "http://localhost:3000/en-US/campaign/launch",
-      ar: "http://localhost:3000/ar/campaign/launch",
-    });
+    expect(Object.fromEntries(alternates.map((link) => [link.hreflang, link.href]))).toEqual(
+      Object.fromEntries(
+        registry.supportedLocales.map((supported) => [
+          supported,
+          `http://localhost:3000/${supported}/campaign/launch`,
+        ]),
+      ),
+    );
   });
 
   it("keeps RTL CTA links and DOM/focus order semantic", () => {
@@ -109,7 +112,7 @@ describe("k-drama Phase 2 localization integration", () => {
     languageTrigger.focus();
     fireEvent.keyDown(languageTrigger, { key: "ArrowDown" });
     const menu = await screen.findByRole("menu", { name: resources.ar["locale.label"] });
-    expect(menu.querySelectorAll("a")).toHaveLength(3);
+    expect(menu.querySelectorAll("a")).toHaveLength(registry.supportedLocales.length);
     expect(screen.getByRole("menuitem", { name: resources.ar["locale.ar"] })).toHaveAttribute(
       "aria-current",
       "page",

@@ -2,9 +2,9 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const apps = [
-  { id: "k-drama", origin: "http://127.0.0.1:4173" },
-  { id: "ai-communication", origin: "http://127.0.0.1:4174" },
-  { id: "k-culture", origin: "http://127.0.0.1:4175" },
+  { id: "k-drama", origin: "http://127.0.0.1:4173", localeCount: 8 },
+  { id: "ai-communication", origin: "http://127.0.0.1:4174", localeCount: 8 },
+  { id: "k-culture", origin: "http://127.0.0.1:4175", localeCount: 3 },
 ] as const;
 
 const ids = {
@@ -74,7 +74,7 @@ for (const app of apps) {
       await language.click();
       const languageMenu = page.getByTestId("navbar-language-menu-content");
       await expect(languageMenu).toBeVisible();
-      await expect(languageMenu.getByRole("menuitem")).toHaveCount(3);
+      await expect(languageMenu.getByRole("menuitem")).toHaveCount(app.localeCount);
       for (const option of await languageMenu.getByRole("menuitem").all()) {
         await expect(option).toHaveAttribute("href", /\S+/);
       }
