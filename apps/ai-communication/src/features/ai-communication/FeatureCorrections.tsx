@@ -1,6 +1,10 @@
+import type { I18nRuntime } from "@landing/contracts/i18n";
+import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
+import { ButtonLink, SharedFeatureTemplate } from "@landing/ui";
+
 /**
  * ai-communication Feature 02 — "Build your own sentences, Get instant
- * corrections." Bespoke two-column feature section reproducing the "Talkie
+ * corrections." Bespoke two-column feature section reproducing the "Baetter
  * Feature 02" screen in ai-community.pen: copy on the left, and a decorative
  * collage on the right (voice-waveform card, chat-bubble card, and the AI
  * correction card).
@@ -25,7 +29,7 @@ function ArrowGlyph() {
   );
 }
 
-function VoiceCard() {
+function VoiceCard({ t }: { t: I18nRuntime["translate"] }) {
   return (
     <div className="feature-corrections__card feature-corrections__voice">
       <div className="feature-corrections__wave">
@@ -34,16 +38,16 @@ function VoiceCard() {
         <span />
         <span />
       </div>
-      <p className="feature-corrections__voice-text">&ldquo;지금 어디야?&rdquo;</p>
+      <p className="feature-corrections__voice-text">{t("feature.corrections.voice")}</p>
     </div>
   );
 }
 
-function ChatCard() {
+function ChatCard({ t }: { t: I18nRuntime["translate"] }) {
   return (
     <div className="feature-corrections__card feature-corrections__chat">
       <span className="feature-corrections__bubble feature-corrections__bubble--outline">
-        어디야?
+        {t("feature.corrections.question")}
       </span>
       <span className="feature-corrections__reply">
         <span className="feature-corrections__typing" aria-hidden="true">
@@ -52,64 +56,72 @@ function ChatCard() {
           <span className="feature-corrections__dot" />
         </span>
         <span className="feature-corrections__bubble feature-corrections__bubble--fill">
-          나지금 오고 있어
+          {t("feature.corrections.answer")}
         </span>
       </span>
     </div>
   );
 }
 
-function CorrectionCard() {
+function CorrectionCard({ t }: { t: I18nRuntime["translate"] }) {
   return (
     <div className="feature-corrections__chatroom">
       <div className="feature-corrections__cr-thread">
         <span className="feature-corrections__cr-msg feature-corrections__cr-msg--in">
-          어디야?
+          {t("feature.corrections.question")}
         </span>
         <span className="feature-corrections__cr-msg feature-corrections__cr-msg--out">
-          나지금 오고 있어
+          {t("feature.corrections.answer")}
         </span>
       </div>
       <div className="feature-corrections__feedback">
-        <span className="feature-corrections__feedback-label">Better phrasing</span>
-        <p className="feature-corrections__phrase-old">나지금 오고 있어</p>
+        <span className="feature-corrections__feedback-label">
+          {t("feature.corrections.feedback")}
+        </span>
+        <p className="feature-corrections__phrase-old">{t("feature.corrections.answer")}</p>
         <p className="feature-corrections__phrase-new">
           <span className="feature-corrections__phrase-arrow">
             <ArrowGlyph />
           </span>
-          나 지금 가고 있어(요)
+          {t("feature.corrections.improved")}
         </p>
-        <p className="feature-corrections__explain">
-          Add spacing after 나 and use 가고 있어(요) for natural polite roleplay speech.
-        </p>
+        <p className="feature-corrections__explain">{t("feature.corrections.explanation")}</p>
       </div>
     </div>
   );
 }
 
-export function FeatureCorrections() {
+export interface FeatureCorrectionsProps {
+  t: I18nRuntime["translate"];
+  onEarlyAccess: () => void;
+}
+
+export function FeatureCorrections({ t, onEarlyAccess }: FeatureCorrectionsProps) {
+  const featureId = "ai-communication-corrections";
   return (
-    <section className="feature-corrections" aria-labelledby="feature-corrections-title">
-      <div className="feature-corrections__inner">
-        <div className="feature-corrections__copy">
-          <span className="feature-corrections__badge">2</span>
-          <h2 className="feature-corrections__headline" id="feature-corrections-title">
-            Build your own sentences,
-            <br />
-            Get instant corrections.
-          </h2>
-          <p className="feature-corrections__description">
-            Not another flashcard drill.
-            <br />
-            Say what you mean, then see how Koreans would naturally say it.
-          </p>
-        </div>
+    <SharedFeatureTemplate
+      appearance="soft"
+      numberLabel={t("feature.corrections.number")}
+      headerText={t("feature.corrections.title")}
+      subheaderText={t("feature.corrections.description")}
+      testId={sharedFeatureTestIds.root(featureId)}
+    >
+      <div className="feature-corrections">
         <div className="feature-corrections__visual" aria-hidden="true">
-          <VoiceCard />
-          <ChatCard />
-          <CorrectionCard />
+          <VoiceCard t={t} />
+          <ChatCard t={t} />
+          <CorrectionCard t={t} />
         </div>
+        <ButtonLink
+          className="shared-feature__early-access-cta"
+          variant="text"
+          href="/ai-communication/early-access"
+          data-testid={sharedFeatureTestIds.earlyAccessCta(featureId)}
+          onClick={onEarlyAccess}
+        >
+          {t("feature.cta")}
+        </ButtonLink>
       </div>
-    </section>
+    </SharedFeatureTemplate>
   );
 }

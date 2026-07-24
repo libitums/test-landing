@@ -1,6 +1,6 @@
 /**
  * ai-communication Feature 01 — "Role-play the situations you'll actually
- * be in". Bespoke two-column feature section reproducing the "Talkie
+ * be in". Bespoke two-column feature section reproducing the "Baetter
  * Feature 01" screen in ai-community.pen: copy + lavender pill list on the
  * left, and a decorative visual (iPhone role-play mockup, action rail,
  * scenario cards, tags) on the right.
@@ -8,11 +8,9 @@
  * The visual is decorative (`aria-hidden`); photos load via CSS
  * background-image, never `<img>`. Icons are inline SVG.
  */
-const PILLS = [
-  "Cafés, taxis, meeting friends, and more",
-  "Chat about your interests and K-pop",
-  "Speak or type anytime",
-] as const;
+import type { I18nRuntime } from "@landing/contracts/i18n";
+import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
+import { ButtonLink, SharedFeatureTemplate } from "@landing/ui";
 
 type IconName = "mic" | "ear" | "replay" | "close" | "settings";
 
@@ -69,7 +67,7 @@ function Icon({ name }: { name: IconName }) {
   }
 }
 
-function PhoneMockup() {
+function PhoneMockup({ t }: { t: I18nRuntime["translate"] }) {
   return (
     <div className="feature-roleplay__phone">
       <div className="feature-roleplay__phone-scrim" />
@@ -85,11 +83,11 @@ function PhoneMockup() {
           <Icon name="settings" />
         </span>
       </div>
-      <p className="feature-roleplay__phone-title">Practice Idol Fan-Sign</p>
-      <span className="feature-roleplay__phone-badge">Idol Fan-Sign Roleplay</span>
+      <p className="feature-roleplay__phone-title">{t("feature.roleplay.phone.title")}</p>
+      <span className="feature-roleplay__phone-badge">{t("feature.roleplay.phone.badge")}</span>
       <div className="feature-roleplay__chat">
-        <p className="feature-roleplay__chat-lead">이번 새 앨범에 어떤 수록곡이 맘에 들었어?</p>
-        <p className="feature-roleplay__chat-detail">Which tracks on the new album did you like?</p>
+        <p className="feature-roleplay__chat-lead">{t("feature.roleplay.phone.prompt")}</p>
+        <p className="feature-roleplay__chat-detail">{t("feature.roleplay.phone.translation")}</p>
       </div>
       <span className="feature-roleplay__phone-mic">
         <Icon name="mic" />
@@ -124,17 +122,30 @@ function ScenarioCard({ variant, title }: { variant: "taxi" | "cosmetic"; title:
   );
 }
 
-export function FeatureRoleplay() {
+export interface FeatureRoleplayProps {
+  t: I18nRuntime["translate"];
+  onEarlyAccess: () => void;
+}
+
+export function FeatureRoleplay({ t, onEarlyAccess }: FeatureRoleplayProps) {
+  const featureId = "ai-communication-roleplay";
+  const pills = [
+    t("feature.roleplay.pill.one"),
+    t("feature.roleplay.pill.two"),
+    t("feature.roleplay.pill.three"),
+  ];
   return (
-    <section className="feature-roleplay" aria-labelledby="feature-roleplay-title">
-      <div className="feature-roleplay__inner">
-        <div className="feature-roleplay__copy">
-          <span className="feature-roleplay__badge">1</span>
-          <h2 className="feature-roleplay__headline" id="feature-roleplay-title">
-            Role-play the situations you&apos;ll actually be in
-          </h2>
+    <SharedFeatureTemplate
+      appearance="white"
+      numberLabel={t("feature.roleplay.number")}
+      headerText={t("feature.roleplay.title")}
+      subheaderText={t("feature.roleplay.description")}
+      testId={sharedFeatureTestIds.root(featureId)}
+    >
+      <div className="feature-roleplay">
+        <div className="feature-roleplay__details">
           <ul className="feature-roleplay__pills">
-            {PILLS.map((pill) => (
+            {pills.map((pill) => (
               <li key={pill} className="feature-roleplay__pill">
                 {pill}
               </li>
@@ -143,18 +154,29 @@ export function FeatureRoleplay() {
         </div>
         <div className="feature-roleplay__visual" aria-hidden="true">
           <div className="feature-roleplay__tags">
-            <span className="feature-roleplay__tag">Role play</span>
-            <span className="feature-roleplay__tag feature-roleplay__tag--selected">Travel</span>
-            <span className="feature-roleplay__tag">cafe</span>
+            <span className="feature-roleplay__tag">{t("feature.roleplay.tag.roleplay")}</span>
+            <span className="feature-roleplay__tag feature-roleplay__tag--selected">
+              {t("feature.roleplay.tag.travel")}
+            </span>
+            <span className="feature-roleplay__tag">{t("feature.roleplay.tag.cafe")}</span>
           </div>
           <ActionRail />
-          <PhoneMockup />
+          <PhoneMockup t={t} />
           <div className="feature-roleplay__cards">
-            <ScenarioCard variant="cosmetic" title="Buy cosmetic" />
-            <ScenarioCard variant="taxi" title="Taxi driver" />
+            <ScenarioCard variant="cosmetic" title={t("feature.roleplay.scene.cosmetic")} />
+            <ScenarioCard variant="taxi" title={t("feature.roleplay.scene.taxi")} />
           </div>
         </div>
+        <ButtonLink
+          className="shared-feature__early-access-cta feature-roleplay__cta"
+          variant="text"
+          href="/ai-communication/early-access"
+          data-testid={sharedFeatureTestIds.earlyAccessCta(featureId)}
+          onClick={onEarlyAccess}
+        >
+          {t("feature.cta")}
+        </ButtonLink>
       </div>
-    </section>
+    </SharedFeatureTemplate>
   );
 }
