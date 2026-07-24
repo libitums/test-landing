@@ -133,7 +133,7 @@ describe("ai-communication Phase 2 localization integration", () => {
     );
     expect(screen.getByRole("link", { name: resources.ar["cta.action"] })).toHaveAttribute(
       "href",
-      "/ar/ai-communication/early-access",
+      "#early-access",
     );
     expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.lastIndexOf("#top"));
     for (const link of links) {

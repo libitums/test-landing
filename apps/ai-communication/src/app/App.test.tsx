@@ -50,7 +50,7 @@ describe("AI communication landing", () => {
       expect(root).toContainElement(screen.getByTestId(`shared-feature:${testId}:content`));
       const featureAction = screen.getByTestId(`shared-feature:${testId}:early-access-cta`);
       expect(featureAction).toHaveAccessibleName("Get early access");
-      expect(featureAction).toHaveAttribute("href", "/en-US/ai-communication/early-access");
+      expect(featureAction).toHaveAttribute("href", "#early-access");
       expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
       expect(featureAction).not.toHaveClass("button--secondary");
       featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });

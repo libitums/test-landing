@@ -2,7 +2,6 @@ import { expect, test, type Page, type Route } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const endpoint = "**/functions/v1/register-early-access";
-const standalonePath = "/en-US/ai-communication/early-access";
 
 type CapturedRequest = {
   projectId: string;
@@ -13,6 +12,14 @@ type CapturedRequest = {
 async function fillValidRegistration(page: Page, email = "learner@example.com") {
   await page.getByTestId("early-access-email").fill(email);
   await page.getByTestId("early-access-marketing-consent").check();
+}
+
+async function openEarlyAccess(page: Page, locale = "en-US") {
+  await page.goto(`/${locale}/`);
+  await page
+    .getByTestId("shared-feature:ai-communication-roleplay:early-access-cta")
+    .click();
+  await expect(page.getByRole("dialog")).toBeVisible();
 }
 
 async function fulfillSuccess(route: Route, id = "fc67d924-80d0-4c63-9414-3d77dc51d523") {
@@ -27,7 +34,7 @@ async function fulfillSuccess(route: Route, id = "fc67d924-80d0-4c63-9414-3d77dc
 }
 
 test.describe("ai-communication early-access boundary", () => {
-  test("standalone submits the fixed project payload, resets on success, and keeps stable ids", async ({
+  test("modal submits the fixed project payload, resets on success, and keeps stable ids", async ({
     page,
   }) => {
     const requests: CapturedRequest[] = [];
@@ -35,7 +42,7 @@ test.describe("ai-communication early-access boundary", () => {
       requests.push(route.request().postDataJSON() as CapturedRequest);
       await fulfillSuccess(route);
     });
-    await page.goto(standalonePath);
+    await openEarlyAccess(page);
 
     for (const testId of [
       "early-access-page",
@@ -72,7 +79,7 @@ test.describe("ai-communication early-access boundary", () => {
       requestCount += 1;
       await fulfillSuccess(route);
     });
-    await page.goto(standalonePath);
+    await openEarlyAccess(page);
 
     await page.getByTestId("early-access-email").fill("not-an-email");
     await page.getByTestId("early-access-submit").click();
@@ -102,7 +109,7 @@ test.describe("ai-communication early-access boundary", () => {
       await released;
       await fulfillSuccess(route);
     });
-    await page.goto(standalonePath);
+    await openEarlyAccess(page);
     await fillValidRegistration(page);
 
     await page.getByTestId("early-access-submit").click();
@@ -135,7 +142,7 @@ test.describe("ai-communication early-access boundary", () => {
       }
       await fulfillSuccess(route);
     });
-    await page.goto(standalonePath);
+    await openEarlyAccess(page);
     await fillValidRegistration(page);
     await page.getByTestId("early-access-submit").click();
 
@@ -163,7 +170,7 @@ test.describe("ai-communication early-access boundary", () => {
             body: JSON.stringify({ status: "server_error" }),
           });
       });
-      await page.goto(standalonePath);
+      await openEarlyAccess(page);
       await fillValidRegistration(page);
       await page.getByTestId("early-access-submit").click();
 
@@ -178,7 +185,7 @@ test.describe("ai-communication early-access boundary", () => {
     });
   }
 
-  test("overlay uses the same connected submission flow and remains open after success", async ({
+  test("modal traps focus, remains open after success, and restores its opener", async ({
     page,
   }) => {
     await page.route(endpoint, (route) => fulfillSuccess(route));
@@ -210,7 +217,7 @@ test.describe("ai-communication early-access boundary", () => {
   }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/ar/ai-communication/early-access");
+    await openEarlyAccess(page, "ar");
 
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     const widths = await page.evaluate(() => ({

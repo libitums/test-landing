@@ -7,9 +7,7 @@ import {
   type SubmitEarlyAccessRegistration,
 } from "@landing/contracts/early-access";
 import type { I18nRuntime } from "@landing/contracts/i18n";
-import { localizePath } from "@landing/i18n";
-import { baetterLogo, Checkbox, Input } from "@landing/ui";
-import { registry } from "../i18n";
+import { Checkbox, Input } from "@landing/ui";
 
 type FormStatus =
   "idle" | "validation-error" | "pending" | "success" | "network-error" | "rate-limit";
@@ -18,10 +16,8 @@ type FieldErrors = Partial<Record<"email" | "marketingConsent", true>>;
 
 export interface EarlyAccessPageProps {
   runtime: I18nRuntime;
-  location: string;
   submitRegistration: SubmitEarlyAccessRegistration;
-  overlay?: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 function validate(email: string, marketingConsent: boolean): FieldErrors {
@@ -76,9 +72,7 @@ function withoutField(errors: FieldErrors, field: keyof FieldErrors): FieldError
 
 export function EarlyAccessPage({
   runtime,
-  location,
   submitRegistration,
-  overlay = false,
   onClose,
 }: EarlyAccessPageProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -90,15 +84,8 @@ export function EarlyAccessPage({
   const submitRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const t = runtime.translate;
-  const homeHref = `/${runtime.locale}/`;
 
   useEffect(() => {
-    if (overlay) return;
-    document.title = `${t("earlyAccess.form.title")} — Baetter`;
-  }, [overlay, t]);
-
-  useEffect(() => {
-    if (!overlay) return;
     const previouslyFocused = document.activeElement;
     const modal = modalRef.current;
     const focusableSelector =
@@ -137,7 +124,7 @@ export function EarlyAccessPage({
         previouslyFocused.focus();
       }
     };
-  }, [onClose, overlay]);
+  }, [onClose]);
 
   function focusFirstInvalid(errors: FieldErrors) {
     requestAnimationFrame(() => {
@@ -224,74 +211,30 @@ export function EarlyAccessPage({
     status === "validation-error" || status === "network-error" || status === "rate-limit";
 
   return (
-    <div
-      className={`early-access${overlay ? " early-access--overlay" : ""}`}
-      data-testid={earlyAccessTestIds.page}
-    >
-      {!overlay ? (
-        <header className="early-access__header">
-          <a className="early-access__brand" href={homeHref} aria-label={t("brand")}>
-            <span className="early-access__brand-crop">
-              <img src={baetterLogo} alt="" />
-            </span>
-          </a>
-          <nav className="early-access__locales" aria-label={t("locale.label")}>
-            {registry.supportedLocales.map((candidate) => (
-              <a
-                key={candidate}
-                href={localizePath(registry, location, candidate)}
-                hrefLang={candidate}
-                aria-current={candidate === runtime.locale ? "page" : undefined}
-              >
-                {t(`locale.${candidate}`)}
-              </a>
-            ))}
-          </nav>
-        </header>
-      ) : null}
-
-      <main className="early-access__main">
-        {overlay ? (
-          <button
-            className="early-access__backdrop"
-            type="button"
-            onClick={onClose}
-            aria-label={t("earlyAccess.dismiss")}
-            data-testid="early-access-backdrop"
-          />
-        ) : null}
+    <div className="early-access early-access--overlay" data-testid={earlyAccessTestIds.page}>
+      <div className="early-access__main">
+        <button
+          className="early-access__backdrop"
+          type="button"
+          onClick={onClose}
+          aria-label={t("earlyAccess.dismiss")}
+          data-testid="early-access-backdrop"
+        />
         <div
           ref={modalRef}
           className="early-access__modal"
-          role={overlay ? "dialog" : undefined}
-          aria-modal={overlay ? "true" : undefined}
-          aria-labelledby={overlay ? "early-access-form-title" : "early-access-title"}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="early-access-form-title"
         >
-          {overlay ? (
-            <button
-              className="early-access__close"
-              type="button"
-              onClick={onClose}
-              aria-label={t("earlyAccess.close")}
-            >
-              ×
-            </button>
-          ) : null}
-          {!overlay ? (
-            <section className="early-access__intro" aria-labelledby="early-access-title">
-              <a className="early-access__back" href={homeHref}>
-                ← {t("earlyAccess.back")}
-              </a>
-              <p className="early-access__eyebrow">{t("earlyAccess.eyebrow")}</p>
-              <h1 id="early-access-title">{t("earlyAccess.title")}</h1>
-              <p className="early-access__description">{t("earlyAccess.description")}</p>
-              <ul className="early-access__benefits">
-                <li>{t("earlyAccess.benefit.invite")}</li>
-                <li>{t("earlyAccess.benefit.voice")}</li>
-                <li>{t("earlyAccess.benefit.feedback")}</li>
-              </ul>
-            </section>
-          ) : null}
+          <button
+            className="early-access__close"
+            type="button"
+            onClick={onClose}
+            aria-label={t("earlyAccess.close")}
+          >
+            ×
+          </button>
 
           <section
             id="form"
@@ -371,7 +314,7 @@ export function EarlyAccessPage({
             </form>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

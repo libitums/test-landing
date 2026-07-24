@@ -4,13 +4,13 @@
 
 This is the frozen visual, interaction, and accessibility contract for connecting
 the existing `ai-communication` early-access form to the shared Supabase
-submission boundary. It follows `DESIGN.md` with no deviation. The existing page
-and overlay compositions in `EarlyAccessPage` are the visual reference: their
+submission boundary. It follows `DESIGN.md` with no deviation. The existing modal
+composition in `EarlyAccessPage` is the visual reference: its
 content order, card geometry, field layout, and responsive behavior do not change.
 
 Only `ai-communication` receives an interactive form in this phase. Admin UI and
-forms for `k-drama` and `k-culture` are out of scope. The contract applies to both
-the standalone page and overlay at every viewport supported by the existing app.
+forms for `k-drama` and `k-culture` are out of scope. The contract applies to the
+modal at every viewport supported by the existing app.
 
 ## Existing visual structure to preserve
 
@@ -26,8 +26,8 @@ The implementation keeps this order inside `early-access__card`:
 Desktop retains the current two-column form grid with each present control
 spanning the grid. At `--breakpoint-mobile` and below it becomes one column. Text,
 including translated status copy and the submit label, may wrap; no state adds a
-fixed block size or causes horizontal scrolling. Standalone and overlay modes use
-the same state treatment. The overlay's sticky submit behavior remains intact.
+fixed block size or causes horizontal scrolling. The modal's sticky submit behavior
+remains intact.
 
 ## Closed state model
 
@@ -132,8 +132,7 @@ disabled semantics and the live message accompany it.
 
 ## Verification contract
 
-Implementation and accessibility tests must cover standalone and overlay forms
-where applicable, and verify:
+Implementation and accessibility tests must cover the modal form and verify:
 
 1. state-specific localized copy and the absence of `integrationPending` after the
    adapter is connected;

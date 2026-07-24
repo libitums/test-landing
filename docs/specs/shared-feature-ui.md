@@ -27,7 +27,7 @@ DESIGN.md 표준 따름. 벗어남: 없음.
 5. 현재 Chrome·Safari·Firefox·Edge에서 전체 레이아웃과 앱별 `children` 동작이 작동한다.
 6. 이전 브라우저에서 고급 레이아웃 CSS가 적용되지 않더라도 넘버 라벨, 헤더, 서브헤더, `children`이 기본 문서 흐름에서 표시되며 읽기와 기본 조작이 가능하다.
 7. 공통 템플릿은 API, 앱 비즈니스 로직, 앱별 action callback을 소유하지 않으며 앱별 콘텐츠와 동작은 `children` 내부에 유지된다.
-8. 모든 기능 인스턴스의 `children`에 접근 가능한 이름이 `Get early access`인 native 텍스트 링크가 있고, 목적지는 각각 `k-drama`의 `/k-drama/early-access`, `ai-communication`의 `/ai-communication/early-access`, `k-culture`의 `/k-culture/early-access`다.
+8. 모든 기능 인스턴스의 `children`에 접근 가능한 이름이 `Get early access`인 native 텍스트 링크가 있다. `ai-communication`은 `#early-access` 모달을 열고, 나머지 앱은 각 전용 경로를 유지한다.
 9. 각 기능 CTA 클릭은 링크 기본 이동을 보존하면서 `feature_cta_clicked`를 해당 인스턴스의 비어 있지 않은 `featureId`와 함께 한 번 요청하며, 기존 페이지 CTA의 `cta_clicked`와 구분된다.
 10. 기능 CTA는 `presentation: "text-link"` 의미를 사용하고 키보드 포커스가 시각적으로 보인다. 대형 컨트롤, secondary button, 배경, 경계 또는 고정 target 크기는 계약하지 않는다.
 

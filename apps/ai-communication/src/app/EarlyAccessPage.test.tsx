@@ -4,15 +4,14 @@ import { describe, expect, it, vi } from "vitest";
 import { getRuntime } from "../i18n";
 import { EarlyAccessPage } from "./EarlyAccessPage";
 
-const location = "/en-US/ai-communication/early-access";
+const location = "/en-US/";
 
-function renderPage(submitRegistration = vi.fn().mockResolvedValue(undefined), overlay = false) {
+function renderPage(submitRegistration = vi.fn().mockResolvedValue(undefined)) {
   render(
     <EarlyAccessPage
       runtime={getRuntime(location)}
-      location={location}
       submitRegistration={submitRegistration}
-      overlay={overlay}
+      onClose={vi.fn()}
     />,
   );
   return submitRegistration;
@@ -52,14 +51,11 @@ function rejection(code: EarlyAccessSubmissionError["code"]): EarlyAccessSubmiss
 }
 
 describe("EarlyAccessPage", () => {
-  it("renders the stable accessible form contract in standalone and overlay modes", () => {
+  it("renders the stable accessible modal form contract", () => {
     renderPage();
     expect(screen.getByTestId("early-access-page")).toBeInTheDocument();
     expect(screen.getByTestId("early-access-email")).toBeRequired();
-    expect(screen.getByRole("link", { name: "Korean" })).toHaveAttribute(
-      "href",
-      "/ko-KR/ai-communication/early-access",
-    );
+    expect(screen.getByRole("dialog", { name: "Reserve your spot" })).toBeInTheDocument();
   });
 
   it("blocks invalid input, associates visible errors, and focuses the first invalid field", async () => {
@@ -136,7 +132,7 @@ describe("EarlyAccessPage", () => {
       .fn()
       .mockRejectedValueOnce(rejection("validation"))
       .mockResolvedValueOnce(undefined);
-    renderPage(submitRegistration, true);
+    renderPage(submitRegistration);
     fillRequiredFields();
     submit();
 
@@ -162,9 +158,7 @@ describe("EarlyAccessPage", () => {
     const { unmount } = render(
       <EarlyAccessPage
         runtime={getRuntime(location)}
-        location={location}
         submitRegistration={vi.fn().mockResolvedValue(undefined)}
-        overlay
         onClose={onClose}
       />,
     );

@@ -130,7 +130,7 @@ export interface FeatureRoleplayProps {
 
 export function FeatureRoleplay({
   t,
-  earlyAccessHref = "/ai-communication/early-access",
+  earlyAccessHref = "#early-access",
   onEarlyAccess,
 }: FeatureRoleplayProps) {
   const featureId = "ai-communication-roleplay";

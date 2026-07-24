@@ -30,7 +30,7 @@ export function App({
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
-  const earlyAccessHref = `/${runtime.locale}/ai-communication/early-access`;
+  const earlyAccessHref = "#early-access";
   const content = createContent(runtime, earlyAccessHref);
   const t = runtime.translate;
   const openEarlyAccess = () => {
@@ -104,8 +104,6 @@ export function App({
       {isEarlyAccessOpen ? (
         <EarlyAccessPage
           runtime={runtime}
-          location={location}
-          overlay
           onClose={() => setEarlyAccessOpen(false)}
           submitRegistration={submitEarlyAccessRegistration}
         />
