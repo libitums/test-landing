@@ -33,3 +33,4 @@ AGENTS.md
 !.env.example
 !**/.env.example
 supabase/.temp/
+supabase/.branches/

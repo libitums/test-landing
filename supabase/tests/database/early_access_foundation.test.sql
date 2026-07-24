@@ -5,9 +5,13 @@ set search_path = public, extensions;
 
 select plan(92);
 
-select has_table('public', 'k_drama_early_access');
-select has_table('public', 'ai_communication_early_access');
-select has_table('public', 'k_culture_early_access');
+select has_table('public', 'k_drama_early_access', 'k-drama registration table exists');
+select has_table(
+  'public',
+  'ai_communication_early_access',
+  'ai-communication registration table exists'
+);
+select has_table('public', 'k_culture_early_access', 'k-culture registration table exists');
 
 select columns_are(
   'public',
@@ -25,28 +29,28 @@ select columns_are(
   array['id', 'email', 'marketing_consent', 'created_at']
 );
 
-select col_type_is('public', 'k_drama_early_access', 'id', 'uuid');
-select col_type_is('public', 'k_drama_early_access', 'email', 'text');
-select col_type_is('public', 'k_drama_early_access', 'marketing_consent', 'boolean');
-select col_type_is('public', 'k_drama_early_access', 'created_at', 'timestamp with time zone');
-select col_type_is('public', 'ai_communication_early_access', 'id', 'uuid');
-select col_type_is('public', 'ai_communication_early_access', 'email', 'text');
-select col_type_is('public', 'ai_communication_early_access', 'marketing_consent', 'boolean');
-select col_type_is('public', 'ai_communication_early_access', 'created_at', 'timestamp with time zone');
-select col_type_is('public', 'k_culture_early_access', 'id', 'uuid');
-select col_type_is('public', 'k_culture_early_access', 'email', 'text');
-select col_type_is('public', 'k_culture_early_access', 'marketing_consent', 'boolean');
-select col_type_is('public', 'k_culture_early_access', 'created_at', 'timestamp with time zone');
+select col_type_is('public', 'k_drama_early_access', 'id', 'uuid', 'k-drama id is uuid');
+select col_type_is('public', 'k_drama_early_access', 'email', 'text', 'k-drama email is text');
+select col_type_is('public', 'k_drama_early_access', 'marketing_consent', 'boolean', 'k-drama consent is boolean');
+select col_type_is('public', 'k_drama_early_access', 'created_at', 'timestamp with time zone', 'k-drama created_at is timestamptz');
+select col_type_is('public', 'ai_communication_early_access', 'id', 'uuid', 'ai-communication id is uuid');
+select col_type_is('public', 'ai_communication_early_access', 'email', 'text', 'ai-communication email is text');
+select col_type_is('public', 'ai_communication_early_access', 'marketing_consent', 'boolean', 'ai-communication consent is boolean');
+select col_type_is('public', 'ai_communication_early_access', 'created_at', 'timestamp with time zone', 'ai-communication created_at is timestamptz');
+select col_type_is('public', 'k_culture_early_access', 'id', 'uuid', 'k-culture id is uuid');
+select col_type_is('public', 'k_culture_early_access', 'email', 'text', 'k-culture email is text');
+select col_type_is('public', 'k_culture_early_access', 'marketing_consent', 'boolean', 'k-culture consent is boolean');
+select col_type_is('public', 'k_culture_early_access', 'created_at', 'timestamp with time zone', 'k-culture created_at is timestamptz');
 
-select col_is_pk('public', 'k_drama_early_access', 'id');
-select col_is_pk('public', 'ai_communication_early_access', 'id');
-select col_is_pk('public', 'k_culture_early_access', 'id');
-select col_not_null('public', 'k_drama_early_access', 'email');
-select col_not_null('public', 'k_drama_early_access', 'marketing_consent');
-select col_not_null('public', 'ai_communication_early_access', 'email');
-select col_not_null('public', 'ai_communication_early_access', 'marketing_consent');
-select col_not_null('public', 'k_culture_early_access', 'email');
-select col_not_null('public', 'k_culture_early_access', 'marketing_consent');
+select col_is_pk('public', 'k_drama_early_access', 'id', 'k-drama id is the primary key');
+select col_is_pk('public', 'ai_communication_early_access', 'id', 'ai-communication id is the primary key');
+select col_is_pk('public', 'k_culture_early_access', 'id', 'k-culture id is the primary key');
+select col_not_null('public', 'k_drama_early_access', 'email', 'k-drama email is required');
+select col_not_null('public', 'k_drama_early_access', 'marketing_consent', 'k-drama consent is required');
+select col_not_null('public', 'ai_communication_early_access', 'email', 'ai-communication email is required');
+select col_not_null('public', 'ai_communication_early_access', 'marketing_consent', 'ai-communication consent is required');
+select col_not_null('public', 'k_culture_early_access', 'email', 'k-culture email is required');
+select col_not_null('public', 'k_culture_early_access', 'marketing_consent', 'k-culture consent is required');
 
 select ok(c.relrowsecurity, c.relname || ' enables RLS')
 from pg_class c
