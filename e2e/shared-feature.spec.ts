@@ -7,11 +7,15 @@ const apps = [
     id: "k-drama",
     origin: "http://127.0.0.1:4173",
     earlyAccessPath: "/k-drama/early-access",
+    // k-drama opens the early access form as an in-page modal from a button,
+    // rather than navigating to a route.
+    earlyAccessCta: "button" as const,
   },
   {
     id: "k-culture",
     origin: "http://127.0.0.1:4175",
     earlyAccessPath: "/k-culture/early-access",
+    earlyAccessCta: "link" as const,
   },
 ] as const;
 
@@ -107,15 +111,23 @@ async function expectCompleteFeature(root: Locator, options: { stylesAvailable?:
   ).toHaveLength(1);
 }
 
-async function expectEarlyAccessCta(root: Locator, expectedPath: string) {
+async function expectEarlyAccessCta(
+  root: Locator,
+  expectedPath: string,
+  kind: "link" | "button" = "link",
+) {
   const rootId = await root.getAttribute("data-testid");
   if (!rootId) throw new Error("shared feature root must expose its stable test id");
   const cta = root.getByTestId(`${rootId}:early-access-cta`);
   await expect(cta).toHaveCount(1);
   await expect(cta).toBeVisible();
-  await expect(cta).toHaveRole("link");
+  await expect(cta).toHaveRole(kind);
   await expect(cta).toHaveAccessibleName("Get early access");
-  await expect(cta).toHaveAttribute("href", expectedPath);
+  if (kind === "link") {
+    await expect(cta).toHaveAttribute("href", expectedPath);
+  } else {
+    await expect(cta).not.toHaveAttribute("href");
+  }
   await expect(cta).toHaveClass(/button--text/);
   await expect(cta).toHaveClass(/shared-feature__early-access-cta/);
   return cta;
@@ -165,7 +177,7 @@ for (const app of apps) {
       expect(new Set(appearances)).toEqual(new Set(["white", "soft"]));
       for (const root of roots) {
         await expectCompleteFeature(root);
-        await expectEarlyAccessCta(root, app.earlyAccessPath);
+        await expectEarlyAccessCta(root, app.earlyAccessPath, app.earlyAccessCta);
       }
       await expectNoHorizontalOverflow(page);
     });
@@ -179,7 +191,7 @@ for (const app of apps) {
 
       for (const root of await getFeatureRoots(page)) {
         await expectCompleteFeature(root);
-        const cta = await expectEarlyAccessCta(root, app.earlyAccessPath);
+        const cta = await expectEarlyAccessCta(root, app.earlyAccessPath, app.earlyAccessCta);
         const content = root.getByTestId(`${await root.getAttribute("data-testid")}:content`);
         const [ctaBox, contentBox] = await Promise.all([cta.boundingBox(), content.boundingBox()]);
         expect(ctaBox?.width, "the mobile text link must retain intrinsic width").toBeLessThan(
@@ -204,14 +216,21 @@ for (const app of apps) {
       const roots = await getFeatureRoots(page);
       for (const root of roots) {
         await expectCompleteFeature(root, { stylesAvailable: false });
-        await expectEarlyAccessCta(root, app.earlyAccessPath);
+        await expectEarlyAccessCta(root, app.earlyAccessPath, app.earlyAccessCta);
       }
       await expectNoHorizontalOverflow(page);
 
       const firstRoot = roots[0];
       if (!firstRoot) throw new Error("the first feature CTA is missing");
-      await (await expectEarlyAccessCta(firstRoot, app.earlyAccessPath)).click();
-      await expect(page).toHaveURL(`${app.origin}${app.earlyAccessPath}`);
+      const firstCta = await expectEarlyAccessCta(firstRoot, app.earlyAccessPath, app.earlyAccessCta);
+      await firstCta.click();
+      if (app.earlyAccessCta === "link") {
+        await expect(page).toHaveURL(`${app.origin}${app.earlyAccessPath}`);
+      } else {
+        // The button opens the in-page modal instead of navigating.
+        await expect(page.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
+        await expect(page).toHaveURL(`${app.origin}/en-US/`);
+      }
     });
   });
 }
@@ -253,7 +272,7 @@ test("feature early access CTA uses an intrinsic underlined text-link treatment"
 
   const firstRoot = (await getFeatureRoots(page))[0];
   if (!firstRoot) throw new Error("the representative feature CTA is missing");
-  const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath);
+  const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
   await expect(cta).toHaveCSS("min-height", "0px");
   await expect(cta).toHaveCSS("padding-block-start", "0px");
   await expect(cta).toHaveCSS("padding-inline-start", "0px");
@@ -273,7 +292,7 @@ test("feature early access CTA uses an intrinsic underlined text-link treatment"
   await expect(cta).toHaveCSS("text-decoration-line", "underline");
   const softRoot = (await getFeatureRoots(page))[1];
   if (!softRoot) throw new Error("the soft-surface feature CTA is missing");
-  const softCta = await expectEarlyAccessCta(softRoot, apps[0].earlyAccessPath);
+  const softCta = await expectEarlyAccessCta(softRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
   await expect(softCta).toHaveCSS("color", "rgb(100, 116, 139)");
   await expect(softCta).toHaveCSS("text-decoration-line", "underline");
   await softCta.focus();

@@ -118,7 +118,9 @@ for (const app of apps) {
         await expect(cta).toHaveRole("button");
         await expect(cta).toHaveText(/\S+/);
         await expect(cta).not.toHaveAttribute("href");
-        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        // k-drama's hero CTA now opens the early-access modal, so it is an
+        // active button rather than an inert display-only control.
+        await expect(cta).not.toHaveAttribute("aria-disabled", "true");
         await expect(highlights).toBeVisible();
         await expect(highlights.getByRole("listitem")).toHaveCount(3);
         await expect(visuals).toHaveCount(3);

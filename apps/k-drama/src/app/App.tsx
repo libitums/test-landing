@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
 import {
-  ButtonLink,
   CtaSection,
   Footer,
   Hero,
@@ -20,6 +19,7 @@ import {
   KDramaYoutubeLessonFeature,
 } from "../features/k-drama/KDramaFeatureVisuals";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
+import { KDramaEarlyAccessPage } from "./KDramaEarlyAccessPage";
 
 const featureVisuals = {
   subtitles: <KDramaDualSubtitleFeature />,
@@ -33,12 +33,14 @@ export interface AppProps {
   location?: string;
 }
 export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+  const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
   const content = createContent(runtime);
   const t = runtime.translate;
-  const trackCta = () => {
+  const openEarlyAccess = () => {
+    setEarlyAccessOpen(true);
     void analytics.track({ name: "cta_clicked" });
   };
   const trackFeatureCta = (featureId: string) => {
@@ -52,7 +54,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
       >
         <LandingShell.Main>
           <div className="k-drama-hero">
-            <Hero content={content.hero}>
+            <Hero content={content.hero} onAction={openEarlyAccess}>
               <div className="k-drama-hero__visuals">
                 <div
                   className="k-drama-hero-card k-drama-hero-card--video"
@@ -184,28 +186,38 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                     {feature.id === "shortform" ? (
                       <KDramaShortformHighlights items={content.shortformHighlights} />
                     ) : null}
-                    <ButtonLink
-                      className="shared-feature__early-access-cta"
-                      variant="text"
-                      href="/k-drama/early-access"
+                    <button
+                      type="button"
+                      className="button button--text shared-feature__early-access-cta"
                       data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
-                      onClick={() => trackFeatureCta(feature.id)}
+                      onClick={() => {
+                        trackFeatureCta(feature.id);
+                        openEarlyAccess();
+                      }}
                     >
                       Get early access
-                    </ButtonLink>
+                    </button>
                   </div>
                 </SharedFeatureTemplate>
               );
             })}
           </div>
           <div id="cta">
-            <CtaSection content={content.cta} onAction={trackCta} />
+            <CtaSection content={content.cta} onAction={openEarlyAccess} />
           </div>
           <div id="pricing">
             <PricingSection content={content.pricing} />
           </div>
         </LandingShell.Main>
       </LandingShell>
+      {isEarlyAccessOpen ? (
+        <KDramaEarlyAccessPage
+          runtime={runtime}
+          location={location}
+          overlay
+          onClose={() => setEarlyAccessOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

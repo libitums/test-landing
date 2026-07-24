@@ -28,7 +28,7 @@ describe("K-drama landing", () => {
     expect(action).toBeVisible();
     expect(action).toHaveRole("button");
     expect(action).not.toHaveAttribute("href");
-    expect(action).toHaveAttribute("aria-disabled", "true");
+    expect(action).not.toHaveAttribute("aria-disabled", "true");
     expect(action).toHaveTextContent(/\S+/);
     expect(within(highlights).getAllByRole("listitem")).toHaveLength(3);
     expect(media).toBeInTheDocument();
@@ -36,7 +36,6 @@ describe("K-drama landing", () => {
     expect(within(media).getAllByRole("img", { name: /\S+/ })).toHaveLength(3);
     expect(within(media).queryByRole("button")).not.toBeInTheDocument();
     expect(within(media).queryByRole("link")).not.toBeInTheDocument();
-    fireEvent.click(action);
     expect(adapter.events).toEqual([
       {
         name: "experiment_viewed",
@@ -65,15 +64,38 @@ describe("K-drama landing", () => {
     const featureAction = screen.getByTestId(
       "shared-feature:k-drama-subtitles:early-access-cta",
     );
-    expect(featureAction).toHaveAttribute("href", "/k-drama/early-access");
+    expect(featureAction).toHaveRole("button");
+    expect(featureAction).not.toHaveAttribute("href");
     expect(featureAction).toHaveClass("button--text", "shared-feature__early-access-cta");
-    expect(featureAction).not.toHaveClass("button--secondary");
-    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
     fireEvent.click(featureAction);
-    await waitFor(() => expect(adapter.events).toHaveLength(2));
-    expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "feature_cta_clicked", featureId: "subtitles" }),
+    // Feature CTA opens the early-access modal and reports both its own feature
+    // event and the shared cta_clicked.
+    expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
+    await waitFor(() => expect(adapter.events).toHaveLength(3));
+    expect(adapter.events.map((event) => event.name)).toEqual(
+      expect.arrayContaining(["feature_cta_clicked", "cta_clicked"]),
     );
+  });
+
+  it("opens the early-access modal from the hero CTA and closes it on Escape", async () => {
+    const adapter = createInMemoryAnalyticsAdapter();
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter,
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId(landingTestIds.heroCta));
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    await waitFor(() =>
+      expect(adapter.events.map((event) => event.name)).toContain("cta_clicked"),
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
   it("renders sections in features -> cta -> pricing -> footer order", () => {

@@ -104,6 +104,28 @@ export const koKR = {
     "한국 밖에서 한국어를 배우는 팬들을 위해 만들어졌습니다. 초급부터 자신감 있는 스피커까지.",
   "footer.privacy": "개인정보 처리방침",
   "footer.terms": "이용약관",
+  "earlyAccess.back": "Baetter로 돌아가기",
+  "earlyAccess.close": "사전등록 폼 닫기",
+  "earlyAccess.dismiss": "사전등록 폼 바깥 영역 닫기",
+  "earlyAccess.eyebrow": "얼리 액세스 사전 등록",
+  "earlyAccess.title": "Baetter와 가장 먼저 한국어로 말해 보세요",
+  "earlyAccess.description":
+    "이메일만 남겨주세요. 초대 순서가 되면 가장 먼저 알려드릴게요.",
+  "earlyAccess.benefit.invite": "우선 초대와 출시 소식",
+  "earlyAccess.benefit.voice": "좋아하는 K-드라마·유튜브 클립·쇼츠로 학습",
+  "earlyAccess.benefit.feedback": "의견을 남겨 Baetter를 함께 만들 기회",
+  "earlyAccess.form.title": "자리 예약하기",
+  "earlyAccess.form.description": "이메일을 입력해 얼리 액세스 명단에 합류하세요.",
+  "earlyAccess.form.email": "이메일",
+  "earlyAccess.form.consent": "얼리 액세스와 출시 소식을 이메일로 받는 데 동의합니다.",
+  "earlyAccess.form.submit": "얼리 액세스 예약",
+  "earlyAccess.form.submitting": "저장 중…",
+  "earlyAccess.form.privacy":
+    "입력한 정보는 Baetter 얼리 액세스와 관련 안내에만 사용합니다.",
+  "earlyAccess.form.integrationPending":
+    "감사합니다! 아직 등록 연동 전이라 이메일은 저장되지 않았어요.",
+  "earlyAccess.form.success": "명단에 등록됐어요. 곳 연락드릴게요.",
+  "earlyAccess.form.error": "등록을 저장하지 못했어요. 다시 시도해 주세요.",
   "footer.copyright": "© 2026 Baetter. 모든 권리 보유.",
 } as const;
 
@@ -213,6 +235,28 @@ export const enUS: Record<keyof typeof koKR, string> = {
     "Made for fans learning Korean outside Korea, from beginner to confident speaker.",
   "footer.privacy": "Privacy",
   "footer.terms": "Terms",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. All rights reserved.",
 };
 
@@ -322,6 +366,28 @@ export const ar: Record<keyof typeof koKR, string> = {
     "مصمم لمحبي الدراما الذين يتعلمون الكورية خارج كوريا، من المبتدئ إلى المتحدث الواثق.",
   "footer.privacy": "الخصوصية",
   "footer.terms": "الشروط",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. جميع الحقوق محفوظة.",
 };
 
@@ -432,6 +498,28 @@ export const jaJP: Record<keyof typeof koKR, string> = {
     "韓国の外で韓国語を学ぶファンのために。初心者から自信を持って話せるレベルまで。",
   "footer.privacy": "プライバシー",
   "footer.terms": "利用規約",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. All rights reserved.",
 };
 
@@ -542,6 +630,28 @@ export const viVN: Record<keyof typeof koKR, string> = {
     "Được tạo ra cho những người hâm mộ học tiếng Hàn bên ngoài Hàn Quốc, từ mới bắt đầu đến nói tự tin.",
   "footer.privacy": "Quyền riêng tư",
   "footer.terms": "Điều khoản",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. Bảo lưu mọi quyền.",
 };
 
@@ -652,6 +762,28 @@ export const thTH: Record<keyof typeof koKR, string> = {
     "ออกแบบมาเพื่อแฟนๆ ที่เรียนภาษาเกาหลีนอกประเทศเกาหลี ตั้งแต่ระดับเริ่มต้นจนพูดได้อย่างมั่นใจ",
   "footer.privacy": "ความเป็นส่วนตัว",
   "footer.terms": "ข้อกำหนด",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. สงวนลิขสิทธิ์ทั้งหมด",
 };
 
@@ -762,6 +894,28 @@ export const zhCN: Record<keyof typeof koKR, string> = {
     "专为在韩国以外学韩语的粉丝打造，从初学者到自信开口。",
   "footer.privacy": "隐私政策",
   "footer.terms": "服务条款",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. 保留所有权利。",
 };
 
@@ -872,5 +1026,27 @@ export const zhTW: Record<keyof typeof koKR, string> = {
     "專為在韓國以外學韓語的粉絲設計，從初學者到自信開口都適用。",
   "footer.privacy": "隱私權",
   "footer.terms": "使用條款",
+  "earlyAccess.back": "Back to Baetter",
+  "earlyAccess.close": "Close early-access form",
+  "earlyAccess.dismiss": "Dismiss early-access form",
+  "earlyAccess.eyebrow": "Early access reservation",
+  "earlyAccess.title": "Be first to practice Korean with Baetter",
+  "earlyAccess.description":
+    "Just leave your email. We will let you know the moment your invite is ready.",
+  "earlyAccess.benefit.invite": "Priority invitation and launch updates",
+  "earlyAccess.benefit.voice": "Learn from your favorite K-dramas, YouTube clips, and shorts",
+  "earlyAccess.benefit.feedback": "A chance to shape Baetter with your feedback",
+  "earlyAccess.form.title": "Reserve your spot",
+  "earlyAccess.form.description": "Enter your email to join the early-access list.",
+  "earlyAccess.form.email": "Email",
+  "earlyAccess.form.consent": "I agree to receive early-access and launch updates by email.",
+  "earlyAccess.form.submit": "Reserve early access",
+  "earlyAccess.form.submitting": "Saving…",
+  "earlyAccess.form.privacy":
+    "We only use what you enter for Baetter early-access and related updates.",
+  "earlyAccess.form.integrationPending":
+    "Thanks! Registration is not connected yet, so your email was not stored.",
+  "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
+  "earlyAccess.form.error": "We could not save your registration. Please try again.",
   "footer.copyright": "© 2026 Baetter. 版權所有。",
 };
