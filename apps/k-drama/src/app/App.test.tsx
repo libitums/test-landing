@@ -108,7 +108,7 @@ describe("K-drama landing", () => {
     expect(screen.getByRole("heading", { name: "Before you start" })).toBeInTheDocument();
     const faq = screen.getByTestId("footer-faq");
     expect(within(faq).getAllByRole("button")).toHaveLength(4);
-    expect(within(faq).getByText("What is this app?")).toBeInTheDocument();
+    expect(within(faq).getByText("What is Baetter?")).toBeInTheDocument();
     expect(within(faq).getByText("Clips")).toBeInTheDocument();
     expect(within(faq).getByText("Practice")).toBeInTheDocument();
     expect(within(faq).getByText("For learners")).toBeInTheDocument();

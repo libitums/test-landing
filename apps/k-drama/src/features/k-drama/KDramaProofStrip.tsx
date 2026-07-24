@@ -1,17 +1,12 @@
-import { Check } from "lucide-react";
-
-/** A single qualitative proof checklist item (no numeric metric). */
-export interface ProofCheckItem {
-  id: string;
-  label: string;
-}
+import type { ProofMetric } from "@landing/contracts";
 
 interface KDramaProofStripProps {
-  items: readonly ProofCheckItem[];
+  /** Each entry pairs a one-word step (`label`) with its explanation (`value`). */
+  metrics: readonly ProofMetric[];
   title: string;
 }
 
-export function KDramaProofStrip({ items, title }: KDramaProofStripProps) {
+export function KDramaProofStrip({ metrics, title }: KDramaProofStripProps) {
   return (
     <section
       className="section proof-strip"
@@ -20,14 +15,14 @@ export function KDramaProofStrip({ items, title }: KDramaProofStripProps) {
     >
       <div className="container stack">
         <h2 id="k-drama-proof-title">{title}</h2>
-        <ul className="proof-checklist">
-          {items.map((item) => (
-            <li key={item.id} className="proof-check" data-testid={`k-drama-proof:${item.id}`}>
-              <Check className="proof-check__icon" aria-hidden="true" strokeWidth={2.5} />
-              <span className="proof-check__label">{item.label}</span>
-            </li>
+        <dl className="proof-grid">
+          {metrics.map((metric) => (
+            <div key={metric.id} data-testid={`k-drama-proof:${metric.id}`}>
+              <dt>{metric.label}</dt>
+              <dd>{metric.value}</dd>
+            </div>
           ))}
-        </ul>
+        </dl>
       </div>
     </section>
   );

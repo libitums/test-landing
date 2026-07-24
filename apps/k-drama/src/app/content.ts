@@ -4,13 +4,13 @@ import type {
   HeroContent,
   HeroHighlight,
   PricingContent,
+  ProofMetric,
 } from "@landing/contracts";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
 import type { NavbarProps } from "@landing/contracts/navbar";
 import { localizePath } from "@landing/i18n";
 import { registry } from "../i18n";
-import type { ProofCheckItem } from "../features/k-drama/KDramaProofStrip";
 
 export function createNavbarProps(runtime: I18nRuntime, location: string): NavbarProps {
   const t = runtime.translate;
@@ -125,11 +125,15 @@ export function createContent(runtime: I18nRuntime) {
         description: t("features.shortform.description"),
       },
     ] satisfies readonly FeatureItem[],
-    proofChecks: [
-      { id: "anyContent", label: t("proof.check.anyContent") },
-      { id: "favoriteLesson", label: t("proof.check.favoriteLesson") },
-      { id: "shortform", label: t("proof.check.shortform") },
-    ] satisfies readonly ProofCheckItem[],
+    metrics: [
+      { id: "watch", label: t("proof.watch.word"), value: t("proof.watch.description") },
+      {
+        id: "understand",
+        label: t("proof.understand.word"),
+        value: t("proof.understand.description"),
+      },
+      { id: "speak", label: t("proof.speak.word"), value: t("proof.speak.description") },
+    ] satisfies readonly ProofMetric[],
     shortformHighlights: [
       { id: "one-minute", label: t("features.shortform.highlight.oneMinute") },
       { id: "key-moments", label: t("features.shortform.highlight.keyMoments") },
