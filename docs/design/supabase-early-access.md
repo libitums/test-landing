@@ -72,13 +72,13 @@ The existing `early-access__status` position is the only status-message location
 It stays in the layout when a message is present and uses the existing
 `--space-3`, `--radius-lg`, `--text-sm`, and `--font-semibold` treatment.
 
-| State              | Surface and text roles                                                        | Announcement                             |
-| ------------------ | ----------------------------------------------------------------------------- | ---------------------------------------- |
-| `pending`          | `--color-editorial-control` surface and `--color-fg` text                     | polite live status                       |
-| `success`          | `--color-editorial-control` surface and `--color-editorial-accent` text       | polite live status                       |
-| `validation-error` | `--color-surface` surface, `--color-danger` text, and `--color-danger` border | assertive alert after the submit attempt |
-| `network-error`    | same danger roles; distinct message includes retry guidance                   | assertive alert                          |
-| `rate-limit`       | same danger roles; distinct message includes the one-minute wait              | assertive alert                          |
+| State              | Surface and text roles                                                         | Announcement                             |
+| ------------------ | ------------------------------------------------------------------------------ | ---------------------------------------- |
+| `pending`          | `--color-editorial-control` surface and `--color-fg` text                      | polite live status                       |
+| `success`          | `--color-editorial-control` surface and `--color-editorial-accent-active` text | polite live status                       |
+| `validation-error` | `--color-surface` surface, `--color-danger` text, and `--color-danger` border  | assertive alert after the submit attempt |
+| `network-error`    | same danger roles; distinct message includes retry guidance                    | assertive alert                          |
+| `rate-limit`       | same danger roles; distinct message includes the one-minute wait               | assertive alert                          |
 
 State identity never relies on color: every state has unique text, and error
 states include their reason or recovery action. Maintain a persistent live-region
@@ -115,17 +115,20 @@ No new design token is needed. Implementation reuses:
   `--breakpoint-mobile`;
 - typography: `--text-xs`, `--text-sm`, `--font-semibold`;
 - neutral and success presentation: `--color-surface`,
-  `--color-editorial-control`, `--color-fg`, `--color-editorial-accent`;
+  `--color-editorial-control`, `--color-fg`,
+  `--color-editorial-accent-active`;
 - failure presentation: `--color-danger` and the existing neutral surface;
 - controls: `--color-disabled-bg`, `--color-disabled-fg`, `--focus-ring`;
 - transition: `--duration-fast`, `--ease-standard`.
 
 The existing opaque foreground/surface pairs are used. Danger is conveyed through
-text and a border on a light surface, while success uses the current editorial
-accent treatment already present in the form. Core text and controls therefore
-retain the `DESIGN.md` WCAG AA gate. Disabled color is not used to communicate
-request status by itself; native disabled semantics and the live message accompany
-it.
+text and a border on a light surface, while success and the form eyebrow use
+`--color-editorial-accent-active` for small text. Its `#4938d2` value has an sRGB
+contrast of approximately 6.89:1 over `--color-editorial-control` (`#f5f3ff`) and
+7.22:1 over `--color-surface` (`#f8fafc`). Both exceed the 4.5:1 WCAG AA threshold
+for normal text. Core text and controls therefore retain the `DESIGN.md` WCAG AA
+gate. Disabled color is not used to communicate request status by itself; native
+disabled semantics and the live message accompany it.
 
 ## Verification contract
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
+import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { CtaSection, Footer, Hero, LandingShell, Navbar, PricingSection } from "@landing/ui";
 import { AiCommunicationProofStrip } from "../features/ai-communication/AiCommunicationProofStrip";
 import { HeroShowcase } from "../features/ai-communication/HeroShowcase";
@@ -10,12 +11,19 @@ import { FeatureBias } from "../features/ai-communication/FeatureBias";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 import { EarlyAccessPage } from "./EarlyAccessPage";
 import { useConversationBreakpoints } from "./useConversationBreakpoints";
+import { unavailableEarlyAccessRegistration } from "../early-access";
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
   location?: string;
+  submitEarlyAccessRegistration?: SubmitEarlyAccessRegistration;
 }
-export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+export function App({
+  analytics,
+  runtime,
+  location = `/${runtime.locale}/`,
+  submitEarlyAccessRegistration = unavailableEarlyAccessRegistration,
+}: AppProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
   useConversationBreakpoints(rootRef);
@@ -99,6 +107,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
           location={location}
           overlay
           onClose={() => setEarlyAccessOpen(false)}
+          submitRegistration={submitEarlyAccessRegistration}
         />
       ) : null}
     </div>

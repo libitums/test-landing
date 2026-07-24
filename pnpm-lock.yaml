@@ -73,6 +73,9 @@ importers:
       "@landing/design-tokens":
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      "@landing/early-access":
+        specifier: workspace:*
+        version: link:../../packages/early-access
       "@landing/i18n":
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -275,6 +278,19 @@ importers:
       "@landing/config-typescript":
         specifier: workspace:*
         version: link:../config-typescript
+
+  packages/early-access:
+    dependencies:
+      "@landing/contracts":
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      "@landing/config-typescript":
+        specifier: workspace:*
+        version: link:../config-typescript
+      vitest:
+        specifier: 3.2.4
+        version: 3.2.4(@types/node@24.13.3)(jsdom@26.1.0)
 
   packages/i18n:
     dependencies:

@@ -30,3 +30,6 @@ AGENT.md
 AGENTS.md
 .vercel
 .env*
+!.env.example
+!**/.env.example
+supabase/.temp/

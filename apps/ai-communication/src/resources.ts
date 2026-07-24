@@ -17,10 +17,15 @@ const featureCopy = {
   "earlyAccess.form.submitting": "Saving…",
   "earlyAccess.form.privacy":
     "We will only use these details for Baetter early access and related updates.",
-  "earlyAccess.form.integrationPending":
-    "The form UI is ready. Registration will open when the shared Supabase connection is added.",
+  "earlyAccess.form.pending": "Saving your registration…",
   "earlyAccess.form.success": "You are on the list. We will be in touch soon.",
-  "earlyAccess.form.error": "We could not save your registration. Please try again.",
+  "earlyAccess.form.validationSummary": "Check the highlighted field and try again.",
+  "earlyAccess.form.emailError": "Enter a valid email address.",
+  "earlyAccess.form.consentError": "Agree to receive email updates before continuing.",
+  "earlyAccess.form.networkError":
+    "We could not save your registration. Check your connection and try again.",
+  "earlyAccess.form.rateLimit":
+    "Too many registration attempts. Please wait one minute and try again.",
   "nav.pricing": "Pricing",
   "feature.cta": "Get early access",
   "feature.roleplay.number": "1",
@@ -98,10 +103,14 @@ const koFeatureCopy: Record<keyof typeof featureCopy, string> = {
   "earlyAccess.form.submit": "얼리 액세스 사전 등록",
   "earlyAccess.form.submitting": "저장 중…",
   "earlyAccess.form.privacy": "입력한 정보는 Baetter 얼리 액세스와 관련 안내에만 사용합니다.",
-  "earlyAccess.form.integrationPending":
-    "폼 화면이 준비되었습니다. 공통 Supabase 연결이 추가되면 등록이 시작됩니다.",
+  "earlyAccess.form.pending": "사전 등록 정보를 저장하고 있습니다…",
   "earlyAccess.form.success": "사전 등록이 완료되었습니다. 곧 소식을 전해드릴게요.",
-  "earlyAccess.form.error": "등록 정보를 저장하지 못했습니다. 다시 시도해 주세요.",
+  "earlyAccess.form.validationSummary": "강조된 항목을 확인하고 다시 시도해 주세요.",
+  "earlyAccess.form.emailError": "올바른 이메일 주소를 입력해 주세요.",
+  "earlyAccess.form.consentError": "계속하려면 이메일 소식 수신에 동의해 주세요.",
+  "earlyAccess.form.networkError":
+    "등록 정보를 저장하지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
+  "earlyAccess.form.rateLimit": "등록 시도가 너무 많습니다. 1분 후 다시 시도해 주세요.",
   "nav.pricing": "요금제",
   "feature.cta": "얼리 액세스 신청",
   "feature.roleplay.number": "1",
