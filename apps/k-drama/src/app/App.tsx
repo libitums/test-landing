@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useState, useEffect, type KeyboardEvent, type MouseEvent } from "react";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
+import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
 import {
-  ButtonLink,
   CtaSection,
   Footer,
   Hero,
@@ -13,12 +13,15 @@ import {
   PricingSection,
 } from "@landing/ui";
 import { KDramaProofStrip } from "../features/k-drama/KDramaProofStrip";
+import { KDramaShortformHighlights } from "../features/k-drama/KDramaShortformHighlights";
 import {
   KDramaDualSubtitleFeature,
   KDramaShortformFeature,
   KDramaYoutubeLessonFeature,
 } from "../features/k-drama/KDramaFeatureVisuals";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
+import { KDramaEarlyAccessPage } from "./KDramaEarlyAccessPage";
+import { unavailableEarlyAccessRegistration } from "../early-access";
 
 const featureVisuals = {
   subtitles: <KDramaDualSubtitleFeature />,
@@ -26,18 +29,35 @@ const featureVisuals = {
   shortform: <KDramaShortformFeature />,
 };
 
+// The shared CtaSection renders its action as an anchor (href="#top"); since the
+// final CTA opens the modal instead of navigating, swallow the anchor's default
+// jump on both pointer and keyboard (Enter) activation. openEarlyAccess still
+// fires from the anchor's own onClick.
+function preventCtaJump(event: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
+  if ("key" in event && event.key !== "Enter") return;
+  if ((event.target as Element).closest("a[href]")) event.preventDefault();
+}
+
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
   location?: string;
+  submitEarlyAccessRegistration?: SubmitEarlyAccessRegistration;
 }
-export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+export function App({
+  analytics,
+  runtime,
+  location = `/${runtime.locale}/`,
+  submitEarlyAccessRegistration = unavailableEarlyAccessRegistration,
+}: AppProps) {
+  const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
   const content = createContent(runtime);
   const t = runtime.translate;
-  const trackCta = () => {
+  const openEarlyAccess = () => {
+    setEarlyAccessOpen(true);
     void analytics.track({ name: "cta_clicked" });
   };
   const trackFeatureCta = (featureId: string) => {
@@ -51,7 +71,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
       >
         <LandingShell.Main>
           <div className="k-drama-hero">
-            <Hero content={content.hero}>
+            <Hero content={content.hero} onAction={openEarlyAccess}>
               <div className="k-drama-hero__visuals">
                 <div
                   className="k-drama-hero-card k-drama-hero-card--video"
@@ -180,28 +200,42 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                 >
                   <div className="k-drama-feature-composition">
                     {featureVisuals[feature.id as keyof typeof featureVisuals]}
-                    <ButtonLink
-                      className="shared-feature__early-access-cta"
-                      variant="text"
-                      href="/k-drama/early-access"
+                    {feature.id === "shortform" ? (
+                      <KDramaShortformHighlights items={content.shortformHighlights} />
+                    ) : null}
+                    <button
+                      type="button"
+                      className="button button--text shared-feature__early-access-cta"
                       data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
-                      onClick={() => trackFeatureCta(feature.id)}
+                      onClick={() => {
+                        trackFeatureCta(feature.id);
+                        openEarlyAccess();
+                      }}
                     >
                       Get early access
-                    </ButtonLink>
+                    </button>
                   </div>
                 </SharedFeatureTemplate>
               );
             })}
           </div>
+          <div id="cta" onClickCapture={preventCtaJump} onKeyDownCapture={preventCtaJump}>
+            <CtaSection content={content.cta} onAction={openEarlyAccess} />
+          </div>
           <div id="pricing">
             <PricingSection content={content.pricing} />
           </div>
-          <div id="cta">
-            <CtaSection content={content.cta} onAction={trackCta} />
-          </div>
         </LandingShell.Main>
       </LandingShell>
+      {isEarlyAccessOpen ? (
+        <KDramaEarlyAccessPage
+          runtime={runtime}
+          location={location}
+          overlay
+          submitRegistration={submitEarlyAccessRegistration}
+          onClose={() => setEarlyAccessOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

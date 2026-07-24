@@ -32,7 +32,9 @@
 }
 @media (max-width: 48rem) {
   .proof-grid {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr), not 1fr: 1fr's min-content floor refuses to shrink and
+       long pseudo-locale strings overflow the viewport (WCAG 1.4.10). */
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-8);
   }
 }

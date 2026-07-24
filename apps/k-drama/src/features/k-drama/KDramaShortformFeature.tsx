@@ -12,14 +12,17 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 interface ShortformPhoneContentProps {
   autoStart: boolean;
+  /** Skip the count-in and settle straight into the recording end state. */
+  settleImmediately: boolean;
 }
 
-function ShortformPhoneContent({ autoStart }: ShortformPhoneContentProps) {
-  const [countdown, setCountdown] = useState(autoStart ? 3 : 0);
-  const [isRecording, setIsRecording] = useState(false);
+function ShortformPhoneContent({ autoStart, settleImmediately }: ShortformPhoneContentProps) {
+  const [countdown, setCountdown] = useState(autoStart && !settleImmediately ? 3 : 0);
+  const [isRecording, setIsRecording] = useState(autoStart && settleImmediately);
 
   useEffect(() => {
     if (countdown === 0) return;
@@ -55,13 +58,13 @@ function ShortformPhoneContent({ autoStart }: ShortformPhoneContentProps) {
         <span>Repeat after the scene</span>
         <strong>아저씨 사랑해요</strong>
         <small>Ajeossi, saranghaeyo · Mister, I love you</small>
-        <button type="button">
+        <span className="k-drama-feature__challenge-listen">
           <Volume2 aria-hidden="true" /> Hear original
-        </button>
+        </span>
       </div>
       {isRecording ? (
         <div className="k-drama-feature__challenge-capture">
-          <div className="k-drama-feature__challenge-wave" aria-hidden="true">
+          <div className="k-drama-feature__challenge-wave">
             <i />
             <i />
             <i />
@@ -74,33 +77,28 @@ function ShortformPhoneContent({ autoStart }: ShortformPhoneContentProps) {
             <i /> REC&nbsp;&nbsp;00:08
           </small>
           <div>
-            <button type="button" aria-label="Record again" onClick={() => setIsRecording(false)}>
+            <span className="k-drama-feature__challenge-action">
               <RotateCcw aria-hidden="true" />
-            </button>
-            <button className="is-recording" type="button" aria-label="Stop recording">
+            </span>
+            <span className="k-drama-feature__challenge-action is-recording">
               <i />
-            </button>
-            <button type="button" aria-label="Share challenge">
+            </span>
+            <span className="k-drama-feature__challenge-action">
               <Send aria-hidden="true" />
-            </button>
+            </span>
           </div>
           <strong>Finish your take and share the challenge</strong>
         </div>
       ) : (
         <div className="k-drama-feature__challenge-start">
-          <button
-            type="button"
-            aria-label="Start speaking challenge"
-            onClick={() => setCountdown(3)}
-            disabled={countdown > 0}
-          >
+          <span className="k-drama-feature__challenge-trigger">
             <i />
-          </button>
+          </span>
           <strong>Tap to start your challenge</strong>
         </div>
       )}
       {countdown > 0 ? (
-        <div className="k-drama-feature__challenge-countdown" aria-live="polite">
+        <div className="k-drama-feature__challenge-countdown">
           <span key={countdown}>{countdown}</span>
           <small>Get ready</small>
         </div>
@@ -165,7 +163,7 @@ function YoutubeShortsPhoneContent({ sequenceStep }: YoutubeShortsPhoneContentPr
       </div>
       <div className={`k-drama-feature__shorts-caption${sequenceStep > 0 ? " is-visible" : ""}`}>
         <div>
-          <strong>@talkie.korean</strong>
+          <strong>@baetter.korean</strong>
           <span>Learn</span>
         </div>
         <strong>Learn today&apos;s phrase from this scene: 아저씨 사랑해요</strong>
@@ -177,12 +175,31 @@ function YoutubeShortsPhoneContent({ sequenceStep }: YoutubeShortsPhoneContentPr
   );
 }
 
+/**
+ * Feature 03 short-form composition.
+ *
+ * This is a decorative illustration of the product UI, not the product itself,
+ * so the root carries `aria-hidden="true"` like the other two feature visuals.
+ * Its phone chrome is therefore built from non-interactive elements: `aria-hidden`
+ * hides content from assistive technology but does *not* remove it from the tab
+ * order, so real `<button>`s here would strand keyboard users on controls their
+ * screen reader cannot see (axe `aria-hidden-focus`, WCAG 2.1 AA 4.1.2). None of
+ * these mockup controls expose real functionality — the whole sequence is
+ * timer-driven — so non-interactive elements are the honest markup.
+ */
 export function KDramaShortformFeature() {
   const [sequenceStep, setSequenceStep] = useState(0);
   const [challengeRun, setChallengeRun] = useState(0);
   const [sequenceCycle, setSequenceCycle] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      // Settle on the fully composed frame instead of looping the sequence.
+      setSequenceStep(2);
+      setChallengeRun(1);
+      return;
+    }
     const swipeTimer = window.setTimeout(() => setSequenceStep(1), 1600);
     const challengeTimer = window.setTimeout(() => setSequenceStep(2), 3000);
     const recordTimer = window.setTimeout(() => setChallengeRun((run) => run + 1), 3500);
@@ -197,15 +214,16 @@ export function KDramaShortformFeature() {
       window.clearTimeout(recordTimer);
       window.clearTimeout(restartTimer);
     };
-  }, [sequenceCycle]);
+  }, [sequenceCycle, prefersReducedMotion]);
 
   return (
-    <div className="k-drama-feature k-drama-feature--shortform">
+    <div className="k-drama-feature k-drama-feature--shortform" aria-hidden="true">
       <div className="k-drama-feature__shortform-devices">
         <div className="k-drama-feature__phone k-drama-feature__phone--shortform-secondary">
           <ShortformPhoneContent
             key={`${sequenceCycle}-${challengeRun}`}
             autoStart={challengeRun > 0 && sequenceStep === 2}
+            settleImmediately={prefersReducedMotion}
           />
         </div>
         <div className="k-drama-feature__phone k-drama-feature__phone--shortform">

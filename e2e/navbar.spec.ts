@@ -2,9 +2,9 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const apps = [
-  { id: "k-drama", origin: "http://127.0.0.1:4173" },
-  { id: "ai-communication", origin: "http://127.0.0.1:4174" },
-  { id: "k-culture", origin: "http://127.0.0.1:4175" },
+  { id: "k-drama", origin: "http://127.0.0.1:4173", localeCount: 8 },
+  { id: "ai-communication", origin: "http://127.0.0.1:4174", localeCount: 8 },
+  { id: "k-culture", origin: "http://127.0.0.1:4175", localeCount: 3 },
 ] as const;
 
 const ids = {
@@ -22,7 +22,12 @@ const ids = {
 async function expectNamed(locator: Locator) {
   const name = await locator.getAttribute("aria-label");
   const visibleText = (await locator.textContent())?.trim();
-  expect(name?.trim() || visibleText).toBeTruthy();
+  // An image logo carries its accessible name on the nested <img alt>, not on
+  // the link's own aria-label or text. Only read it when an image is actually
+  // present — a bare getAttribute would block for the full timeout otherwise.
+  const image = locator.locator("img[alt]").first();
+  const imageAlt = (await image.count()) > 0 ? (await image.getAttribute("alt"))?.trim() : "";
+  expect(name?.trim() || visibleText || imageAlt).toBeTruthy();
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -69,7 +74,7 @@ for (const app of apps) {
       await language.click();
       const languageMenu = page.getByTestId("navbar-language-menu-content");
       await expect(languageMenu).toBeVisible();
-      await expect(languageMenu.getByRole("menuitem")).toHaveCount(3);
+      await expect(languageMenu.getByRole("menuitem")).toHaveCount(app.localeCount);
       for (const option of await languageMenu.getByRole("menuitem").all()) {
         await expect(option).toHaveAttribute("href", /\S+/);
       }
@@ -124,6 +129,12 @@ for (const app of apps) {
       await expect(menu).toHaveRole("dialog");
       await expect(menu).toHaveAccessibleName(/\S+/);
       await expect(menu.getByRole("button", { name: "Close menu" })).toBeVisible();
+      // The sheet animates opacity 0 -> 1 on open; running axe before it settles
+      // measures a translucent composite and reports a false contrast failure.
+      // Wait for the animation to finish so contrast is checked on the final frame.
+      await menu.evaluate((node) =>
+        Promise.all(node.getAnimations({ subtree: true }).map((animation) => animation.finished)),
+      );
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       const mobileHowItWorks = menu.getByTestId(ids.howItWorks);
       const mobilePricing = menu.getByTestId(ids.pricing);

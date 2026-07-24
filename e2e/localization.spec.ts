@@ -3,29 +3,44 @@ import AxeBuilder from "@axe-core/playwright";
 import { landingTestIds } from "@landing/contracts";
 import { navbarTestIds } from "@landing/contracts/navbar";
 
+const baseLocales = [
+  { name: "ko-KR", dir: "ltr" },
+  { name: "en-US", dir: "ltr" },
+  { name: "ar", dir: "rtl" },
+] as const;
+// Apps that ship the extended locale set (added alongside the Baetter rollout).
+const extendedLocales = [
+  { name: "ko-KR", dir: "ltr" },
+  { name: "en-US", dir: "ltr" },
+  { name: "ja-JP", dir: "ltr" },
+  { name: "vi-VN", dir: "ltr" },
+  { name: "th-TH", dir: "ltr" },
+  { name: "zh-CN", dir: "ltr" },
+  { name: "zh-TW", dir: "ltr" },
+  { name: "ar", dir: "rtl" },
+] as const;
+
 const apps = [
   {
     id: "k-drama",
     origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
     displayOnlyHero: true,
+    locales: extendedLocales,
   },
   {
     id: "ai-communication",
     origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
     displayOnlyHero: false,
+    locales: extendedLocales,
   },
   {
     id: "k-culture",
     origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
     displayOnlyHero: false,
+    locales: baseLocales,
   },
 ] as const;
 const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
-const locales = [
-  { name: "ko-KR", dir: "ltr" },
-  { name: "en-US", dir: "ltr" },
-  { name: "ar", dir: "rtl" },
-] as const;
 const focusableSelector = 'a[href], button, input, select, textarea, [tabindex="0"]';
 
 async function tabOrder(page: Page) {
@@ -71,7 +86,7 @@ async function expectVisibleFocus(page: Page) {
 }
 
 for (const app of apps) {
-  for (const locale of locales) {
+  for (const locale of app.locales) {
     test(`${app.id} renders ${locale.name} metadata and semantic focus order`, async ({ page }) => {
       // The focus-order walk traverses the full landing page. Disable smooth scrolling so
       // Firefox does not spend the test budget animating between distant focus targets.
@@ -86,8 +101,8 @@ for (const app of apps) {
       );
 
       const alternates = page.locator('link[rel="alternate"]');
-      await expect(alternates).toHaveCount(locales.length);
-      for (const alternate of locales) {
+      await expect(alternates).toHaveCount(app.locales.length);
+      for (const alternate of app.locales) {
         const localeAlternate = page.locator(`link[rel="alternate"][hreflang="${alternate.name}"]`);
         await expect(localeAlternate).toHaveCount(1);
         await expect(localeAlternate).toHaveAttribute(

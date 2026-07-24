@@ -1,6 +1,7 @@
 import type { ProofMetric } from "@landing/contracts";
 
 interface KDramaProofStripProps {
+  /** Each entry pairs a one-word step (`label`) with its explanation (`value`). */
   metrics: readonly ProofMetric[];
   title: string;
 }

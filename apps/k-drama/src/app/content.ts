@@ -2,6 +2,7 @@ import type {
   CtaContent,
   FeatureItem,
   HeroContent,
+  HeroHighlight,
   PricingContent,
   ProofMetric,
 } from "@landing/contracts";
@@ -9,6 +10,7 @@ import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { FooterProps } from "@landing/contracts/footer";
 import type { NavbarProps } from "@landing/contracts/navbar";
 import { localizePath } from "@landing/i18n";
+import { baetterLogo } from "@landing/ui";
 import { registry } from "../i18n";
 
 export function createNavbarProps(runtime: I18nRuntime, location: string): NavbarProps {
@@ -16,9 +18,9 @@ export function createNavbarProps(runtime: I18nRuntime, location: string): Navba
   return {
     appearance: "warm-editorial",
     content: {
-      logo: { kind: "text", label: t("brand"), accessibleLabel: t("brand"), href: "#top" },
-      howItWorks: { label: t("nav.product"), href: "#features" },
-      pricing: { label: t("nav.proof"), href: "#proof" },
+      logo: { kind: "image", src: baetterLogo, alt: t("brand"), href: "#top" },
+      howItWorks: { label: t("nav.whyBaetter"), href: "#proof" },
+      pricing: { label: t("nav.pricing"), href: "#pricing" },
       language: {
         label: t("locale.label"),
         accessibleLabel: t("locale.label"),
@@ -62,14 +64,24 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
         heading: t("footer.faq.heading"),
         items: [
           {
-            id: "availability",
-            question: t("footer.faq.availability.question"),
-            answer: t("footer.faq.availability.answer"),
+            id: "what",
+            question: t("footer.faq.what.question"),
+            answer: t("footer.faq.what.answer"),
           },
           {
-            id: "workflow",
-            question: t("footer.faq.workflow.question"),
-            answer: t("footer.faq.workflow.answer"),
+            id: "clips",
+            question: t("footer.faq.clips.question"),
+            answer: t("footer.faq.clips.answer"),
+          },
+          {
+            id: "practice",
+            question: t("footer.faq.practice.question"),
+            answer: t("footer.faq.practice.answer"),
+          },
+          {
+            id: "learners",
+            question: t("footer.faq.learners.question"),
+            answer: t("footer.faq.learners.answer"),
           },
         ],
       },
@@ -115,10 +127,20 @@ export function createContent(runtime: I18nRuntime) {
       },
     ] satisfies readonly FeatureItem[],
     metrics: [
-      { id: "markets", value: t("proof.markets.value"), label: t("proof.markets.label") },
-      { id: "reuse", value: t("proof.reuse.value"), label: t("proof.reuse.label") },
-      { id: "launch", value: t("proof.launch.value"), label: t("proof.launch.label") },
+      { id: "watch", label: t("proof.watch.word"), value: t("proof.watch.description") },
+      {
+        id: "understand",
+        label: t("proof.understand.word"),
+        value: t("proof.understand.description"),
+      },
+      { id: "speak", label: t("proof.speak.word"), value: t("proof.speak.description") },
     ] satisfies readonly ProofMetric[],
+    shortformHighlights: [
+      { id: "one-minute", label: t("features.shortform.highlight.oneMinute") },
+      { id: "key-moments", label: t("features.shortform.highlight.keyMoments") },
+      { id: "simple", label: t("features.shortform.highlight.simple") },
+      { id: "instant", label: t("features.shortform.highlight.instant") },
+    ] satisfies readonly HeroHighlight[],
     cta: {
       badge: t("cta.badge"),
       title: t("cta.title"),
