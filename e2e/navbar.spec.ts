@@ -124,6 +124,12 @@ for (const app of apps) {
       await expect(menu).toHaveRole("dialog");
       await expect(menu).toHaveAccessibleName(/\S+/);
       await expect(menu.getByRole("button", { name: "Close menu" })).toBeVisible();
+      // The sheet animates opacity 0 -> 1 on open; running axe before it settles
+      // measures a translucent composite and reports a false contrast failure.
+      // Wait for the animation to finish so contrast is checked on the final frame.
+      await menu.evaluate((node) =>
+        Promise.all(node.getAnimations({ subtree: true }).map((animation) => animation.finished)),
+      );
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       const mobileHowItWorks = menu.getByTestId(ids.howItWorks);
       const mobilePricing = menu.getByTestId(ids.pricing);

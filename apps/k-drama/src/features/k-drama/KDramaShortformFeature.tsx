@@ -163,7 +163,7 @@ function YoutubeShortsPhoneContent({ sequenceStep }: YoutubeShortsPhoneContentPr
       </div>
       <div className={`k-drama-feature__shorts-caption${sequenceStep > 0 ? " is-visible" : ""}`}>
         <div>
-          <strong>@talkie.korean</strong>
+          <strong>@baetter.korean</strong>
           <span>Learn</span>
         </div>
         <strong>Learn today&apos;s phrase from this scene: 아저씨 사랑해요</strong>
