@@ -1,4 +1,10 @@
-import { useState, useEffect, type KeyboardEvent, type MouseEvent } from "react";
+import { useState, useEffect, useMemo, useRef, type KeyboardEvent, type MouseEvent } from "react";
+import {
+  createEngagementReporter,
+  createFormFunnelReporter,
+  discoverSections,
+  startEngagementTracking,
+} from "@landing/analytics";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
@@ -38,6 +44,15 @@ function preventCtaJump(event: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDi
   if ((event.target as Element).closest("a[href]")) event.preventDefault();
 }
 
+const featurePrefix = "k-drama-";
+const earlyAccessFormId = "early-access";
+const landingSections = [
+  ["hero", '[data-testid="hero"]'],
+  ["proof", "#proof"],
+  ["cta", "#cta"],
+  ["pricing", "#pricing"],
+] as const;
+
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
@@ -50,28 +65,59 @@ export function App({
   location = `/${runtime.locale}/`,
   submitEarlyAccessRegistration = unavailableEarlyAccessRegistration,
 }: AppProps) {
-  const [isEarlyAccessOpen, setEarlyAccessOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [earlyAccessSource, setEarlyAccessSource] = useState<string | null>(null);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (root === null) {
+      return;
+    }
+
+    return startEngagementTracking({
+      reporter: createEngagementReporter({ tracker: analytics }),
+      sections: discoverSections({ root, named: landingSections, featurePrefix }),
+    });
+  }, [analytics]);
+  const earlyAccessFunnel = useMemo(
+    () =>
+      earlyAccessSource === null
+        ? null
+        : createFormFunnelReporter({
+            tracker: analytics,
+            formId: earlyAccessFormId,
+            sourceId: earlyAccessSource,
+          }),
+    [analytics, earlyAccessSource],
+  );
+  useEffect(() => {
+    if (earlyAccessFunnel === null) {
+      return;
+    }
+
+    earlyAccessFunnel.opened();
+    return () => earlyAccessFunnel.closed();
+  }, [earlyAccessFunnel]);
   const content = createContent(runtime);
   const t = runtime.translate;
-  const openEarlyAccess = () => {
-    setEarlyAccessOpen(true);
+  const openEarlyAccess = (sourceId: string) => {
+    setEarlyAccessSource(sourceId);
     void analytics.track({ name: "cta_clicked" });
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
   };
   return (
-    <div id="top" data-testid="landing:k-drama">
+    <div ref={rootRef} id="top" data-testid="landing:k-drama">
       <LandingShell
         header={<Navbar {...createNavbarProps(runtime, location)} />}
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
           <div className="k-drama-hero">
-            <Hero content={content.hero} onAction={openEarlyAccess}>
+            <Hero content={content.hero} onAction={() => openEarlyAccess("hero")}>
               <div className="k-drama-hero__visuals">
                 <div
                   className="k-drama-hero-card k-drama-hero-card--video"
@@ -209,7 +255,7 @@ export function App({
                       data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
                       onClick={() => {
                         trackFeatureCta(feature.id);
-                        openEarlyAccess();
+                        openEarlyAccess(`feature:${feature.id}`);
                       }}
                     >
                       Get early access
@@ -220,20 +266,21 @@ export function App({
             })}
           </div>
           <div id="cta" onClickCapture={preventCtaJump} onKeyDownCapture={preventCtaJump}>
-            <CtaSection content={content.cta} onAction={openEarlyAccess} />
+            <CtaSection content={content.cta} onAction={() => openEarlyAccess("final-cta")} />
           </div>
           <div id="pricing">
             <PricingSection content={content.pricing} />
           </div>
         </LandingShell.Main>
       </LandingShell>
-      {isEarlyAccessOpen ? (
+      {earlyAccessFunnel !== null ? (
         <KDramaEarlyAccessPage
           runtime={runtime}
           location={location}
           overlay
           submitRegistration={submitEarlyAccessRegistration}
-          onClose={() => setEarlyAccessOpen(false)}
+          onClose={() => setEarlyAccessSource(null)}
+          funnel={earlyAccessFunnel}
         />
       ) : null}
     </div>

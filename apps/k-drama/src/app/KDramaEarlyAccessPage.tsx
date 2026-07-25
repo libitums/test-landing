@@ -1,4 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import type { FormFunnelReporter } from "@landing/analytics";
+import type { FormErrorCode } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import type { SubmitEarlyAccessRegistration } from "@landing/contracts/early-access";
 import { localizePath } from "@landing/i18n";
@@ -11,6 +13,13 @@ export interface KDramaEarlyAccessPageProps {
   submitRegistration?: SubmitEarlyAccessRegistration;
   overlay?: boolean;
   onClose?: () => void;
+  /** Optional so the page stays renderable in isolation, e.g. from tests. */
+  funnel?: FormFunnelReporter | undefined;
+}
+
+function submissionErrorCode(reason: unknown): FormErrorCode {
+  const code = (reason as { code?: unknown } | null)?.code;
+  return code === "validation" || code === "rate_limited" || code === "network" ? code : "server";
 }
 
 export function KDramaEarlyAccessPage({
@@ -19,6 +28,7 @@ export function KDramaEarlyAccessPage({
   submitRegistration,
   overlay = false,
   onClose,
+  funnel,
 }: KDramaEarlyAccessPageProps) {
   const [status, setStatus] = useState<"idle" | "pending" | "success" | "error">("idle");
   const t = runtime.translate;
@@ -48,15 +58,25 @@ export function KDramaEarlyAccessPage({
 
     const data = new FormData(form);
     setStatus("pending");
+    funnel?.submitted();
     try {
       await submitRegistration({
         email: String(data.get("email") ?? "").trim(),
         marketingConsent: data.get("marketingConsent") === "on",
       });
+      funnel?.succeeded();
       form.reset();
       setStatus("success");
-    } catch {
+    } catch (reason) {
+      funnel?.failed(submissionErrorCode(reason));
       setStatus("error");
+    }
+  }
+
+  function handleFieldChange(event: ChangeEvent<HTMLFormElement>) {
+    const fieldName = event.target.name;
+    if (typeof fieldName === "string" && fieldName !== "") {
+      funnel?.fieldTouched(fieldName);
     }
   }
 
@@ -136,7 +156,11 @@ export function KDramaEarlyAccessPage({
           >
             <h2 id="early-access-form-title">{t("earlyAccess.form.title")}</h2>
             <p>{t("earlyAccess.form.description")}</p>
-            <form className="early-access__form" onSubmit={handleSubmit}>
+            <form
+              className="early-access__form"
+              onSubmit={handleSubmit}
+              onChange={handleFieldChange}
+            >
               <label className="early-access__field--wide">
                 <span>{t("earlyAccess.form.email")}</span>
                 <Input name="email" type="email" autoComplete="email" required />
