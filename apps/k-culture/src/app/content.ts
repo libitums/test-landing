@@ -13,11 +13,16 @@ import { registry } from "../i18n";
 export function createNavbarProps(runtime: I18nRuntime, location: string): NavbarProps {
   const t = runtime.translate;
   return {
-    appearance: "neutral",
+    appearance: "violet-editorial",
     content: {
-      logo: { kind: "text", label: t("brand"), accessibleLabel: t("brand"), href: "#top" },
-      howItWorks: { label: t("nav.discover"), href: "#features" },
-      pricing: { label: t("nav.impact"), href: "#proof" },
+      logo: {
+        kind: "text",
+        label: t("brand"),
+        accessibleLabel: t("brand"),
+        href: "#top",
+      },
+      howItWorks: { label: t("nav.proof"), href: "#proof" },
+      pricing: { label: t("nav.pricing"), href: "#pricing" },
       language: {
         label: t("locale.label"),
         accessibleLabel: t("locale.label"),
@@ -60,14 +65,19 @@ export function createFooterProps(runtime: I18nRuntime, location: string): Foote
         heading: t("footer.faq.heading"),
         items: [
           {
-            id: "collection",
-            question: t("footer.faq.collection.question"),
-            answer: t("footer.faq.collection.answer"),
+            id: "clips",
+            question: t("footer.faq.clips.question"),
+            answer: t("footer.faq.clips.answer"),
           },
           {
-            id: "updates",
-            question: t("footer.faq.updates.question"),
-            answer: t("footer.faq.updates.answer"),
+            id: "real-life",
+            question: t("footer.faq.real-life.question"),
+            answer: t("footer.faq.real-life.answer"),
+          },
+          {
+            id: "register",
+            question: t("footer.faq.register.question"),
+            answer: t("footer.faq.register.answer"),
           },
         ],
       },
@@ -86,45 +96,56 @@ export function createContent(runtime: I18nRuntime) {
     hero: {
       title: t("hero.title"),
       description: t("hero.description"),
-      cta: { label: t("hero.explore") },
+      cta: { label: t("hero.cta") },
       highlights: [
-        { id: "music", label: t("features.music.title") },
-        { id: "taste", label: t("features.taste.title") },
-        { id: "style", label: t("features.style.title") },
+        { id: "clips", label: t("hero.highlight.clips") },
+        { id: "real-life", label: t("hero.highlight.real-life") },
+        { id: "register", label: t("hero.highlight.register") },
       ],
     } satisfies HeroContent,
     features: [
       {
-        id: "music",
-        title: t("features.music.title"),
-        description: t("features.music.description"),
+        id: "clips",
+        title: t("features.clips.title"),
+        description: t("features.clips.description"),
       },
       {
-        id: "taste",
-        title: t("features.taste.title"),
-        description: t("features.taste.description"),
+        id: "real-life",
+        title: t("features.real-life.title"),
+        description: t("features.real-life.description"),
       },
       {
-        id: "style",
-        title: t("features.style.title"),
-        description: t("features.style.description"),
+        id: "register",
+        title: t("features.register.title"),
+        description: t("features.register.description"),
       },
     ] satisfies readonly FeatureItem[],
     metrics: [
-      { id: "stories", value: t("proof.stories.value"), label: t("proof.stories.label") },
-      { id: "regions", value: t("proof.regions.value"), label: t("proof.regions.label") },
-      { id: "weekly", value: t("proof.weekly.value"), label: t("proof.weekly.label") },
+      { id: "clips", value: t("proof.clips.value"), label: t("proof.clips.label") },
+      { id: "situations", value: t("proof.situations.value"), label: t("proof.situations.label") },
+      {
+        id: "relationships",
+        value: t("proof.relationships.value"),
+        label: t("proof.relationships.label"),
+      },
     ] satisfies readonly ProofMetric[],
     cta: {
       badge: t("cta.badge"),
       title: t("cta.title"),
       description: t("cta.description"),
-      actions: [{ id: "discover", label: t("cta.action"), href: "#top", variant: "primary" }],
-      notes: [
-        { id: "card", label: t("cta.note.card") },
-        { id: "access", label: t("cta.note.access") },
+      actions: [
+        {
+          id: "early-access",
+          label: t("cta.action"),
+          href: "/k-culture/early-access",
+          variant: "primary",
+        },
       ],
-      ghostWords: ["EXPLORE", "TOGETHER"],
+      notes: [
+        { id: "clips", label: t("cta.note.clips") },
+        { id: "practice", label: t("cta.note.practice") },
+      ],
+      ghostWords: ["WATCH", "SPEAK"],
     } satisfies CtaContent,
     pricing: {
       kicker: t("pricing.kicker"),
@@ -144,8 +165,8 @@ export function createContent(runtime: I18nRuntime) {
           cta: t("pricing.free.cta"),
           features: [
             { id: "clips", label: t("pricing.free.feature.clips") },
-            { id: "captions", label: t("pricing.free.feature.captions") },
-            { id: "saved", label: t("pricing.free.feature.saved") },
+            { id: "phrases", label: t("pricing.free.feature.phrases") },
+            { id: "register", label: t("pricing.free.feature.register") },
           ],
         },
         {
@@ -158,9 +179,9 @@ export function createContent(runtime: I18nRuntime) {
           cta: t("pricing.plus.cta"),
           features: [
             { id: "unlimited", label: t("pricing.plus.feature.unlimited") },
-            { id: "import", label: t("pricing.plus.feature.import") },
-            { id: "offline", label: t("pricing.plus.feature.offline") },
-            { id: "reminders", label: t("pricing.plus.feature.reminders") },
+            { id: "situations", label: t("pricing.plus.feature.situations") },
+            { id: "drills", label: t("pricing.plus.feature.drills") },
+            { id: "review", label: t("pricing.plus.feature.review") },
           ],
         },
         {
@@ -170,10 +191,10 @@ export function createContent(runtime: I18nRuntime) {
           price: { monthly: "$9.99", annual: "$7.99", unit: t("pricing.unit") },
           cta: t("pricing.premium.cta"),
           features: [
+            { id: "everything", label: t("pricing.premium.feature.everything") },
             { id: "pronunciation", label: t("pricing.premium.feature.pronunciation") },
-            { id: "subtitles", label: t("pricing.premium.feature.subtitles") },
-            { id: "collections", label: t("pricing.premium.feature.collections") },
-            { id: "priority", label: t("pricing.premium.feature.priority") },
+            { id: "practice", label: t("pricing.premium.feature.practice") },
+            { id: "early-access", label: t("pricing.premium.feature.early-access") },
           ],
         },
       ],
