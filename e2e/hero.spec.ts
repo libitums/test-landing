@@ -7,16 +7,19 @@ const apps = [
     id: "k-drama",
     origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
     displayOnly: true,
+    hasMedia: true,
   },
   {
     id: "ai-communication",
     origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
     displayOnly: false,
+    hasMedia: true,
   },
   {
     id: "k-culture",
     origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
     displayOnly: false,
+    hasMedia: false,
   },
 ] as const;
 const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
@@ -106,9 +109,10 @@ for (const app of apps) {
       const highlights = hero.getByTestId(landingTestIds.heroHighlights);
       const media = hero.getByTestId(landingTestIds.heroMedia);
 
-      for (const element of [hero, heading, description, media]) {
+      for (const element of [hero, heading, description]) {
         await expect(element).toBeVisible();
       }
+      await expect(media).toHaveCount(app.hasMedia ? 1 : 0);
       if (app.displayOnly) {
         const label = hero.getByTestId(landingTestIds.heroLabel);
         const visuals = media.getByRole("img", { name: /\S+/ });
@@ -139,7 +143,7 @@ for (const app of apps) {
         await expect
           .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
           .toBe("rgb(255, 255, 255)");
-      } else {
+      } else if (app.hasMedia) {
         await expect(hero.getByTestId(landingTestIds.heroLabel)).toHaveCount(0);
         await expect(cta).toBeVisible();
         await expect(cta).toHaveRole("button");
@@ -150,10 +154,20 @@ for (const app of apps) {
         await expect(media.getByRole("group", { name: /\S+/ })).toBeVisible();
         await expectCentered(cta);
         await expectOrderedWithoutOverlap([heading, description, cta, highlights, media]);
+      } else {
+        await expect(hero.getByTestId(landingTestIds.heroLabel)).toHaveCount(0);
+        await expect(cta).toBeVisible();
+        await expect(cta).toHaveRole("button");
+        await expect(cta).toHaveText(/\S+/);
+        await expect(cta).not.toHaveAttribute("href");
+        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        await expect(highlights).toBeVisible();
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([heading, description, cta, highlights]);
       }
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
       expect(await hero.getAttribute("aria-labelledby")).toBe(await heading.getAttribute("id"));
-      await expect(media.locator("img")).toHaveCount(0);
+      if (app.hasMedia) await expect(media.locator("img")).toHaveCount(0);
       for (const element of [heading, description]) await expectCentered(element);
       await expectNoHorizontalOverflowWithin(hero);
       const { violations } = await new AxeBuilder({ page })
@@ -196,7 +210,7 @@ for (const app of apps) {
         await expect
           .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
           .toBe("rgb(255, 255, 255)");
-      } else {
+      } else if (app.hasMedia) {
         await expectCentered(cta);
         await expectOrderedWithoutOverlap([
           heading,
@@ -205,6 +219,10 @@ for (const app of apps) {
           hero.getByTestId(landingTestIds.heroHighlights),
           media,
         ]);
+      } else {
+        await expect(media).toHaveCount(0);
+        await expectCentered(cta);
+        await expectOrderedWithoutOverlap([heading, description, cta, highlights]);
       }
       await expectNoHorizontalOverflow(page);
     });

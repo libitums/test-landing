@@ -88,7 +88,8 @@ export interface LandingShellSlotProps {
 
 export interface HeroProps {
   content: HeroContent;
-  children: ContentSlot;
+  /** Optional app-owned media composition; omit when an app has no approved design children. */
+  children?: ContentSlot;
   onAction?: () => void;
   testId?: "hero";
 }

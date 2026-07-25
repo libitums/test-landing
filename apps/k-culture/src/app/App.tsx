@@ -24,7 +24,6 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
     void analytics.track({ name: "experiment_viewed" });
   }, [analytics]);
   const content = createContent(runtime);
-  const t = runtime.translate;
   const trackCta = () => {
     void analytics.track({ name: "cta_clicked" });
   };
@@ -38,17 +37,12 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
-          <Hero content={content.hero}>
-            <div
-              className="hero-media-card hero-media-card--culture"
-              role="group"
-              aria-label={t("hero.eyebrow")}
-            >
-              <span>{t("features.music.title")}</span>
-            </div>
-          </Hero>
+          <Hero content={content.hero} />
           <div id="proof">
-            <KCultureProofStrip metrics={content.metrics} title={t("proof.title")} />
+            <KCultureProofStrip
+              metrics={content.metrics}
+              title={runtime.translate("proof.title")}
+            />
           </div>
           <div id="features">
             {content.features.map((feature, index) => {
@@ -69,17 +63,17 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                     data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
                     onClick={() => trackFeatureCta(feature.id)}
                   >
-                    Get early access
+                    {runtime.translate("features.earlyAccess")}
                   </ButtonLink>
                 </SharedFeatureTemplate>
               );
             })}
           </div>
-          <div id="pricing">
-            <PricingSection content={content.pricing} />
-          </div>
           <div id="cta">
             <CtaSection content={content.cta} onAction={trackCta} />
+          </div>
+          <div id="pricing">
+            <PricingSection content={content.pricing} />
           </div>
         </LandingShell.Main>
       </LandingShell>

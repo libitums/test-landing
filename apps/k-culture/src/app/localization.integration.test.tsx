@@ -23,12 +23,33 @@ afterEach(() => {
 });
 
 describe("k-culture Phase 2 localization integration", () => {
+  const supportedLocales = [
+    "ko-KR",
+    "en-US",
+    "ja-JP",
+    "vi-VN",
+    "th-TH",
+    "zh-CN",
+    "zh-TW",
+    "ar",
+  ] as const;
+
+  it("registers the eight production locales in the shared navigation order", () => {
+    expect(registry.supportedLocales).toEqual(supportedLocales);
+    for (const localeName of supportedLocales) {
+      expect(getRuntime(`/${localeName}/campaign`).locale).toBe(localeName);
+      expect(getRuntime(`/${localeName}/campaign`).direction).toBe(
+        localeName === "ar" ? "rtl" : "ltr",
+      );
+    }
+  });
+
   it("enables pseudo runtime only through the explicit test entry", () => {
     expect(registry.supportedLocales).not.toContain("en-XA");
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", true).locale).toBe("en-XA");
     expect(getEntryRuntime("/ko-KR/campaign", "?pseudo=1", false).locale).toBe("ko-KR");
   });
-  it.each(["ko-KR", "en-US", "ar"] as const)(
+  it.each(supportedLocales)(
     "renders real %s translations with a complete key set and locale Intl formatting",
     (localeName) => {
       const runtime = getRuntime(`/${localeName}/campaign`);
@@ -38,6 +59,9 @@ describe("k-culture Phase 2 localization integration", () => {
       render(<App analytics={analytics} runtime={runtime} />);
 
       expect(screen.getByTestId("landing:k-culture")).toBeInTheDocument();
+      expect(screen.getByTestId("navbar-logo")).toHaveAccessibleName("K-zip");
+      expect(screen.getByTestId("navbar-logo")).toHaveTextContent("K-zip");
+      expect(screen.getByRole("contentinfo")).toHaveTextContent("K-zip");
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
         resources[localeName]["hero.title"],
       );
@@ -62,6 +86,7 @@ describe("k-culture Phase 2 localization integration", () => {
 
     expect(document.documentElement).toHaveAttribute("lang", "ar");
     expect(document.documentElement).toHaveAttribute("dir", "rtl");
+    expect(document.title).toBe("K-zip");
     expect(document.head.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
     expect(document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href).toBe(
       "http://localhost:3000/ar/campaign/launch",
@@ -73,6 +98,11 @@ describe("k-culture Phase 2 localization integration", () => {
     expect(Object.fromEntries(alternates.map((link) => [link.hreflang, link.href]))).toEqual({
       "ko-KR": "http://localhost:3000/ko-KR/campaign/launch",
       "en-US": "http://localhost:3000/en-US/campaign/launch",
+      "ja-JP": "http://localhost:3000/ja-JP/campaign/launch",
+      "vi-VN": "http://localhost:3000/vi-VN/campaign/launch",
+      "th-TH": "http://localhost:3000/th-TH/campaign/launch",
+      "zh-CN": "http://localhost:3000/zh-CN/campaign/launch",
+      "zh-TW": "http://localhost:3000/zh-TW/campaign/launch",
       ar: "http://localhost:3000/ar/campaign/launch",
     });
   });
@@ -82,15 +112,20 @@ describe("k-culture Phase 2 localization integration", () => {
     const links = screen.getAllByRole("link");
     const hrefs = links.map((link) => link.getAttribute("href"));
 
-    expect(screen.getByRole("link", { name: resources.ar["nav.cta"] })).toHaveAttribute(
+    expect(screen.getByTestId("navbar-try")).toHaveAttribute("href", "#cta");
+    expect(screen.getByTestId("navbar-how-it-works")).toHaveAttribute("href", "#proof");
+    expect(screen.getByTestId("navbar-pricing")).toHaveAttribute("href", "#pricing");
+    expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute(
       "href",
-      "#cta",
+      "/k-culture/early-access",
     );
-    expect(screen.getByRole("link", { name: resources.ar["cta.action"] })).toHaveAttribute(
-      "href",
-      "#top",
-    );
-    expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.lastIndexOf("#top"));
+    expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.indexOf("/k-culture/early-access"));
+    expect(
+      screen
+        .getByTestId("cta-section")
+        .compareDocumentPosition(screen.getByTestId("pricing-section")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     for (const link of links) {
       link.focus();
       expect(document.activeElement).toBe(link);
@@ -109,7 +144,7 @@ describe("k-culture Phase 2 localization integration", () => {
     languageTrigger.focus();
     fireEvent.keyDown(languageTrigger, { key: "ArrowDown" });
     const menu = await screen.findByRole("menu", { name: resources.ar["locale.label"] });
-    expect(menu.querySelectorAll("a")).toHaveLength(3);
+    expect(menu.querySelectorAll("a")).toHaveLength(8);
     expect(screen.getByRole("menuitem", { name: resources.ar["locale.ar"] })).toHaveAttribute(
       "aria-current",
       "page",
@@ -118,6 +153,9 @@ describe("k-culture Phase 2 localization integration", () => {
       "href",
       "/en-US/campaign/launch?experiment=A#proof",
     );
+    expect(
+      [...menu.querySelectorAll("a")].map((item) => item.getAttribute("href")?.split("/")[1]),
+    ).toEqual(["ko-KR", "en-US", "ja-JP", "vi-VN", "th-TH", "zh-CN", "zh-TW", "ar"]);
   });
 
   it("renders a 35% pseudo-locale without raw keys and retains CTA and landmarks", () => {
