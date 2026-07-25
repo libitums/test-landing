@@ -28,10 +28,16 @@ describe("AI communication landing", () => {
     expect(media).toBeInTheDocument();
     expect(media.querySelector("img")).toBeNull();
     fireEvent.click(action);
-    expect(adapter.events.map((event) => event.name)).toEqual(["experiment_viewed", "cta_clicked"]);
+    expect(adapter.events.map((event) => event.name)).toEqual([
+      "experiment_viewed",
+      "cta_clicked",
+      "form_opened",
+    ]);
+    expect(adapter.events[2]).toMatchObject({ formId: "early-access", sourceId: "hero" });
     expect(screen.getByRole("dialog", { name: "Reserve your spot" })).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("early-access-backdrop"));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(adapter.events[3]).toMatchObject({ name: "form_abandoned", lastFieldId: "none" });
     expect(screen.getByTestId("landing:ai-communication")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Role-play the situations/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Get instant corrections/i })).toBeInTheDocument();

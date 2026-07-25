@@ -1,4 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import {
+  createEngagementReporter,
+  discoverSections,
+  startEngagementTracking,
+} from "@landing/analytics";
 import type { AnalyticsTracker } from "@landing/contracts/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import { sharedFeatureTestIds } from "@landing/contracts/shared-feature";
@@ -14,14 +19,34 @@ import {
 } from "@landing/ui";
 import { KCultureProofStrip } from "../features/k-culture/KCultureProofStrip";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
+const featurePrefix = "k-culture-";
+const landingSections = [
+  ["hero", '[data-testid="hero"]'],
+  ["proof", "#proof"],
+  ["cta", "#cta"],
+  ["pricing", "#pricing"],
+] as const;
+
 export interface AppProps {
   analytics: AnalyticsTracker;
   runtime: I18nRuntime;
   location?: string;
 }
 export function App({ analytics, runtime, location = `/${runtime.locale}/` }: AppProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     void analytics.track({ name: "experiment_viewed" });
+  }, [analytics]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (root === null) {
+      return;
+    }
+
+    return startEngagementTracking({
+      reporter: createEngagementReporter({ tracker: analytics }),
+      sections: discoverSections({ root, named: landingSections, featurePrefix }),
+    });
   }, [analytics]);
   const content = createContent(runtime);
   const trackCta = () => {
@@ -31,7 +56,7 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
     void analytics.track({ name: "feature_cta_clicked", featureId });
   };
   return (
-    <div id="top" data-testid="landing:k-culture">
+    <div ref={rootRef} id="top" data-testid="landing:k-culture">
       <LandingShell
         header={<Navbar {...createNavbarProps(runtime, location)} />}
         footer={<Footer {...createFooterProps(runtime, location)} />}

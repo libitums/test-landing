@@ -6,6 +6,7 @@ import {
   type EarlyAccessValidationIssue,
   type SubmitEarlyAccessRegistration,
 } from "@landing/contracts/early-access";
+import type { FormFunnelReporter } from "@landing/analytics";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 import { Checkbox, Input } from "@landing/ui";
 
@@ -18,6 +19,8 @@ export interface EarlyAccessModalProps {
   runtime: I18nRuntime;
   submitRegistration: SubmitEarlyAccessRegistration;
   onClose: () => void;
+  /** Optional so the modal stays renderable in isolation, e.g. from stories and tests. */
+  funnel?: FormFunnelReporter | undefined;
 }
 
 function validate(email: string, marketingConsent: boolean): FieldErrors {
@@ -74,6 +77,7 @@ export function EarlyAccessModal({
   runtime,
   submitRegistration,
   onClose,
+  funnel,
 }: EarlyAccessModalProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [email, setEmail] = useState("");
@@ -138,6 +142,7 @@ export function EarlyAccessModal({
   }
 
   function handleEmailChange(event: ChangeEvent<HTMLInputElement>) {
+    funnel?.fieldTouched("email");
     setEmail(event.currentTarget.value);
     setStatus("idle");
     if (fieldErrors.email) {
@@ -146,6 +151,7 @@ export function EarlyAccessModal({
   }
 
   function handleConsentChange(event: ChangeEvent<HTMLInputElement>) {
+    funnel?.fieldTouched("marketingConsent");
     setMarketingConsent(event.currentTarget.checked);
     setStatus("idle");
     if (fieldErrors.marketingConsent) {
@@ -159,7 +165,9 @@ export function EarlyAccessModal({
 
     const trimmedEmail = email.trim();
     const clientErrors = validate(trimmedEmail, marketingConsent);
+    funnel?.submitted();
     if (Object.keys(clientErrors).length > 0) {
+      funnel?.failed("validation");
       setFieldErrors(clientErrors);
       setStatus("validation-error");
       focusFirstInvalid(clientErrors);
@@ -172,6 +180,7 @@ export function EarlyAccessModal({
     setStatus("pending");
     try {
       await submitRegistration({ email: trimmedEmail, marketingConsent });
+      funnel?.succeeded();
       setEmail("");
       setMarketingConsent(false);
       setStatus("success");
@@ -181,6 +190,7 @@ export function EarlyAccessModal({
         ? reason
         : { name: "EarlyAccessSubmissionError", code: "server" };
       const nextStatus = earlyAccessFailureStateByCode[error.code];
+      funnel?.failed(error.code);
       if (error.code === "validation") {
         const adapterErrors = fieldErrorsFromIssues(error.issues);
         setFieldErrors(adapterErrors);

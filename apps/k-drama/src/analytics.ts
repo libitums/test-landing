@@ -1,7 +1,8 @@
 import {
   createAnalyticsEventValidator,
   createAnalyticsTracker,
-  createNoopAnalyticsAdapter,
+  createBrowserAnalyticsAdapter,
+  resolveTrafficType,
   parseCountryHint,
 } from "@landing/analytics";
 import type {
@@ -12,8 +13,20 @@ import type {
   CountryAllowlist,
 } from "@landing/contracts/analytics";
 
-const productionConsent: ConsentProvider = { getState: () => "unknown" };
+/** No consent banner ships yet: measurement is granted, advertising signals stay denied. */
+const productionConsent: ConsentProvider = { getState: () => "granted" };
 const productionAllowedCountries: CountryAllowlist = new Set(["KR", "US"]);
+
+/** GA4 loads only in production builds that carry a measurement id. */
+function createProductionAdapter(search: string): AnalyticsAdapter {
+  return createBrowserAnalyticsAdapter({
+    trafficType: resolveTrafficType({ search }),
+    measurementId: import.meta.env.VITE_GA_MEASUREMENT_ID,
+    rollupMeasurementId: import.meta.env.VITE_GA_ROLLUP_MEASUREMENT_ID,
+    pixelId: import.meta.env.VITE_META_PIXEL_ID,
+    enabled: import.meta.env.PROD,
+  });
+}
 
 export interface AppAnalyticsDependencies {
   consent?: ConsentProvider;
@@ -40,7 +53,7 @@ export function createAppAnalytics(
       ),
     },
     consent: dependencies.consent ?? productionConsent,
-    adapter: dependencies.adapter ?? createNoopAnalyticsAdapter(),
+    adapter: dependencies.adapter ?? createProductionAdapter(search),
     validator: dependencies.validator ?? createAnalyticsEventValidator(),
   });
 }

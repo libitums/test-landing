@@ -71,10 +71,13 @@ describe("K-drama landing", () => {
     // Feature CTA opens the early-access modal and reports both its own feature
     // event and the shared cta_clicked.
     expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
-    await waitFor(() => expect(adapter.events).toHaveLength(3));
+    await waitFor(() => expect(adapter.events).toHaveLength(4));
     expect(adapter.events.map((event) => event.name)).toEqual(
-      expect.arrayContaining(["feature_cta_clicked", "cta_clicked"]),
+      expect.arrayContaining(["feature_cta_clicked", "cta_clicked", "form_opened"]),
     );
+    expect(adapter.events.find((event) => event.name === "form_opened")).toMatchObject({
+      sourceId: "feature:subtitles",
+    });
   });
 
   it("opens the early-access modal from the hero CTA and closes it on Escape", async () => {
