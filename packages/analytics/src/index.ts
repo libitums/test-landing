@@ -1,5 +1,4 @@
 import type {
-  AnalyticsAdapter,
   AnalyticsContext,
   AnalyticsEvent,
   AnalyticsEventName,
@@ -13,26 +12,22 @@ import type {
   CountryHint,
   InMemoryAnalyticsAdapter,
 } from "@landing/contracts/analytics";
-
-const eventNames = new Set<AnalyticsEventName>([
-  "experiment_viewed",
-  "cta_clicked",
-  "feature_cta_clicked",
-  "conversion_completed",
-]);
+import {
+  baseEventKeys,
+  contextStringFields,
+  eventSchemas,
+  formErrorCodes,
+  percentFields,
+} from "./event-schema";
+import type { EventFieldSchema } from "./event-schema";
 
 const projectIds = new Set(["k-drama", "ai-communication", "k-culture"]);
 
-const eventKeys = new Set([
-  "name",
-  "version",
-  "projectId",
-  "experimentId",
-  "variantId",
-  "locale",
-  "pageId",
-  "countryHint",
-]);
+function schemaFor(name: unknown): EventFieldSchema | undefined {
+  return typeof name === "string" && name in eventSchemas
+    ? eventSchemas[name as AnalyticsEventName]
+    : undefined;
+}
 
 function isRecord(candidate: unknown): candidate is Record<string, unknown> {
   if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) {
@@ -55,6 +50,15 @@ function addStringIssue(
   }
 }
 
+/** Durations and percentages are finite and non-negative; percentages also cap at 100. */
+function isMeasurement(value: unknown, isPercent: boolean): boolean {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    return false;
+  }
+
+  return !isPercent || value <= 100;
+}
+
 /** Strictly validates the closed version 1 event contract. */
 export const analyticsEventValidator: AnalyticsEventValidator = {
   validate(candidate: unknown): AnalyticsValidationResult {
@@ -63,23 +67,16 @@ export const analyticsEventValidator: AnalyticsEventValidator = {
     }
 
     const issues: AnalyticsValidationIssue[] = [];
+    const schema = schemaFor(candidate.name);
+    const payloadKeys = new Set(schema ? [...schema.strings, ...schema.numbers] : []);
 
     for (const key of Object.keys(candidate)) {
-      const isFeatureId = key === "featureId" && candidate.name === "feature_cta_clicked";
-      if (!eventKeys.has(key) && !isFeatureId) {
+      if (!baseEventKeys.has(key) && !payloadKeys.has(key)) {
         issues.push({ field: key, code: "unknown" });
       }
     }
 
-    for (const field of [
-      "name",
-      "projectId",
-      "experimentId",
-      "variantId",
-      "locale",
-      "pageId",
-      "countryHint",
-    ]) {
+    for (const field of ["name", ...contextStringFields]) {
       addStringIssue(candidate, field, issues);
     }
 
@@ -89,19 +86,32 @@ export const analyticsEventValidator: AnalyticsEventValidator = {
       issues.push({ field: "version", code: "invalid" });
     }
 
-    if (
-      typeof candidate.name === "string" &&
-      !eventNames.has(candidate.name as AnalyticsEventName)
-    ) {
+    if (typeof candidate.name === "string" && schema === undefined) {
       issues.push({ field: "name", code: "invalid" });
     }
 
-    if (candidate.name === "feature_cta_clicked") {
-      if (!("featureId" in candidate)) {
-        issues.push({ field: "featureId", code: "missing" });
-      } else if (typeof candidate.featureId !== "string" || candidate.featureId.trim() === "") {
-        issues.push({ field: "featureId", code: "invalid" });
+    for (const field of schema?.strings ?? []) {
+      if (!(field in candidate)) {
+        issues.push({ field, code: "missing" });
+      } else if (typeof candidate[field] !== "string" || String(candidate[field]).trim() === "") {
+        issues.push({ field, code: "invalid" });
       }
+    }
+
+    for (const field of schema?.numbers ?? []) {
+      if (!(field in candidate)) {
+        issues.push({ field, code: "missing" });
+      } else if (!isMeasurement(candidate[field], percentFields.has(field))) {
+        issues.push({ field, code: "invalid" });
+      }
+    }
+
+    if (
+      candidate.name === "form_failed" &&
+      typeof candidate.errorCode === "string" &&
+      !formErrorCodes.has(candidate.errorCode)
+    ) {
+      issues.push({ field: "errorCode", code: "invalid" });
     }
 
     if (typeof candidate.projectId === "string" && !projectIds.has(candidate.projectId)) {
@@ -147,10 +157,6 @@ export function parseCountryHint(search: string, allowlist: CountryAllowlist): C
   }
 }
 
-export function createNoopAnalyticsAdapter(): AnalyticsAdapter {
-  return { send: () => undefined };
-}
-
 export function createInMemoryAnalyticsAdapter(): InMemoryAnalyticsAdapter {
   const events: AnalyticsEvent[] = [];
 
@@ -194,12 +200,22 @@ export function createAnalyticsTracker(options: AnalyticsTrackerOptions): Analyt
           return { status: "invalid", issues: validation.issues };
         }
 
-        if (validation.event.name === "experiment_viewed") {
-          const key = exposureKey(validation.event);
-          if (recordedExposures.has(key)) {
-            return { status: "duplicate", name: "experiment_viewed" };
+        const event = validation.event;
+        const onceKey =
+          event.name === "experiment_viewed"
+            ? exposureKey(event)
+            : event.name === "section_viewed"
+              ? `section:${event.sectionId}`
+              : undefined;
+
+        if (onceKey !== undefined) {
+          if (recordedExposures.has(onceKey)) {
+            return {
+              status: "duplicate",
+              name: event.name as "experiment_viewed" | "section_viewed",
+            };
           }
-          recordedExposures.add(key);
+          recordedExposures.add(onceKey);
         }
 
         await options.adapter.send(validation.event);
@@ -210,6 +226,35 @@ export function createAnalyticsTracker(options: AnalyticsTrackerOptions): Analyt
     },
   };
 }
+
+export { createNoopAnalyticsAdapter } from "./noop-adapter";
+export { resolveTrafficType } from "./internal-traffic";
+export type {
+  InternalTrafficOptions,
+  InternalTrafficStorage,
+  TrafficType,
+} from "./internal-traffic";
+export { createEngagementReporter } from "./engagement-reporter";
+export type { EngagementReporter, EngagementReporterOptions } from "./engagement-reporter";
+export { startEngagementTracking } from "./engagement-dom";
+export type { EngagementTrackingOptions, TrackedSection } from "./engagement-dom";
+export { createFormFunnelReporter } from "./form-funnel";
+export type { FormFunnelOptions, FormFunnelReporter } from "./form-funnel";
+export { discoverSections, featureSectionId } from "./section-discovery";
+export type { SectionDiscoveryOptions } from "./section-discovery";
+export { eventSchemas } from "./event-schema";
+export type { EventFieldSchema } from "./event-schema";
+export { createBrowserAnalyticsAdapter } from "./browser-analytics";
+export type { BrowserAnalyticsOptions } from "./browser-analytics";
+export { createCompositeAnalyticsAdapter } from "./composite-adapter";
+export { createPixelAnalyticsAdapter } from "./pixel-adapter";
+export type { PixelAnalyticsAdapterOptions } from "./pixel-adapter";
+export { installPixel } from "./pixel-loader";
+export type { FbqFunction, InstallPixelOptions, PixelWindow } from "./pixel-loader";
+export { createGtagAnalyticsAdapter } from "./gtag-adapter";
+export type { GtagAnalyticsAdapterOptions } from "./gtag-adapter";
+export { installGtag } from "./gtag-loader";
+export type { GtagFunction, GtagWindow, InstallGtagOptions } from "./gtag-loader";
 
 export type {
   AnalyticsAdapter,
