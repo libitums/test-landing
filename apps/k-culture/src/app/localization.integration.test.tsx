@@ -117,9 +117,9 @@ describe("k-culture Phase 2 localization integration", () => {
     expect(screen.getByTestId("navbar-pricing")).toHaveAttribute("href", "#pricing");
     expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute(
       "href",
-      "/k-culture/early-access",
+      "#early-access",
     );
-    expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.indexOf("/k-culture/early-access"));
+    expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.indexOf("#early-access"));
     expect(
       screen
         .getByTestId("cta-section")

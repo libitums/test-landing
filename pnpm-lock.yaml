@@ -111,6 +111,9 @@ importers:
       '@landing/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@landing/early-access':
+        specifier: workspace:*
+        version: link:../../packages/early-access
       '@landing/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n

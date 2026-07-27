@@ -46,7 +46,7 @@ describe("K-culture temporary landing", () => {
       expect(section).toHaveClass(appearance);
       expect(within(section).getByRole("heading", { level: 2 })).toHaveTextContent(title);
       const action = within(section).getByRole("link", { name: "Get early access" });
-      expect(action).toHaveAttribute("href", "/k-culture/early-access");
+      expect(action).toHaveAttribute("href", "#early-access");
       expect(within(section).queryByRole("img")).not.toBeInTheDocument();
     }
 
@@ -54,7 +54,7 @@ describe("K-culture temporary landing", () => {
     expect(screen.getByTestId("pricing-plan:plus")).toHaveTextContent("Most popular");
     expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute(
       "href",
-      "/k-culture/early-access",
+      "#early-access",
     );
     expect(
       screen
@@ -67,19 +67,43 @@ describe("K-culture temporary landing", () => {
     );
 
     const featureAction = screen.getByTestId("shared-feature:k-culture-clips:early-access-cta");
-    featureAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
     fireEvent.click(featureAction);
-    await waitFor(() => expect(adapter.events).toHaveLength(2));
-    expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "feature_cta_clicked", featureId: "clips" }),
+    await waitFor(() => expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument());
+    expect(adapter.events).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "feature_cta_clicked", featureId: "clips" }),
+        expect.objectContaining({ name: "form_opened", sourceId: "feature:clips" }),
+      ]),
     );
+    fireEvent.click(screen.getByTestId("early-access-backdrop"));
 
     const finalAction = screen.getByTestId("cta-action:early-access");
-    finalAction.addEventListener("click", (event) => event.preventDefault(), { once: true });
     fireEvent.click(finalAction);
-    await waitFor(() => expect(adapter.events).toHaveLength(3));
-    expect(adapter.events[adapter.events.length - 1]).toEqual(
-      expect.objectContaining({ name: "cta_clicked" }),
+    await waitFor(() => expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument());
+    expect(adapter.events).toEqual(expect.arrayContaining([expect.objectContaining({ name: "cta_clicked" })]));
+  });
+
+  it("submits an early-access registration and tracks the form funnel", async () => {
+    const adapter = createInMemoryAnalyticsAdapter();
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter,
+      validator: createAnalyticsEventValidator(),
+    });
+    let submission: { email: string; marketingConsent: boolean } | undefined;
+    render(
+      <App
+        analytics={analytics}
+        runtime={getRuntime("/en-US/")}
+        submitEarlyAccessRegistration={async (value) => { submission = value; }}
+      />,
     );
+    fireEvent.click(screen.getByTestId("hero-cta"));
+    fireEvent.change(screen.getByTestId("early-access-email"), { target: { value: "learner@example.com" } });
+    fireEvent.click(screen.getByTestId("early-access-marketing-consent"));
+    fireEvent.click(screen.getByTestId("early-access-submit"));
+    await waitFor(() => expect(submission).toEqual({ email: "learner@example.com", marketingConsent: true }));
+    expect(adapter.events.map((event) => event.name)).toEqual(expect.arrayContaining(["form_opened", "form_started", "form_submitted", "conversion_completed"]));
+    expect(screen.getByTestId("early-access-status")).toHaveTextContent("You're on the list");
   });
 });

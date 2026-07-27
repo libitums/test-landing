@@ -14,6 +14,7 @@
     "@landing/analytics": "workspace:*",
     "@landing/contracts": "workspace:*",
     "@landing/design-tokens": "workspace:*",
+    "@landing/early-access": "workspace:*",
     "@landing/ui": "workspace:*",
     "@landing/i18n": "workspace:*",
     "react": "19.1.0",
