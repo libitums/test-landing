@@ -18,6 +18,9 @@ import {
   PricingSection,
 } from "@landing/ui";
 import { KCultureProofStrip } from "../features/k-culture/KCultureProofStrip";
+import { KCultureFeatureOne } from "../features/k-culture/KCultureFeatureOne";
+import { KCultureFeatureTwo } from "../features/k-culture/KCultureFeatureTwo";
+import { KCultureFeatureThree } from "../features/k-culture/KCultureFeatureThree";
 import { createContent, createFooterProps, createNavbarProps } from "./content";
 const featurePrefix = "k-culture-";
 const landingSections = [
@@ -81,6 +84,9 @@ export function App({ analytics, runtime, location = `/${runtime.locale}/` }: Ap
                   subheaderText={feature.description}
                   testId={sharedFeatureTestIds.root(featureTestId)}
                 >
+                  {index === 0 ? <KCultureFeatureOne /> : null}
+                  {index === 1 ? <KCultureFeatureTwo /> : null}
+                  {index === 2 ? <KCultureFeatureThree /> : null}
                   <ButtonLink
                     className="shared-feature__early-access-cta"
                     variant="text"
