@@ -138,14 +138,19 @@
 }
 #features > .shared-feature:first-child .shared-feature__early-access-cta {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
+  top: 25.75rem;
+  left: 7rem;
+  width: fit-content;
+  height: auto;
+  margin: 0;
   padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
   border: 0;
+  color: #5f6368;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-decoration: underline;
+  pointer-events: auto;
 }
 .k-feature-one__stage {
   position: absolute;
@@ -252,6 +257,7 @@
   #features > .shared-feature:first-child { height: 70rem; min-height: 70rem; }
   #features > .shared-feature:first-child .shared-feature__inner { height:70rem; min-height:70rem; padding-inline:2rem; }
   #features > .shared-feature:first-child .shared-feature__content { position:relative; inset:auto; margin-top:2rem; height:37rem; overflow:hidden; }
+  #features > .shared-feature:first-child .shared-feature__early-access-cta { top:-1.5rem; left:0; }
   .k-feature-one__device--guide { left:8%; top:9rem; scale:.78; transform-origin:top left; }
   .k-feature-one__device--meme { left:auto; right:4%; top:0; scale:.78; transform-origin:top right; }
 }
@@ -346,14 +352,19 @@
 }
 #features > .shared-feature:nth-child(2) .shared-feature__early-access-cta {
   position:absolute;
-  width:1px;
-  height:1px;
-  margin:-1px;
+  top:22.5rem;
+  left:6.125rem;
+  width:fit-content;
+  height:auto;
+  margin:0;
   padding:0;
-  overflow:hidden;
-  clip:rect(0 0 0 0);
-  white-space:nowrap;
   border:0;
+  color:#5f6368;
+  font-size:1rem;
+  font-weight:500;
+  line-height:1.45;
+  text-decoration:underline;
+  pointer-events:auto;
 }
 .k-feature-two__stage { position:absolute; inset:0; }
 .k-feature-two__lesson-phone {
@@ -415,6 +426,7 @@
   #features > .shared-feature:nth-child(2) .shared-feature__inner { height:auto; min-height:0; padding:5rem 2rem 0; }
   #features > .shared-feature:nth-child(2) .shared-feature__header { max-width:42rem; font-size:3.25rem; }
   #features > .shared-feature:nth-child(2) .shared-feature__content { position:relative; inset:auto; height:25.5rem; margin-top:2rem; overflow:hidden; }
+  #features > .shared-feature:nth-child(2) .shared-feature__early-access-cta { top:-1.5rem; left:0; }
   .k-feature-two__lesson-phone { left:50%; top:3rem; scale:.72; translate:-50% 0; transform-origin:top center; }
   .k-feature-two__situation { display:none; }
   .k-feature-two__situation--food { left:10%; --situation-slide:26.5rem; }.k-feature-two__situation--phone { left:25%; --situation-slide:17.5rem; }.k-feature-two__situation--school { left:40%; --situation-slide:8.5rem; }
@@ -487,14 +499,19 @@
 }
 #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta {
   position:absolute;
-  width:1px;
-  height:1px;
-  margin:-1px;
+  top:22rem;
+  left:6.25rem;
+  width:fit-content;
+  height:auto;
+  margin:0;
   padding:0;
-  overflow:hidden;
-  clip:rect(0 0 0 0);
-  white-space:nowrap;
   border:0;
+  color:#5f6368;
+  font-size:1rem;
+  font-weight:500;
+  line-height:1.45;
+  text-decoration:underline;
+  pointer-events:auto;
 }
 .k-feature-three__stage { position:absolute; inset:0; pointer-events:none; }
 .k-feature-three__composer { position:absolute; z-index:3; top:23.625rem; left:48.0625rem; display:flex; gap:.625rem; width:20.5625rem; height:3.25rem; opacity:0; pointer-events:auto; }
@@ -528,6 +545,7 @@
   #features > .shared-feature:nth-child(3) { height:68rem; }
   #features > .shared-feature:nth-child(3) .shared-feature__inner { height:68rem; padding:5rem 2rem 0; }
   #features > .shared-feature:nth-child(3) .shared-feature__content { position:relative; inset:auto; height:39rem; margin-top:2rem; overflow:hidden; }
+  #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta { top:-1.5rem; left:0; }
   .k-feature-three__composer { top:1rem; left:50%; translate:-50% 0; }
   .k-feature-three__scenes { position:absolute; top:5rem; left:50%; width:48rem; height:29rem; translate:-50% 0; }
   .k-feature-three__scene { top:0; scale:.72; transform-origin:top left; }.k-feature-three__scene--senior { left:0; }.k-feature-three__scene--elder { left:15rem; }.k-feature-three__scene--boss { left:30rem; }

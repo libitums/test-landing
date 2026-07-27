@@ -106,4 +106,39 @@ describe("K-culture temporary landing", () => {
     expect(adapter.events.map((event) => event.name)).toEqual(expect.arrayContaining(["form_opened", "form_started", "form_submitted", "conversion_completed"]));
     expect(screen.getByTestId("early-access-status")).toHaveTextContent("You're on the list");
   });
+
+  it("connects every feature CTA to its GA event and early-access modal", async () => {
+    const adapter = createInMemoryAnalyticsAdapter();
+    const analytics = createAppAnalytics("", {
+      consent: { getState: () => "granted" },
+      adapter,
+      validator: createAnalyticsEventValidator(),
+    });
+    render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
+
+    for (const featureId of ["clips", "real-life", "register"]) {
+      fireEvent.click(
+        screen.getByTestId(`shared-feature:k-culture-${featureId}:early-access-cta`),
+      );
+      await waitFor(() =>
+        expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument(),
+      );
+      fireEvent.click(screen.getByTestId("early-access-backdrop"));
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog", { name: "Get early access" })).not.toBeInTheDocument(),
+      );
+    }
+
+    expect(
+      adapter.events
+        .filter((event) => event.name === "feature_cta_clicked")
+        .map((event) => ("featureId" in event ? event.featureId : undefined)),
+    ).toEqual(["clips", "real-life", "register"]);
+    expect(
+      adapter.events
+        .filter((event) => event.name === "form_opened")
+        .map((event) => ("sourceId" in event ? event.sourceId : undefined)),
+    ).toEqual(["feature:clips", "feature:real-life", "feature:register"]);
+    expect(adapter.events.filter((event) => event.name === "cta_clicked")).toHaveLength(3);
+  });
 });
