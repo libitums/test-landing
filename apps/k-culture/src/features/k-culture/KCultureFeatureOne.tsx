@@ -1,8 +1,13 @@
+import { useEffect, useRef, useState } from "react";
+import type { I18nRuntime } from "@landing/contracts/i18n";
+
+type Translate = I18nRuntime["translate"];
+
 function SpeakerIcon() {
   return <span className="k-feature-one__speaker">◖))</span>;
 }
 
-function GuidePhone() {
+function GuidePhone({ t }: { t: Translate }) {
   return (
     <div className="k-feature-one__device k-feature-one__device--guide">
       <div className="k-feature-one__guide-handle" />
@@ -10,23 +15,23 @@ function GuidePhone() {
       <h3>Lucky Vicky</h3>
       <p className="k-feature-one__pronunciation">럭키비키&nbsp; · &nbsp;leok-ki-bi-ki</p>
       <div className="k-feature-one__word-row">
-        <div><strong>Lucky</strong><span>good fortune</span></div>
+        <div><strong>Lucky</strong><span>{t("visual.one.goodFortune")}</span></div>
         <i>＋</i>
-        <div><strong>Vicky</strong><span>Wonyoung’s English<br />name</span></div>
+        <div><strong>Vicky</strong><span>{t("visual.one.englishName")}</span></div>
       </div>
       <div className="k-feature-one__guide-dialog">
         <span className="k-feature-one__dog">🐶</span>
         <div>
-          <b>Reframe a small inconvenience as<br />unexpected good luck.</b>
-          <p>“The café sold out, so I got a fresh batch<br />— totally Lucky Vicky!”</p>
+          <b>{t("visual.one.definition")}</b>
+          <p>{t("visual.one.example")}</p>
         </div>
       </div>
-      <div className="k-feature-one__guide-button">Got it — lucky me! <span>✓</span></div>
+      <div className="k-feature-one__guide-button">{t("visual.one.confirm")} <span>✓</span></div>
     </div>
   );
 }
 
-function MemePhone() {
+function MemePhone({ t }: { t: Translate }) {
   return (
     <div className="k-feature-one__device k-feature-one__device--meme">
       <div className="k-feature-one__notch"><i /><b /></div>
@@ -35,19 +40,19 @@ function MemePhone() {
         <i className="horizontal-one" /><i className="horizontal-two" />
         <div className="k-feature-one__promo-copy">
           <span>Meme Shorts</span>
-          <strong>That meme?<br />Let me explain it.</strong>
-          <p>Meaning and origin, made simple.</p>
+          <strong>{t("visual.one.bannerTitle")}</strong>
+          <p>{t("visual.one.bannerDescription")}</p>
         </div>
         <img src="/images/study-dog-character-v6.png" alt="" />
       </div>
       <strong className="k-feature-one__content-title">Shorts Meme</strong>
-      <div className="k-feature-one__streak">♨ <span>100+ liking</span></div>
+      <div className="k-feature-one__streak">♨ <span>{t("visual.one.likes")}</span></div>
       <div className="k-feature-one__caption">
         <strong>Meme title</strong>
         <div><span>Dead</span><span>0:42</span></div>
-        <p>Tap to shadow the line, save it, or swipe for the next short clip.</p>
+        <p>{t("visual.one.instruction")}</p>
       </div>
-      <div className="k-feature-one__shadow-button"><span>♩</span> Start Shadowing</div>
+      <div className="k-feature-one__shadow-button"><span>♩</span> {t("visual.one.shadow")}</div>
       <small>be hind the meme</small>
       <div className="k-feature-one__progress"><i /></div>
       <div className="k-feature-one__home" />
@@ -55,7 +60,7 @@ function MemePhone() {
   );
 }
 
-export function KCultureFeatureOne() {
+export function KCultureFeatureOne({ t }: { t: Translate }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -86,9 +91,8 @@ export function KCultureFeatureOne() {
       className={`k-feature-one__stage${isVisible ? " k-feature-one__stage--visible" : ""}`}
       aria-hidden="true"
     >
-      <GuidePhone />
-      <MemePhone />
+      <GuidePhone t={t} />
+      <MemePhone t={t} />
     </div>
   );
 }
-import { useEffect, useRef, useState } from "react";

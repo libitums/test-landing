@@ -131,9 +131,9 @@ export function App({
                   subheaderText={feature.description}
                   testId={sharedFeatureTestIds.root(featureTestId)}
                 >
-                  {index === 0 ? <KCultureFeatureOne /> : null}
-                  {index === 1 ? <KCultureFeatureTwo /> : null}
-                  {index === 2 ? <KCultureFeatureThree /> : null}
+                  {index === 0 ? <KCultureFeatureOne t={runtime.translate} /> : null}
+                  {index === 1 ? <KCultureFeatureTwo t={runtime.translate} /> : null}
+                  {index === 2 ? <KCultureFeatureThree t={runtime.translate} /> : null}
                   <ButtonLink
                     className="shared-feature__early-access-cta"
                     variant="text"

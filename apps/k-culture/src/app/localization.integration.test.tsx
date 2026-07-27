@@ -86,7 +86,7 @@ describe("k-culture Phase 2 localization integration", () => {
 
     expect(document.documentElement).toHaveAttribute("lang", "ar");
     expect(document.documentElement).toHaveAttribute("dir", "rtl");
-    expect(document.title).toBe("K-zip");
+    expect(document.title).toBe("K-zip — Learn Korean through K-Culture");
     expect(document.head.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
     expect(document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href).toBe(
       "http://localhost:3000/ar/campaign/launch",
