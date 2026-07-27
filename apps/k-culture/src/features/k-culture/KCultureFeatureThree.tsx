@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import type { I18nRuntime } from "@landing/contracts/i18n";
 
-const roleplayScenes = [
-  { id: "senior", src: "/images/feature-03/senior.png", label: "Senior", tone: "Warm and respectful" },
-  { id: "elder", src: "/images/feature-03/elder-professor.png", label: "Elder professor", tone: "Formal honorific Korean" },
-  { id: "boss", src: "/images/feature-03/workplace-boss.png", label: "Workplace boss", tone: "Polite and professional" },
-] as const;
+type SceneId = "senior" | "elder" | "boss";
 
-function expressionFor(role: (typeof roleplayScenes)[number]["id"], message: string) {
+function expressionFor(role: SceneId, message: string) {
   const isSorry = /sorry|apolog/i.test(message);
   const isGreeting = /hello|nice to meet|meet you/i.test(message);
   if (isSorry) {
@@ -24,8 +21,13 @@ function expressionFor(role: (typeof roleplayScenes)[number]["id"], message: str
   return "오늘 도와주셔서 감사합니다.";
 }
 
-export function KCultureFeatureThree() {
-  const demoText = "Thank you so much for today";
+export function KCultureFeatureThree({ t }: { t: I18nRuntime["translate"] }) {
+  const demoText = t("visual.three.demo");
+  const roleplayScenes = [
+    { id: "senior", src: "/images/feature-03/senior.png", label: t("visual.three.senior.label"), tone: t("visual.three.senior.tone") },
+    { id: "elder", src: "/images/feature-03/elder-professor.png", label: t("visual.three.elder.label"), tone: t("visual.three.elder.tone") },
+    { id: "boss", src: "/images/feature-03/workplace-boss.png", label: t("visual.three.boss.label"), tone: t("visual.three.boss.tone") },
+  ] as const;
   const stageRef = useRef<HTMLDivElement>(null);
   const typingTimerRef = useRef<number | null>(null);
   const revealTimerRef = useRef<number | null>(null);
@@ -67,7 +69,7 @@ export function KCultureFeatureThree() {
       if (typingTimerRef.current !== null) window.clearInterval(typingTimerRef.current);
       if (revealTimerRef.current !== null) window.clearTimeout(revealTimerRef.current);
     };
-  }, [isVisible]);
+  }, [demoText, isVisible]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -88,9 +90,9 @@ export function KCultureFeatureThree() {
       <form className="k-feature-three__composer" onSubmit={submit}>
         <label className="k-feature-three__input">
           <span>◯</span>
-          <input value={draft} onChange={(event) => editDraft(event.target.value)} aria-label="English meaning to practice" placeholder="Type what you want to say in English" />
+          <input value={draft} onChange={(event) => editDraft(event.target.value)} aria-label={t("visual.three.inputLabel")} placeholder={t("visual.three.placeholder")} />
         </label>
-        <button className="k-feature-three__play" type="submit" aria-label="Show Korean expressions by relationship">▶</button>
+        <button className="k-feature-three__play" type="submit" aria-label={t("visual.three.submitLabel")}>▶</button>
       </form>
       <div className="k-feature-three__scenes">
         {roleplayScenes.map((scene) => (

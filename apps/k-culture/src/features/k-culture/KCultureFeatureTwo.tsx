@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import type { I18nRuntime } from "@landing/contracts/i18n";
 
-const situations = [
-  { className: "food", src: "/images/feature-02/food.png", cardSrc: "/images/feature-02/how-to-order.png", label: "Food", title: "How to order?", prompt: "How do you order in Korea?", action: "Start the lesson" },
-  { className: "phone", src: "/images/feature-02/phone.png", cardSrc: "/images/feature-02/idol-fansign-practice.png", label: "Phone", title: "Practice a fansign", prompt: "What will you say to your bias?", action: "Start practicing" },
-  { className: "school", src: "/images/feature-02/school.png", cardSrc: "/images/feature-02/school-life-lesson.png", label: "School", title: "School life basics", prompt: "Ready for your first day?", action: "Start the lesson" },
-] as const;
-
-export function KCultureFeatureTwo() {
+export function KCultureFeatureTwo({ t }: { t: I18nRuntime["translate"] }) {
+  const situations = [
+    { className: "food", src: "/images/feature-02/food.png", cardSrc: "/images/feature-02/how-to-order.png", label: "Food", title: t("visual.two.food.title"), prompt: t("visual.two.food.prompt"), action: t("visual.two.food.action") },
+    { className: "phone", src: "/images/feature-02/phone.png", cardSrc: "/images/feature-02/idol-fansign-practice.png", label: "Phone", title: t("visual.two.fansign.title"), prompt: t("visual.two.fansign.prompt"), action: t("visual.two.fansign.action") },
+    { className: "school", src: "/images/feature-02/school.png", cardSrc: "/images/feature-02/school-life-lesson.png", label: "School", title: t("visual.two.school.title"), prompt: t("visual.two.school.prompt"), action: t("visual.two.school.action") },
+  ] as const;
   const stageRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -43,7 +43,7 @@ export function KCultureFeatureTwo() {
         <div className="k-feature-two__notch"><i /><b /></div>
         <div className="k-feature-two__lesson-card">
           {active === null ? (
-            <div className="k-feature-two__skeleton" aria-label="Loading lesson">
+            <div className="k-feature-two__skeleton" aria-label={t("visual.two.loading")}>
               <i className="k-feature-two__skeleton-title" />
               <i className="k-feature-two__skeleton-subtitle" />
               <i className="k-feature-two__skeleton-image" />
