@@ -108,6 +108,7 @@ export function App({
   };
   const trackFeatureCta = (featureId: string) => {
     void analytics.track({ name: "feature_cta_clicked", featureId });
+    openEarlyAccess(`feature:${featureId}`);
   };
   return (
     <div ref={rootRef} id="top" data-testid="landing:k-drama">
@@ -255,7 +256,6 @@ export function App({
                       data-testid={sharedFeatureTestIds.earlyAccessCta(featureTestId)}
                       onClick={() => {
                         trackFeatureCta(feature.id);
-                        openEarlyAccess(`feature:${feature.id}`);
                       }}
                     >
                       Get early access
