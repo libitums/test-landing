@@ -81,6 +81,17 @@ async function expectVisibleFocus(page: Page) {
 }
 
 for (const app of apps) {
+  test(`${app.id} uses English when the route has no locale prefix`, async ({ page }) => {
+    await page.goto(`${app.origin}/campaign/launch?experiment=phase2`);
+
+    await expect(page.locator("html")).toHaveAttribute("lang", "en-US");
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `${app.origin}/en-US/campaign/launch`,
+    );
+  });
+
   for (const locale of app.locales) {
     test(`${app.id} renders ${locale.name} metadata and semantic focus order`, async ({ page }) => {
       // The focus-order walk traverses the full landing page. Disable smooth scrolling so
