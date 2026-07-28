@@ -515,9 +515,15 @@
 @media (max-width:64rem) {
   #features > .shared-feature:nth-child(3) { height:auto; min-height:0; }
   #features > .shared-feature:nth-child(3) .shared-feature__inner { height:auto; min-height:0; padding:5rem 2rem 0; }
-  .k-feature-three__stage { position:relative; inset:auto; width:100%; height:39rem; overflow:hidden; }
-  .k-feature-three__composer { top:1rem; left:50%; translate:-50% 0; }
-  .k-feature-three__scenes { position:absolute; top:5rem; left:50%; width:48rem; height:29rem; translate:-50% 0; }
+  /* Composer and scenes flow so the stage is as tall as what is actually drawn.
+     The scene box keeps an explicit size because its cards stay absolute and
+     `scale(.72)` does not shrink their layout boxes: 20.3125rem/28.125rem of
+     card, scaled, is 44.625rem x 20.25rem of visible artwork. `left`/`translate`
+     centering is kept over `margin-inline` so the box stays symmetrical — and
+     symmetrically clipped by the stage — on viewports narrower than it is. */
+  .k-feature-three__stage { position:relative; inset:auto; width:100%; height:auto; overflow:hidden; }
+  .k-feature-three__composer { position:relative; top:auto; left:50%; translate:-50% 0; }
+  .k-feature-three__scenes { position:relative; top:auto; left:50%; width:44.625rem; height:20.25rem; margin-top:1.5rem; translate:-50% 0; }
   .k-feature-three__scene { top:0; scale:.72; transform-origin:top left; }.k-feature-three__scene--friend { left:0; }.k-feature-three__scene--elder { left:15rem; }.k-feature-three__scene--boss { left:30rem; }
 }
 @media (max-width:40rem) {
@@ -525,9 +531,12 @@
   #features > .shared-feature:nth-child(3) .shared-feature__inner { height:auto; padding-block:4rem; }
   #features > .shared-feature:nth-child(3) .shared-feature__header { font-size:2.7rem; letter-spacing:-.06rem; }
   #features > .shared-feature:nth-child(3) .shared-feature__subheader { font-size:.875rem; }
-  .k-feature-three__stage { height:34rem; }
-  .k-feature-three__composer { width:18rem; }.k-feature-three__input { width:14.125rem; }
-  .k-feature-three__scenes { position:absolute; top:5rem; right:0; left:0; display:flex; flex-direction:column; gap:.75rem; width:100%; height:auto; translate:0 0; }
+  /* The stacked panels are already in the flow here, so the stage is sized by
+     its content instead of the fixed height the absolute overlay needed —
+     otherwise the leftover height shows up as dead space under the last card. */
+  .k-feature-three__stage { height:auto; overflow:visible; }
+  .k-feature-three__composer { position:relative; top:auto; left:auto; width:18rem; margin-inline:auto; translate:none; }.k-feature-three__input { width:14.125rem; }
+  .k-feature-three__scenes { position:relative; top:auto; right:auto; left:auto; display:flex; flex-direction:column; gap:.75rem; width:100%; height:auto; margin-top:1.5rem; translate:0 0; }
   .k-feature-three__scene,
   .k-feature-three__scene--friend,
   .k-feature-three__scene--elder,
