@@ -49,7 +49,7 @@ function assertRegistry(definitions: readonly LocaleDefinition[], defaultLocale:
 
 export function createLocaleRegistry(
   definitions: readonly LocaleDefinition[],
-  defaultLocale: Locale = locale("ko-KR"),
+  defaultLocale: Locale = locale("en-US"),
 ): LocaleRegistry {
   assertRegistry(definitions, defaultLocale);
 
@@ -72,6 +72,41 @@ export function createLocaleRegistry(
         : defaultLocale;
     },
   });
+}
+
+/** Matches browser language preferences to the closest supported locale. */
+export function detectPreferredLocale(
+  registry: LocaleRegistry,
+  requestedLocales: readonly string[],
+): Locale {
+  for (const requested of requestedLocales) {
+    const normalized = requested.trim().toLowerCase();
+    if (normalized.length === 0) continue;
+
+    const exact = registry.supportedLocales.find(
+      (candidate) => candidate.toLowerCase() === normalized,
+    );
+    if (exact !== undefined) return exact;
+
+    const language = normalized.split("-", 1)[0];
+    const languageMatch = registry.supportedLocales.find(
+      (candidate) => candidate.toLowerCase().split("-", 1)[0] === language,
+    );
+    if (languageMatch !== undefined) return languageMatch;
+  }
+
+  return registry.defaultLocale;
+}
+
+/** Adds a locale prefix on first entry while preserving explicit locale URLs. */
+export function localizeInitialPath(
+  registry: LocaleRegistry,
+  requested: string | undefined,
+  requestedLocales: readonly string[],
+): string {
+  const resolution = resolveLocalePath(registry, requested);
+  if (resolution.hadSupportedPrefix) return requested ?? resolution.pathname;
+  return localizePath(registry, requested, detectPreferredLocale(registry, requestedLocales));
 }
 
 export interface LocalePathResolution {

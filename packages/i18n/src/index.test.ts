@@ -6,7 +6,9 @@ import {
   createI18nRuntime,
   createLocaleRegistry,
   createRoutingMetadata,
+  detectPreferredLocale,
   locale,
+  localizeInitialPath,
   localizePath,
   pseudoLocale,
   resolveLocalePath,
@@ -35,15 +37,29 @@ describe("strict locale registry", () => {
     const registry = createLocaleRegistry(defs);
     expect(registry.resolve("/ar/page?utm_country=US")).toBe(locale("ar"));
     expect(resolveLocalePath(registry, "/products/one?secret=1#part")).toEqual({
-      locale: locale("ko-KR"),
-      pathname: "/ko-KR/products/one",
+      locale: locale("en-US"),
+      pathname: "/en-US/products/one",
       hadSupportedPrefix: false,
     });
-    expect(resolveLocalePath(registry, "/fr/products").pathname).toBe("/ko-KR/products");
-    expect(resolveLocalePath(registry, "/app/features").pathname).toBe("/ko-KR/app/features");
+    expect(resolveLocalePath(registry, "/fr/products").pathname).toBe("/en-US/products");
+    expect(resolveLocalePath(registry, "/app/features").pathname).toBe("/en-US/app/features");
     expect(
       localizePath(registry, "/ko-KR/products?experiment=variant-a#details", locale("ar")),
     ).toBe("/ar/products?experiment=variant-a#details");
+  });
+
+  it("defaults to English and localizes first entry from browser preferences", () => {
+    const registry = createLocaleRegistry(defs);
+    expect(registry.defaultLocale).toBe(locale("en-US"));
+    expect(detectPreferredLocale(registry, ["ja-JP", "ko-KR"])).toBe(locale("ko-KR"));
+    expect(detectPreferredLocale(registry, ["ar-EG"])).toBe(locale("ar"));
+    expect(detectPreferredLocale(registry, ["fr-FR"])).toBe(locale("en-US"));
+    expect(localizeInitialPath(registry, "/campaign?source=ad#hero", ["ko"])).toBe(
+      "/ko-KR/campaign?source=ad#hero",
+    );
+    expect(localizeInitialPath(registry, "/ar/campaign?source=ad#hero", ["ko"])).toBe(
+      "/ar/campaign?source=ad#hero",
+    );
   });
 
   it("rejects empty, duplicate, unregistered default, and unsupported target locales", () => {
@@ -66,6 +82,7 @@ describe("translation contracts", () => {
     expect(() =>
       assertRegistryResources(
         createLocaleRegistry([defs[0]!, { ...defs[1]!, resource: { greeting: "x", extra: "y" } }]),
+        locale("ko-KR"),
       ),
     ).toThrow("missing: count; extra: extra");
   });

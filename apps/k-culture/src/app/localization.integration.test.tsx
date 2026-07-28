@@ -78,8 +78,8 @@ describe("k-culture Phase 2 localization integration", () => {
   );
 
   it("normalizes unsupported/missing locales and applies route-preserving metadata idempotently", () => {
-    expect(getRuntime("/fr-FR/campaign/launch").locale).toBe("ko-KR");
-    expect(getRuntime("/campaign/launch").locale).toBe("ko-KR");
+    expect(getRuntime("/fr-FR/campaign/launch").locale).toBe("en-US");
+    expect(getRuntime("/campaign/launch").locale).toBe("en-US");
 
     applyLocaleMetadata("/ar/campaign/launch?utm_country=KR#proof");
     applyLocaleMetadata("/ar/campaign/launch?utm_country=US#features");

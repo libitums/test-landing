@@ -55,23 +55,23 @@ describe("Phase 2 localization integration contract", () => {
     }
   });
 
-  it("normalizes missing and locale-looking unsupported prefixes to ko-KR without treating an ordinary route as a locale", () => {
+  it("normalizes missing and locale-looking unsupported prefixes to en-US without treating an ordinary route as a locale", () => {
     expect(resolveLocalePath(registry, "/campaign/launch?utm_country=US#proof")).toEqual({
-      locale: locale("ko-KR"),
-      pathname: "/ko-KR/campaign/launch",
+      locale: locale("en-US"),
+      pathname: "/en-US/campaign/launch",
       hadSupportedPrefix: false,
     });
     expect(resolveLocalePath(registry, "/fr-FR/campaign/launch?ref=header")).toEqual({
-      locale: locale("ko-KR"),
-      pathname: "/ko-KR/campaign/launch",
+      locale: locale("en-US"),
+      pathname: "/en-US/campaign/launch",
       hadSupportedPrefix: false,
     });
     expect(resolveLocalePath(registry, "/app/features?ref=header")).toEqual({
-      locale: locale("ko-KR"),
-      pathname: "/ko-KR/app/features",
+      locale: locale("en-US"),
+      pathname: "/en-US/app/features",
       hadSupportedPrefix: false,
     });
-    expect(registry.resolve(undefined)).toBe(locale("ko-KR"));
+    expect(registry.resolve(undefined)).toBe(locale("en-US"));
   });
 
   it.each(["ko-KR", "en-US", "ar"] as const)(
