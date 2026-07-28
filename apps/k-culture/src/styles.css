@@ -562,3 +562,449 @@
     gap: var(--space-8);
   }
 }
+
+/* Hero media. The card is the k-drama hero's feed card carried over so the two
+   landings read as one family; only the copy and the accent differ. */
+.k-hero__visuals {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+.k-hero-card {
+  position: relative;
+  width: var(--media-card-compact);
+  max-width: 100%;
+  /* Taller than the k-drama original: the lesson card next to it only becomes
+     legible once the scale clears ~0.65, and that needs the height. */
+  height: 22.5rem;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  background: var(--color-editorial-fg);
+  box-shadow: var(--shadow-media-card);
+  color: var(--color-bg);
+}
+.k-hero-card__content {
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.k-hero-card__content strong {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+.k-hero-card__progress {
+  height: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-muted-fg);
+}
+.k-hero-card__progress::before {
+  content: "";
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-bg);
+}
+.k-hero-card--feed .k-hero-card__content {
+  position: relative;
+  padding: 0;
+  background: linear-gradient(to bottom, transparent, var(--color-editorial-fg));
+}
+.k-hero-card__feed-stream {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.k-hero-card__feed-slides {
+  height: 200%;
+  animation: k-hero-feed-swipe 7s ease-in-out infinite;
+}
+.k-hero-card__feed-slide {
+  box-sizing: border-box;
+  height: 50%;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+.k-hero-card__feed-slide > span {
+  color: var(--color-border);
+  font-size: var(--text-xs);
+  line-height: var(--leading-heading);
+}
+.k-hero-card__feed-heading {
+  margin-block-end: auto;
+}
+.k-hero-card__feed-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.k-hero-card__feed-chip {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  color: var(--color-bg);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  line-height: 1;
+}
+/* The hover shade, not the base accent: white 12px bold on #2a6bb0 measures
+   5.49:1 and on #225d9a more, so both clear the 4.5:1 axe threshold. */
+.k-hero-card__feed-chip--topic {
+  background: var(--color-editorial-accent-hover);
+}
+.k-hero-card__feed-chip--time {
+  border: 1px solid var(--color-bg);
+  background: transparent;
+}
+.k-hero-card--feed .k-hero-card__progress {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  width: 100%;
+}
+.k-hero-card--feed .k-hero-card__progress::before {
+  width: 0;
+  animation: k-hero-feed-progress 7s linear infinite;
+}
+@keyframes k-hero-feed-progress {
+  0% { width: 0; }
+  52%, 100% { width: 100%; }
+}
+@keyframes k-hero-feed-swipe {
+  0%, 56% { transform: translateY(0); }
+  64%, 100% { transform: translateY(-50%); }
+}
+.k-hero-card__feed-actions {
+  position: absolute;
+  inset-block-start: var(--space-12);
+  inset-inline-end: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.k-hero-card__feed-actions span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+.k-hero-card__feed-actions small {
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+}
+.k-hero-card__feed-action-icon {
+  width: var(--space-8);
+  height: var(--space-8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-drama-chip-fill);
+  color: var(--color-bg);
+  font-size: var(--text-xl);
+  font-style: normal;
+  line-height: 1;
+}
+.k-hero-card__feed-action-icon svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-hero-card__feed-slides,
+  .k-hero-card--feed .k-hero-card__progress::before {
+    animation: none;
+  }
+  .k-hero-card--feed .k-hero-card__progress::before {
+    width: 38%;
+  }
+}
+
+/* Second hero card: feature 02's situations and lesson card at their original
+   proportions, scaled down as a whole rather than re-laid-out, and driven by
+   the buttons instead of the timer that runs the same visual further down. */
+.k-hero-card--lesson {
+  width: var(--media-card-compact);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-media-card-soft);
+  color: var(--color-fg);
+}
+.k-hero-card--lesson .k-hero-card__content {
+  padding: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+/* The wrapper carries the *scaled* footprint so the flow sees the real size;
+   `transform` alone leaves a 20.75rem x 31.625rem layout box, which overflows
+   the card and gets pushed down rather than centred. */
+.k-hero-lesson {
+  --k-hero-lesson-scale: 0.68;
+  position: relative;
+  width: calc(20.75rem * var(--k-hero-lesson-scale));
+  height: calc(31.625rem * var(--k-hero-lesson-scale));
+}
+.k-hero-lesson__inner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 20.75rem;
+  transform: scale(var(--k-hero-lesson-scale));
+  transform-origin: top left;
+}
+:dir(rtl) .k-hero-lesson__inner {
+  transform-origin: top right;
+}
+/* Pinned so a longer locale cannot change the footprint the wrapper hardcodes. */
+.k-hero-lesson__copy {
+  height: 4.25rem;
+  overflow: hidden;
+}
+.k-hero-lesson__situations {
+  display: flex;
+  gap: 1rem;
+}
+.k-hero-lesson__situation {
+  display: grid;
+  place-items: center;
+  width: 6.25rem;
+  height: 6.25rem;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 1.5rem;
+  box-shadow: 0 0.5rem 1.25rem -0.125rem #0f172a33;
+}
+.k-hero-lesson__situation img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.k-hero-lesson__situation--food { background: #a9d7ff; }
+.k-hero-lesson__situation--phone { background: #fa9395; }
+.k-hero-lesson__situation--school { background: #bde6c8; }
+.k-hero-lesson__situation {
+  opacity: 0.45;
+  transition: opacity 0.32s var(--ease-standard);
+}
+.k-hero-lesson__situation--active {
+  opacity: 1;
+}
+.k-hero-lesson__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 18.75rem;
+  padding: 1.5rem 1.25rem 1.375rem;
+  border: 1px solid #e7ecf1;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 1.125rem 2.625rem -0.25rem #10243b2e;
+}
+.k-hero-lesson__copy {
+  width: 16.25rem;
+  text-align: center;
+}
+.k-hero-lesson__copy strong {
+  display: block;
+  margin: 0;
+  color: #111827;
+  font-size: 1.875rem;
+  line-height: 1.15;
+}
+.k-hero-lesson__copy p {
+  margin: 0.35rem 0 0;
+  color: #8a939f;
+  font-size: 0.875rem;
+}
+.k-hero-lesson__card > img {
+  display: block;
+  width: 16.25rem;
+  height: 12.6875rem;
+  object-fit: contain;
+}
+.k-hero-lesson__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 16.25rem;
+  height: 3.25rem;
+  border-radius: 1.125rem;
+  background: #97caf7;
+  /* Navy, not the white the feature-02 original uses: white on #97caf7 is
+     1.73:1 and axe scans the hero, which is above the fold. Feature 02 escapes
+     the scan only because its card is still a skeleton that far down. */
+  color: #10243b;
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+.k-hero-lesson__button i {
+  font-style: normal;
+  font-size: 1.25rem;
+}
+.k-hero-lesson__copy strong,
+.k-hero-lesson__copy p,
+.k-hero-lesson__card > img {
+  animation: k-feature-card-swap 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (max-width: 48rem) {
+  .k-hero__visuals {
+    grid-auto-flow: row;
+    justify-items: center;
+  }
+  .k-hero-card--lesson {
+    width: min(100%, var(--media-card-compact));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-hero-lesson__copy strong,
+  .k-hero-lesson__copy p,
+  .k-hero-lesson__card > img {
+    animation-duration: 0.001ms;
+  }
+  .k-hero-lesson__situation {
+    transition: none;
+  }
+}
+
+/* Third hero card: feature 03's roleplay scenes as a vertical list, the lines
+   arriving one after another so the register shift reads without scrolling. */
+.k-hero-card--registers {
+  background: var(--color-bg);
+  box-shadow: var(--shadow-media-card-soft);
+  color: var(--color-fg);
+}
+.k-hero-card--registers .k-hero-card__content {
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+.k-hero-registers__prompt {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-subtle-fg);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-heading);
+}
+.k-hero-registers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-3);
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.k-hero-registers__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+/* Block, not a centred grid: `place-items: center` leaves the image at its
+   intrinsic ratio because the percentage height resolves against an indefinite
+   grid area, so `object-fit` never engages and the overflow is pushed to the
+   top edge instead of being cropped. */
+.k-hero-registers__avatar {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-editorial-control);
+}
+.k-hero-registers__avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The friend artwork is the only portrait source (768x1376); a square cover
+   crop centred vertically lands on the table below the character. Its face
+   centres at ~56% of the original, which puts the crop window at 63% to bring
+   the face to the middle. The other two are landscape and fit their full
+   height, so they need no offset. */
+.k-hero-registers__avatar--friend img {
+  object-position: center 63%;
+}
+.k-hero-registers__bubble {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  border-start-start-radius: var(--space-1);
+  background: var(--color-surface);
+  box-shadow: 0 0.5rem 1.25rem #10243b14;
+  color: #111827;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+/* A rotated square rather than a border triangle, so the bubble's own border
+   and fill carry through the tail and it mirrors correctly in RTL. */
+.k-hero-registers__bubble::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0.8125rem;
+  inset-inline-start: -0.3125rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-inline-start: 1px solid var(--color-border);
+  border-block-start: 1px solid var(--color-border);
+  background: inherit;
+  transform: rotate(-45deg);
+}
+:dir(rtl) .k-hero-registers__bubble::before {
+  transform: rotate(45deg);
+}
+/* Staggered so the three registers land in order, then hold before repeating. */
+.k-hero-registers__row {
+  animation: k-hero-register-in 6s var(--ease-standard) infinite both;
+}
+.k-hero-registers__row:nth-child(2) {
+  animation-delay: 0.45s;
+}
+.k-hero-registers__row:nth-child(3) {
+  animation-delay: 0.9s;
+}
+@keyframes k-hero-register-in {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  8%,
+  92% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-hero-registers__row {
+    animation: none;
+  }
+}
