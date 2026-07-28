@@ -1,14 +1,19 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { locale, localizePath } from "@landing/i18n";
+import { locale, localizeInitialPath, localizePath } from "@landing/i18n";
 import { createEarlyAccessSubmissionAdapter } from "@landing/early-access";
 import "@landing/ui/styles.css";
 import "./styles.css";
 import { App } from "./app/App";
 import { createAppAnalytics } from "./analytics";
-import { applyLocaleMetadata, createTestRegistry, getEntryRuntime } from "./i18n";
+import { applyLocaleMetadata, createTestRegistry, getEntryRuntime, registry } from "./i18n";
 const pseudoEnabled = import.meta.env.DEV || import.meta.env.MODE === "test";
-const runtime = getEntryRuntime(window.location.pathname, window.location.search, pseudoEnabled);
+const requestedLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+const browserLanguages = navigator.languages.length > 0 ? navigator.languages : [navigator.language];
+const initialLocation = localizeInitialPath(registry, requestedLocation, browserLanguages);
+if (initialLocation !== requestedLocation) window.location.replace(initialLocation);
+const initialUrl = new URL(initialLocation, window.location.origin);
+const runtime = getEntryRuntime(initialUrl.pathname, initialUrl.search, pseudoEnabled);
 const analytics = createAppAnalytics(window.location.search, {}, runtime.locale);
 const submitEarlyAccessRegistration = createEarlyAccessSubmissionAdapter({
   projectId: "ai-communication",
@@ -17,16 +22,15 @@ const submitEarlyAccessRegistration = createEarlyAccessSubmissionAdapter({
 });
 const pseudoRegistry = runtime.locale === "en-XA" ? createTestRegistry() : undefined;
 const metadataPath = pseudoRegistry
-  ? localizePath(pseudoRegistry, window.location.pathname, locale("en-XA"))
-  : window.location.pathname;
+  ? localizePath(pseudoRegistry, initialUrl.pathname, locale("en-XA"))
+  : initialUrl.pathname;
 applyLocaleMetadata(metadataPath, pseudoRegistry);
-const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App
       analytics={analytics}
       runtime={runtime}
-      location={location}
+      location={initialLocation}
       submitEarlyAccessRegistration={submitEarlyAccessRegistration}
     />
   </StrictMode>,

@@ -37,9 +37,9 @@ describe("K-culture temporary landing", () => {
     );
 
     const features = [
-      ["clips", "Get the meme, then say it.", "shared-feature--white"],
-      ["real-life", "Not textbook Korean — the real thing", "shared-feature--soft"],
-      ["register", "One Meaning, Everyone Different", "shared-feature--white"],
+      ["clips", '"lucky vicky"...? What does that even mean?', "shared-feature--white"],
+      ["real-life", "What you actually need — in a pack", "shared-feature--soft"],
+      ["register", "\"Let's eat\" isn't one sentence in Korean", "shared-feature--white"],
     ] as const;
     for (const [id, title, appearance] of features) {
       const section = screen.getByTestId(`shared-feature:k-culture-${id}`);
@@ -50,12 +50,21 @@ describe("K-culture temporary landing", () => {
       expect(within(section).queryByRole("img")).not.toBeInTheDocument();
     }
 
+    const memeFeature = screen.getByTestId("shared-feature:k-culture-clips");
+    expect(memeFeature).toHaveTextContent(
+      "From your bias's catchphrases to iconic K-drama lines — what it means, where it came from, when to use it, all on one card. Found one you love? Play the clip, nail the delivery, and drop it with your friends like a local.",
+    );
+    expect(memeFeature).toHaveTextContent("Korea's freshest memes, shipped to your front door.");
+    expect(screen.getByTestId("shared-feature:k-culture-real-life")).toHaveTextContent(
+      "No textbook chapters. Only the stuff your hobby actually calls for, hand-picked.",
+    );
+    expect(screen.getByTestId("shared-feature:k-culture-register")).toHaveTextContent(
+      "Your friend, your sunbae, your bias, someone older — who you're talking to, what the situation is, how close you are: in Korean, all of it changes what you say. Chat with personas in a KakaoTalk-style sim: nail the tone and the conversation flows, miss it and watch them react. Make all your mistakes here — so when it counts, you sound natural.",
+    );
+
     expect(screen.getByTestId("k-culture-proof:clips")).toHaveTextContent("2 languages");
     expect(screen.getByTestId("pricing-plan:plus")).toHaveTextContent("Most popular");
-    expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute(
-      "href",
-      "#early-access",
-    );
+    expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute("href", "#early-access");
     expect(
       screen
         .getByTestId("cta-section")
@@ -68,7 +77,9 @@ describe("K-culture temporary landing", () => {
 
     const featureAction = screen.getByTestId("shared-feature:k-culture-clips:early-access-cta");
     fireEvent.click(featureAction);
-    await waitFor(() => expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument(),
+    );
     expect(adapter.events).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ name: "feature_cta_clicked", featureId: "clips" }),
@@ -79,8 +90,12 @@ describe("K-culture temporary landing", () => {
 
     const finalAction = screen.getByTestId("cta-action:early-access");
     fireEvent.click(finalAction);
-    await waitFor(() => expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument());
-    expect(adapter.events).toEqual(expect.arrayContaining([expect.objectContaining({ name: "cta_clicked" })]));
+    await waitFor(() =>
+      expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument(),
+    );
+    expect(adapter.events).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: "cta_clicked" })]),
+    );
   });
 
   it("submits an early-access registration and tracks the form funnel", async () => {
@@ -95,15 +110,28 @@ describe("K-culture temporary landing", () => {
       <App
         analytics={analytics}
         runtime={getRuntime("/en-US/")}
-        submitEarlyAccessRegistration={async (value) => { submission = value; }}
+        submitEarlyAccessRegistration={async (value) => {
+          submission = value;
+        }}
       />,
     );
     fireEvent.click(screen.getByTestId("hero-cta"));
-    fireEvent.change(screen.getByTestId("early-access-email"), { target: { value: "learner@example.com" } });
+    fireEvent.change(screen.getByTestId("early-access-email"), {
+      target: { value: "learner@example.com" },
+    });
     fireEvent.click(screen.getByTestId("early-access-marketing-consent"));
     fireEvent.click(screen.getByTestId("early-access-submit"));
-    await waitFor(() => expect(submission).toEqual({ email: "learner@example.com", marketingConsent: true }));
-    expect(adapter.events.map((event) => event.name)).toEqual(expect.arrayContaining(["form_opened", "form_started", "form_submitted", "conversion_completed"]));
+    await waitFor(() =>
+      expect(submission).toEqual({ email: "learner@example.com", marketingConsent: true }),
+    );
+    expect(adapter.events.map((event) => event.name)).toEqual(
+      expect.arrayContaining([
+        "form_opened",
+        "form_started",
+        "form_submitted",
+        "conversion_completed",
+      ]),
+    );
     expect(screen.getByTestId("early-access-status")).toHaveTextContent("You're on the list");
   });
 
@@ -117,9 +145,7 @@ describe("K-culture temporary landing", () => {
     render(<App analytics={analytics} runtime={getRuntime("/en-US/")} />);
 
     for (const featureId of ["clips", "real-life", "register"]) {
-      fireEvent.click(
-        screen.getByTestId(`shared-feature:k-culture-${featureId}:early-access-cta`),
-      );
+      fireEvent.click(screen.getByTestId(`shared-feature:k-culture-${featureId}:early-access-cta`));
       await waitFor(() =>
         expect(screen.getByRole("dialog", { name: "Get early access" })).toBeInTheDocument(),
       );

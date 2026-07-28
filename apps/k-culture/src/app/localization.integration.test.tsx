@@ -65,6 +65,20 @@ describe("k-culture Phase 2 localization integration", () => {
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
         resources[localeName]["hero.title"],
       );
+      const memeFeature = screen.getByTestId("shared-feature:k-culture-clips");
+      expect(memeFeature).toHaveTextContent(resources[localeName]["features.clips.title"]);
+      expect(memeFeature).toHaveTextContent(resources[localeName]["features.clips.description"]);
+      expect(memeFeature).toHaveTextContent(resources[localeName]["visual.one.bannerTitle"]);
+      const realLifeFeature = screen.getByTestId("shared-feature:k-culture-real-life");
+      expect(realLifeFeature).toHaveTextContent(resources[localeName]["features.real-life.title"]);
+      expect(realLifeFeature).toHaveTextContent(
+        resources[localeName]["features.real-life.description"],
+      );
+      const registerFeature = screen.getByTestId("shared-feature:k-culture-register");
+      expect(registerFeature).toHaveTextContent(resources[localeName]["features.register.title"]);
+      expect(registerFeature).toHaveTextContent(
+        resources[localeName]["features.register.description"],
+      );
       expect(document.body.textContent).not.toContain("hero.title");
       expect(runtime.formatNumber(123456.78)).toBe(
         new Intl.NumberFormat(localeName).format(123456.78),
@@ -78,8 +92,8 @@ describe("k-culture Phase 2 localization integration", () => {
   );
 
   it("normalizes unsupported/missing locales and applies route-preserving metadata idempotently", () => {
-    expect(getRuntime("/fr-FR/campaign/launch").locale).toBe("ko-KR");
-    expect(getRuntime("/campaign/launch").locale).toBe("ko-KR");
+    expect(getRuntime("/fr-FR/campaign/launch").locale).toBe("en-US");
+    expect(getRuntime("/campaign/launch").locale).toBe("en-US");
 
     applyLocaleMetadata("/ar/campaign/launch?utm_country=KR#proof");
     applyLocaleMetadata("/ar/campaign/launch?utm_country=US#features");
@@ -115,10 +129,7 @@ describe("k-culture Phase 2 localization integration", () => {
     expect(screen.getByTestId("navbar-try")).toHaveAttribute("href", "#cta");
     expect(screen.getByTestId("navbar-how-it-works")).toHaveAttribute("href", "#proof");
     expect(screen.getByTestId("navbar-pricing")).toHaveAttribute("href", "#pricing");
-    expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute(
-      "href",
-      "#early-access",
-    );
+    expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute("href", "#early-access");
     expect(hrefs.indexOf("#cta")).toBeLessThan(hrefs.indexOf("#early-access"));
     expect(
       screen
