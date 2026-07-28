@@ -98,8 +98,20 @@
   text-decoration-thickness: var(--space-1);
 }
 
+/* The pill treatment itself is shared (@landing/ui); only its placement inside
+   this app's feature stage is local. `order: -1` is a no-op on desktop, where
+   the stage is absolutely positioned and therefore not a flex item; on the
+   responsive layouts the stage joins the flow and the CTA has to stay between
+   the subheader and the visual. `pointer-events` is re-enabled because the
+   content wrapper disables them so the stage artwork cannot swallow clicks. */
+#features .shared-feature__early-access-cta.button--text {
+  order: -1;
+  align-self: flex-start;
+  pointer-events: auto;
+}
+
 #features > .shared-feature:first-child {
-  height: 56.25rem;
+  min-height: 56.25rem;
   padding-block: 0;
   overflow: hidden;
 }
@@ -107,7 +119,7 @@
   position: relative;
   width: min(100%, 90rem);
   max-width: none;
-  height: 56.25rem;
+  min-height: 56.25rem;
   padding: 6rem 0 0 7rem;
 }
 #features > .shared-feature:first-child .shared-feature__number {
@@ -133,27 +145,15 @@
   font-weight: 500;
   line-height: 1.58;
 }
+/* In the flow beneath the subheader, so longer localized copy pushes the CTA
+   down instead of running underneath it. The stage keeps `inset: 0` against
+   `__inner`, which is the same box it occupied when this wrapper was absolute. */
 #features > .shared-feature:first-child .shared-feature__content {
-  position: absolute;
-  inset: 0;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin: 2rem 0 0;
   pointer-events: none;
-}
-#features > .shared-feature:first-child .shared-feature__early-access-cta {
-  position: absolute;
-  top: 25.75rem;
-  left: 7rem;
-  width: fit-content;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  color: #5f6368;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.45;
-  text-decoration: underline;
-  pointer-events: auto;
 }
 .k-feature-one__stage {
   position: absolute;
@@ -257,10 +257,9 @@
 }
 
 @media (max-width: 64rem) {
-  #features > .shared-feature:first-child { height: 70rem; min-height: 70rem; }
-  #features > .shared-feature:first-child .shared-feature__inner { height:70rem; min-height:70rem; padding-inline:2rem; }
-  #features > .shared-feature:first-child .shared-feature__content { position:relative; inset:auto; margin-top:2rem; height:37rem; overflow:hidden; }
-  #features > .shared-feature:first-child .shared-feature__early-access-cta { top:-1.5rem; left:0; }
+  #features > .shared-feature:first-child { height:auto; min-height:0; }
+  #features > .shared-feature:first-child .shared-feature__inner { height:auto; min-height:0; padding:6rem 2rem 0; }
+  .k-feature-one__stage { position:relative; inset:auto; width:100%; height:37rem; overflow:hidden; }
   .k-feature-one__device--guide { left:8%; top:9rem; scale:.78; transform-origin:top left; }
   .k-feature-one__device--meme { left:auto; right:4%; top:0; scale:.78; transform-origin:top right; }
 }
@@ -269,7 +268,7 @@
   #features > .shared-feature:first-child .shared-feature__inner { height:auto; min-height:0; padding:4rem 2rem 0; }
   #features > .shared-feature:first-child .shared-feature__header { font-size:2.7rem; }
   #features > .shared-feature:first-child .shared-feature__subheader { font-size:1rem; }
-  #features > .shared-feature:first-child .shared-feature__content { height:29.25rem; }
+  .k-feature-one__stage { height:29.25rem; }
   .k-feature-one__device--guide {
     z-index:4;
     right:auto;
@@ -311,7 +310,7 @@
 }
 
 #features > .shared-feature:nth-child(2) {
-  height:56.25rem;
+  min-height:56.25rem;
   padding:0;
   overflow:hidden;
   background:#fff;
@@ -320,7 +319,7 @@
   position:relative;
   width:min(100%, 90rem);
   max-width:none;
-  height:56.25rem;
+  min-height:56.25rem;
   padding:4.375rem 0 0 6.125rem;
 }
 #features > .shared-feature:nth-child(2) .shared-feature__number {
@@ -348,26 +347,11 @@
   line-height:1.45;
 }
 #features > .shared-feature:nth-child(2) .shared-feature__content {
-  position:absolute;
-  inset:0;
-  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:1.75rem;
+  margin:2rem 0 0;
   pointer-events:none;
-}
-#features > .shared-feature:nth-child(2) .shared-feature__early-access-cta {
-  position:absolute;
-  top:22.5rem;
-  left:6.125rem;
-  width:fit-content;
-  height:auto;
-  margin:0;
-  padding:0;
-  border:0;
-  color:#5f6368;
-  font-size:1rem;
-  font-weight:500;
-  line-height:1.45;
-  text-decoration:underline;
-  pointer-events:auto;
 }
 .k-feature-two__stage { position:absolute; inset:0; }
 .k-feature-two__lesson-phone {
@@ -428,8 +412,7 @@
   #features > .shared-feature:nth-child(2) { height:auto; min-height:0; }
   #features > .shared-feature:nth-child(2) .shared-feature__inner { height:auto; min-height:0; padding:5rem 2rem 0; }
   #features > .shared-feature:nth-child(2) .shared-feature__header { max-width:42rem; font-size:3.25rem; }
-  #features > .shared-feature:nth-child(2) .shared-feature__content { position:relative; inset:auto; height:25.5rem; margin-top:2rem; overflow:hidden; }
-  #features > .shared-feature:nth-child(2) .shared-feature__early-access-cta { top:-1.5rem; left:0; }
+  .k-feature-two__stage { position:relative; inset:auto; width:100%; height:25.5rem; overflow:hidden; }
   .k-feature-two__lesson-phone { left:50%; top:3rem; scale:.72; translate:-50% 0; transform-origin:top center; }
   .k-feature-two__situation { display:none; }
   .k-feature-two__situation--food { left:10%; --situation-slide:26.5rem; }.k-feature-two__situation--phone { left:25%; --situation-slide:17.5rem; }.k-feature-two__situation--school { left:40%; --situation-slide:8.5rem; }
@@ -439,7 +422,7 @@
   #features > .shared-feature:nth-child(2) .shared-feature__inner { height:auto; min-height:0; padding:4rem 2rem 0; }
   #features > .shared-feature:nth-child(2) .shared-feature__header { font-size:2.7rem; }
   #features > .shared-feature:nth-child(2) .shared-feature__subheader { font-size:1rem; }
-  #features > .shared-feature:nth-child(2) .shared-feature__content { height:21.25rem; }
+  .k-feature-two__stage { height:21.25rem; }
   .k-feature-two__lesson-phone { top:2rem; scale:.62; }
   .k-feature-two__situation { top:18rem; scale:.52; }
   .k-feature-two__situation--food { left:1rem; --situation-slide:calc(50vw - 3rem); }.k-feature-two__situation--phone { left:5rem; --situation-slide:calc(50vw - 7rem); }.k-feature-two__situation--school { left:9rem; --situation-slide:calc(50vw - 11rem); }
@@ -456,7 +439,7 @@
 }
 
 #features > .shared-feature:nth-child(3) {
-  height:56.25rem;
+  min-height:56.25rem;
   padding:0;
   overflow:hidden;
   background:#fff;
@@ -465,7 +448,7 @@
   position:relative;
   width:min(100%, 90rem);
   max-width:none;
-  height:56.25rem;
+  min-height:56.25rem;
   padding:4.6875rem 0 0 5.5rem;
 }
 #features > .shared-feature:nth-child(3) .shared-feature__number {
@@ -495,26 +478,11 @@
   line-height:1.45;
 }
 #features > .shared-feature:nth-child(3) .shared-feature__content {
-  position:absolute;
-  inset:0;
-  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:1.75rem;
+  margin:2rem 0 0;
   pointer-events:none;
-}
-#features > .shared-feature:nth-child(3) .shared-feature__early-access-cta {
-  position:absolute;
-  top:22rem;
-  left:6.25rem;
-  width:fit-content;
-  height:auto;
-  margin:0;
-  padding:0;
-  border:0;
-  color:#5f6368;
-  font-size:1rem;
-  font-weight:500;
-  line-height:1.45;
-  text-decoration:underline;
-  pointer-events:auto;
 }
 .k-feature-three__stage { position:absolute; inset:0; pointer-events:none; }
 .k-feature-three__composer { position:absolute; z-index:3; top:23.625rem; left:48.0625rem; display:flex; gap:.625rem; width:20.5625rem; height:3.25rem; opacity:0; pointer-events:auto; }
@@ -545,20 +513,19 @@
 }
 
 @media (max-width:64rem) {
-  #features > .shared-feature:nth-child(3) { height:68rem; }
-  #features > .shared-feature:nth-child(3) .shared-feature__inner { height:68rem; padding:5rem 2rem 0; }
-  #features > .shared-feature:nth-child(3) .shared-feature__content { position:relative; inset:auto; height:39rem; margin-top:2rem; overflow:hidden; }
-  #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta { top:-1.5rem; left:0; }
+  #features > .shared-feature:nth-child(3) { height:auto; min-height:0; }
+  #features > .shared-feature:nth-child(3) .shared-feature__inner { height:auto; min-height:0; padding:5rem 2rem 0; }
+  .k-feature-three__stage { position:relative; inset:auto; width:100%; height:39rem; overflow:hidden; }
   .k-feature-three__composer { top:1rem; left:50%; translate:-50% 0; }
   .k-feature-three__scenes { position:absolute; top:5rem; left:50%; width:48rem; height:29rem; translate:-50% 0; }
   .k-feature-three__scene { top:0; scale:.72; transform-origin:top left; }.k-feature-three__scene--friend { left:0; }.k-feature-three__scene--elder { left:15rem; }.k-feature-three__scene--boss { left:30rem; }
 }
 @media (max-width:40rem) {
-  #features > .shared-feature:nth-child(3) { height:65rem; }
-  #features > .shared-feature:nth-child(3) .shared-feature__inner { height:65rem; padding-block:4rem; }
+  #features > .shared-feature:nth-child(3) { height:auto; }
+  #features > .shared-feature:nth-child(3) .shared-feature__inner { height:auto; padding-block:4rem; }
   #features > .shared-feature:nth-child(3) .shared-feature__header { font-size:2.7rem; letter-spacing:-.06rem; }
   #features > .shared-feature:nth-child(3) .shared-feature__subheader { font-size:.875rem; }
-  #features > .shared-feature:nth-child(3) .shared-feature__content { height:34rem; }
+  .k-feature-three__stage { height:34rem; }
   .k-feature-three__composer { width:18rem; }.k-feature-three__input { width:14.125rem; }
   .k-feature-three__scenes { position:absolute; top:5rem; right:0; left:0; display:flex; flex-direction:column; gap:.75rem; width:100%; height:auto; translate:0 0; }
   .k-feature-three__scene,
