@@ -1064,15 +1064,55 @@ button:focus-visible {
   inline-size: 100%;
   margin-block-start: var(--space-12);
 }
+/* The feature CTA is the section's action, not trailing prose, so it overrides
+   the text variant with a solid pill. `.button--text` stays on the element
+   because that is the class the shared feature contract pins; everything visual
+   comes from the accent tokens, so each app themes it by owning those. */
 .shared-feature__early-access-cta.button--text {
-  color: var(--color-subtle-fg);
-  font-weight: var(--font-normal);
-  text-decoration: underline;
+  min-block-size: 3rem;
+  inline-size: fit-content;
+  justify-content: center;
+  padding-inline: var(--space-7);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  text-decoration: none;
+  box-shadow: var(--shadow-cta);
+  transition:
+    background var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 }
-.shared-feature__early-access-cta.button--text:hover,
+.shared-feature__early-access-cta.button--text:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-accent-fg);
+  text-decoration: none;
+  transform: translateY(-0.125rem);
+}
 .shared-feature__early-access-cta.button--text:active {
-  color: var(--color-link-interactive);
-  text-decoration: underline;
+  background: var(--color-accent-active);
+  color: var(--color-accent-fg);
+  text-decoration: none;
+  transform: translateY(0);
+}
+/* Restated because the pill's own box-shadow would otherwise beat the shared
+   :focus-visible ring on specificity and leave the control without one. */
+.shared-feature__early-access-cta.button--text:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-cta);
+}
+@media (prefers-reduced-motion: reduce) {
+  .shared-feature__early-access-cta.button--text {
+    transition: none;
+  }
+  .shared-feature__early-access-cta.button--text:hover {
+    transform: none;
+  }
 }
 .shared-feature__content img,
 .shared-feature__content video,
