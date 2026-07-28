@@ -13,7 +13,7 @@ export interface FeatureEarlyAccessAction {
   featureId: string;
   label: "Get early access";
   href: FeatureEarlyAccessDestination;
-  presentation: "text-link";
+  presentation: "accent-pill";
 }
 
 /**
