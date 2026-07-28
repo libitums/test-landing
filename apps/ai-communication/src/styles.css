@@ -1486,28 +1486,17 @@
   justify-self: center;
 }
 
+/* Placement only — the pill treatment is shared (@landing/ui). The accent is
+   remapped here because this app only redefines --color-accent on the early
+   access page, so the landing CTA would otherwise paint itself the token
+   default blue inside a violet editorial palette. The hover shade is the base:
+   --color-editorial-accent is 4.56:1 on white and the hover state has to clear
+   4.5:1 as well, so starting one step darker keeps both ends comfortable. */
 .shared-feature__early-access-cta.button--text {
+  --color-accent: var(--color-editorial-accent-hover);
+  --color-accent-hover: var(--color-editorial-accent-active);
+  --color-accent-active: var(--color-editorial-accent-active);
   justify-self: start;
-  inline-size: fit-content;
-  block-size: auto;
-  min-block-size: 0;
-  padding: var(--space-0);
-  color: var(--color-subtle-fg);
-  font-size: var(--text-base);
-  font-weight: var(--font-normal);
-  line-height: var(--leading-body);
-  text-decoration: underline;
-}
-
-.shared-feature__early-access-cta.button--text:hover,
-.shared-feature__early-access-cta.button--text:active {
-  color: var(--color-link-interactive);
-  text-decoration: underline;
-}
-
-.shared-feature__early-access-cta.button--text:focus-visible {
-  outline-color: var(--color-focus);
-  box-shadow: var(--focus-ring);
 }
 
 [data-mobile="true"] .feature-roleplay,
