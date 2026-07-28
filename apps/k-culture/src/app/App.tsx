@@ -20,6 +20,7 @@ import {
   SharedFeatureTemplate,
   PricingSection,
 } from "@landing/ui";
+import { KCultureHeroVisuals } from "../features/k-culture/KCultureHeroVisuals";
 import { KCultureProofStrip } from "../features/k-culture/KCultureProofStrip";
 import { KCultureFeatureOne } from "../features/k-culture/KCultureFeatureOne";
 import { KCultureFeatureTwo } from "../features/k-culture/KCultureFeatureTwo";
@@ -112,7 +113,9 @@ export function App({
         footer={<Footer {...createFooterProps(runtime, location)} />}
       >
         <LandingShell.Main>
-          <Hero content={content.hero} onAction={() => openEarlyAccess("hero")} />
+          <Hero content={content.hero} onAction={() => openEarlyAccess("hero")}>
+            <KCultureHeroVisuals t={runtime.translate} />
+          </Hero>
           <div id="proof">
             <KCultureProofStrip
               metrics={content.metrics}
