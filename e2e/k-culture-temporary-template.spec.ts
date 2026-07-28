@@ -10,25 +10,25 @@ const features = [
     id: "clips",
     number: "01",
     appearance: "white",
-    title: "Get the meme, then say it.",
+    title: '"lucky vicky"…? What does that even mean?',
     subtitle:
-      "Watch YouTube clips and K-drama scenes with Korean and your language side by side. Tap any subtitle to replay the moment, understand words in context, and save natural Korean phrases for review.",
+      "Your bias's catchphrases, iconic drama lines, viral variety-show moments — meaning, origin, and real examples, all on one card. Play the clip, copy the delivery, then drop it in the group chat.",
   },
   {
     id: "real-life",
     number: "02",
     appearance: "soft",
-    title: "Not textbook Korean — the real thing",
+    title: "No textbook — just what you actually need, in a pack",
     subtitle:
-      "From the situations you'll actually hit living in Korea—hospitals, city offices, part-time jobs—to fan meets, video calls, and cheering on your bias. Learn the Korean your K-pop life actually needs.",
+      "K-Pop Stan Pack — the exact lines for video call fansigns, plus fansign & photocard culture.\nKorea Trip Pack — the few phrases you'll really use, plus insider tips only locals know.",
   },
   {
     id: "register",
     number: "03",
     appearance: "white",
-    title: "One Meaning,\nEveryone Different",
+    title: "\"Let's eat\" isn't just one phrase in Korean",
     subtitle:
-      "Pick who you're talking to—your boss, a close friend, an elder, a stranger—and say the same thing to each. Watch the words shift with the person, and drill it until switching feels automatic.",
+      "Friend, sunbae, your boss, someone older — chat with each of them, switching as you go. Their reactions and your affinity score tell you how you're doing. Make your mistakes here — and only here.",
   },
 ] as const;
 
@@ -89,9 +89,9 @@ test.describe("K-culture temporary shared template", () => {
     await expect(localeControl).toBeVisible();
     await expect(localeControl).toHaveRole("button");
     await expect(hero.getByRole("heading", { level: 1 })).toHaveText(
-      "Learn the Korean behind the culture.",
+      "The real Korean you actually wanted to learn",
     );
-    await expect(proof.getByRole("heading")).toHaveText("One language. Every side of your K-life.");
+    await expect(proof.getByRole("heading")).toHaveText("Everything the textbook left out.");
     for (const [index, feature] of features.entries()) {
       const root = featureRoots[index];
       if (!root) throw new Error(`missing feature locator for ${feature.id}`);
@@ -189,7 +189,7 @@ test.describe("K-culture temporary shared template", () => {
       await expect(page).toHaveTitle("K-zip");
       const heading = page.getByRole("heading", { level: 1 });
       await expect(heading).toBeVisible();
-      await expect(heading).not.toHaveText("Learn the Korean behind the culture.");
+      await expect(heading).not.toHaveText("The real Korean you actually wanted to learn");
       await expect(heading).not.toHaveText(/^(?:hero|features|cta|nav|footer|proof|pricing)\./);
       await expect(page.locator("body")).not.toContainText(
         /(?:hero|features|cta|nav|footer|proof|pricing)\.[a-z.-]+/,
