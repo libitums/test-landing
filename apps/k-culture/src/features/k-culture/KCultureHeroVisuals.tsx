@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 
 type Translate = I18nRuntime["translate"];
@@ -5,16 +6,21 @@ type Translate = I18nRuntime["translate"];
 /**
  * Hero media slot.
  *
- * The card is the k-drama hero's feed card carried over so the two landings
- * read as one family; only the copy differs. Its inner text is `aria-hidden`
- * decoration — the Korean lines are the subject matter being taught rather than
- * interface text, so they stay untranslated and the card exposes a single
- * localized label instead.
+ * The first card is the k-drama hero's feed card carried over so the two
+ * landings read as one family; only the copy differs. Its inner text is
+ * `aria-hidden` decoration — the Korean lines are the subject matter being
+ * taught rather than interface text, so they stay untranslated and the card
+ * exposes a single localized label instead.
+ *
+ * The second card is feature 02's situations and lesson card at their original
+ * proportions, scaled down as a whole rather than re-laid-out, cycling on their
+ * own so the hero shows the switch without asking for a click.
  */
 export function KCultureHeroVisuals({ t }: { t: Translate }) {
   return (
     <div className="k-hero__visuals">
       <FeedCard t={t} />
+      <LessonCard t={t} />
     </div>
   );
 }
@@ -62,6 +68,82 @@ function FeedCard({ t }: { t: Translate }) {
           </span>
         </div>
         <div className="k-hero-card__progress" />
+      </div>
+    </div>
+  );
+}
+
+function LessonCard({ t }: { t: Translate }) {
+  const situations = [
+    {
+      id: "food",
+      src: "/images/feature-02/food.png",
+      cardSrc: "/images/feature-02/how-to-order.png",
+      title: t("visual.two.food.title"),
+      prompt: t("visual.two.food.prompt"),
+      action: t("visual.two.food.action"),
+    },
+    {
+      id: "phone",
+      src: "/images/feature-02/phone.png",
+      cardSrc: "/images/feature-02/idol-fansign-practice.png",
+      title: t("visual.two.fansign.title"),
+      prompt: t("visual.two.fansign.prompt"),
+      action: t("visual.two.fansign.action"),
+    },
+    {
+      id: "school",
+      src: "/images/feature-02/school.png",
+      cardSrc: "/images/feature-02/school-life-lesson.png",
+      title: t("visual.two.school.title"),
+      prompt: t("visual.two.school.prompt"),
+      action: t("visual.two.school.action"),
+    },
+  ] as const;
+  const [index, setIndex] = useState(0);
+  const active = situations[index % situations.length] ?? situations[0];
+
+  useEffect(() => {
+    // Nothing to clean up when the visitor asked for less motion: the card just
+    // stays on the situation it started with.
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setIndex((current) => current + 1), 2600);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return (
+    <div
+      className="k-hero-card k-hero-card--lesson"
+      role="img"
+      aria-label={t("hero.visual.situations")}
+    >
+      <div className="k-hero-card__content" aria-hidden="true">
+        <div className="k-hero-lesson">
+          <div className="k-hero-lesson__inner">
+            <div className="k-hero-lesson__situations">
+              {situations.map((situation) => (
+                <div
+                  key={situation.id}
+                  className={`k-hero-lesson__situation k-hero-lesson__situation--${situation.id}${
+                    situation.id === active.id ? " k-hero-lesson__situation--active" : ""
+                  }`}
+                >
+                  <img src={situation.src} alt="" />
+                </div>
+              ))}
+            </div>
+            <div className="k-hero-lesson__card">
+              <div className="k-hero-lesson__copy">
+                <strong key={active.title}>{active.title}</strong>
+                <p key={active.prompt}>{active.prompt}</p>
+              </div>
+              <img key={active.cardSrc} src={active.cardSrc} alt="" />
+              <span className="k-hero-lesson__button">
+                {active.action} <i>→</i>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

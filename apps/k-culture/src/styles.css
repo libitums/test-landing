@@ -728,3 +728,153 @@
     width: 38%;
   }
 }
+
+/* Second hero card: feature 02's situations and lesson card at their original
+   proportions, scaled down as a whole rather than re-laid-out, and driven by
+   the buttons instead of the timer that runs the same visual further down. */
+.k-hero-card--lesson {
+  width: var(--media-card-compact);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-media-card-soft);
+  color: var(--color-fg);
+}
+.k-hero-card--lesson .k-hero-card__content {
+  padding: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+/* The wrapper carries the *scaled* footprint so the flow sees the real size;
+   `transform` alone leaves a 20.75rem x 31.625rem layout box, which overflows
+   the card and gets pushed down rather than centred. */
+.k-hero-lesson {
+  --k-hero-lesson-scale: 0.68;
+  position: relative;
+  width: calc(20.75rem * var(--k-hero-lesson-scale));
+  height: calc(31.625rem * var(--k-hero-lesson-scale));
+}
+.k-hero-lesson__inner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 20.75rem;
+  transform: scale(var(--k-hero-lesson-scale));
+  transform-origin: top left;
+}
+:dir(rtl) .k-hero-lesson__inner {
+  transform-origin: top right;
+}
+/* Pinned so a longer locale cannot change the footprint the wrapper hardcodes. */
+.k-hero-lesson__copy {
+  height: 4.25rem;
+  overflow: hidden;
+}
+.k-hero-lesson__situations {
+  display: flex;
+  gap: 1rem;
+}
+.k-hero-lesson__situation {
+  display: grid;
+  place-items: center;
+  width: 6.25rem;
+  height: 6.25rem;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 1.5rem;
+  box-shadow: 0 0.5rem 1.25rem -0.125rem #0f172a33;
+}
+.k-hero-lesson__situation img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.k-hero-lesson__situation--food { background: #a9d7ff; }
+.k-hero-lesson__situation--phone { background: #fa9395; }
+.k-hero-lesson__situation--school { background: #bde6c8; }
+.k-hero-lesson__situation {
+  opacity: 0.45;
+  transition: opacity 0.32s var(--ease-standard);
+}
+.k-hero-lesson__situation--active {
+  opacity: 1;
+}
+.k-hero-lesson__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 18.75rem;
+  padding: 1.5rem 1.25rem 1.375rem;
+  border: 1px solid #e7ecf1;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 1.125rem 2.625rem -0.25rem #10243b2e;
+}
+.k-hero-lesson__copy {
+  width: 16.25rem;
+  text-align: center;
+}
+.k-hero-lesson__copy strong {
+  display: block;
+  margin: 0;
+  color: #111827;
+  font-size: 1.875rem;
+  line-height: 1.15;
+}
+.k-hero-lesson__copy p {
+  margin: 0.35rem 0 0;
+  color: #8a939f;
+  font-size: 0.875rem;
+}
+.k-hero-lesson__card > img {
+  display: block;
+  width: 16.25rem;
+  height: 12.6875rem;
+  object-fit: contain;
+}
+.k-hero-lesson__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 16.25rem;
+  height: 3.25rem;
+  border-radius: 1.125rem;
+  background: #97caf7;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+.k-hero-lesson__button i {
+  font-style: normal;
+  font-size: 1.25rem;
+}
+.k-hero-lesson__copy strong,
+.k-hero-lesson__copy p,
+.k-hero-lesson__card > img {
+  animation: k-feature-card-swap 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (max-width: 48rem) {
+  .k-hero__visuals {
+    grid-auto-flow: row;
+    justify-items: center;
+  }
+  .k-hero-card--lesson {
+    width: min(100%, var(--media-card-compact));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-hero-lesson__copy strong,
+  .k-hero-lesson__copy p,
+  .k-hero-lesson__card > img {
+    animation-duration: 0.001ms;
+  }
+  .k-hero-lesson__situation {
+    transition: none;
+  }
+}
