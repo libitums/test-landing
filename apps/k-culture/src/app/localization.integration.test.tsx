@@ -22,6 +22,8 @@ afterEach(() => {
     .forEach((node) => node.remove());
 });
 
+const collapse = (copy: string) => copy.replace(/\s+/g, " ").trim();
+
 describe("k-culture Phase 2 localization integration", () => {
   const supportedLocales = [
     "ko-KR",
@@ -71,8 +73,10 @@ describe("k-culture Phase 2 localization integration", () => {
       expect(memeFeature).toHaveTextContent(resources[localeName]["visual.one.bannerTitle"]);
       const realLifeFeature = screen.getByTestId("shared-feature:k-culture-real-life");
       expect(realLifeFeature).toHaveTextContent(resources[localeName]["features.real-life.title"]);
+      // Collapsed: this copy carries an authored newline between the two packs,
+      // and toHaveTextContent normalises whitespace on the rendered side only.
       expect(realLifeFeature).toHaveTextContent(
-        resources[localeName]["features.real-life.description"],
+        collapse(resources[localeName]["features.real-life.description"]),
       );
       const registerFeature = screen.getByTestId("shared-feature:k-culture-register");
       expect(registerFeature).toHaveTextContent(resources[localeName]["features.register.title"]);

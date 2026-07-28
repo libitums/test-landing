@@ -29,7 +29,7 @@ describe("K-culture temporary landing", () => {
 
     const hero = screen.getByTestId("hero");
     expect(within(hero).getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Learn the Korean behind the culture.",
+      "The real Korean you actually wanted to learn",
     );
     const heroMedia = within(hero).getByTestId("hero-media");
     expect(
@@ -42,13 +42,13 @@ describe("K-culture temporary landing", () => {
       "A list of characters whose lines shift from casual to formal Korean.",
     ]);
     expect(screen.getByTestId("hero-highlight:clips")).toHaveTextContent(
-      "Replay real clips with dual subtitles",
+      "Meme cards with meaning, origin, and delivery",
     );
 
     const features = [
-      ["clips", '"lucky vicky"...? What does that even mean?', "shared-feature--white"],
-      ["real-life", "What you actually need — in a pack", "shared-feature--soft"],
-      ["register", "\"Let's eat\" isn't one sentence in Korean", "shared-feature--white"],
+      ["clips", '"lucky vicky"…? What does that even mean?', "shared-feature--white"],
+      ["real-life", "No textbook — just what you actually need, in a pack", "shared-feature--soft"],
+      ["register", "\"Let's eat\" isn't just one phrase in Korean", "shared-feature--white"],
     ] as const;
     for (const [id, title, appearance] of features) {
       const section = screen.getByTestId(`shared-feature:k-culture-${id}`);
@@ -61,17 +61,18 @@ describe("K-culture temporary landing", () => {
 
     const memeFeature = screen.getByTestId("shared-feature:k-culture-clips");
     expect(memeFeature).toHaveTextContent(
-      "From your bias's catchphrases to iconic K-drama lines — what it means, where it came from, when to use it, all on one card. Found one you love? Play the clip, nail the delivery, and drop it with your friends like a local.",
+      "Your bias's catchphrases, iconic drama lines, viral variety-show moments — meaning, origin, and real examples, all on one card. Play the clip, copy the delivery, then drop it in the group chat.",
     );
     expect(memeFeature).toHaveTextContent("Korea's freshest memes, shipped to your front door.");
     expect(screen.getByTestId("shared-feature:k-culture-real-life")).toHaveTextContent(
-      "No textbook chapters. Only the stuff your hobby actually calls for, hand-picked.",
+      // The authored newline between the two packs collapses in rendered text.
+      "K-Pop Stan Pack — the exact lines for video call fansigns, plus fansign & photocard culture. Korea Trip Pack — the few phrases you'll really use, plus insider tips only locals know.",
     );
     expect(screen.getByTestId("shared-feature:k-culture-register")).toHaveTextContent(
-      "Your friend, your sunbae, your bias, someone older — who you're talking to, what the situation is, how close you are: in Korean, all of it changes what you say. Chat with personas in a KakaoTalk-style sim: nail the tone and the conversation flows, miss it and watch them react. Make all your mistakes here — so when it counts, you sound natural.",
+      "Friend, sunbae, your boss, someone older — chat with each of them, switching as you go. Their reactions and your affinity score tell you how you're doing. Make your mistakes here — and only here.",
     );
 
-    expect(screen.getByTestId("k-culture-proof:clips")).toHaveTextContent("2 languages");
+    expect(screen.getByTestId("k-culture-proof:clips")).toHaveTextContent("1 card");
     expect(screen.getByTestId("pricing-plan:plus")).toHaveTextContent("Most popular");
     expect(screen.getByTestId("cta-action:early-access")).toHaveAttribute("href", "#early-access");
     expect(
