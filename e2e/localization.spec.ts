@@ -3,11 +3,6 @@ import AxeBuilder from "@axe-core/playwright";
 import { landingTestIds } from "@landing/contracts";
 import { navbarTestIds } from "@landing/contracts/navbar";
 
-const baseLocales = [
-  { name: "ko-KR", dir: "ltr" },
-  { name: "en-US", dir: "ltr" },
-  { name: "ar", dir: "rtl" },
-] as const;
 // Apps that ship the extended locale set (added alongside the Baetter rollout).
 const extendedLocales = [
   { name: "ko-KR", dir: "ltr" },
@@ -37,7 +32,7 @@ const apps = [
     id: "k-culture",
     origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
     displayOnlyHero: false,
-    locales: baseLocales,
+    locales: extendedLocales,
   },
 ] as const;
 const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
@@ -86,6 +81,17 @@ async function expectVisibleFocus(page: Page) {
 }
 
 for (const app of apps) {
+  test(`${app.id} uses English when the route has no locale prefix`, async ({ page }) => {
+    await page.goto(`${app.origin}/campaign/launch?experiment=phase2`);
+
+    await expect(page.locator("html")).toHaveAttribute("lang", "en-US");
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `${app.origin}/en-US/campaign/launch`,
+    );
+  });
+
   for (const locale of app.locales) {
     test(`${app.id} renders ${locale.name} metadata and semantic focus order`, async ({ page }) => {
       // The focus-order walk traverses the full landing page. Disable smooth scrolling so
@@ -133,7 +139,7 @@ for (const app of apps) {
         .map(({ testId }) => testId)
         .filter((testId) => testId?.startsWith("navbar-"));
       expect(navbarOrder).toEqual(
-        test.info().project.name === "mobile-chromium"
+        test.info().project.name.startsWith("mobile-")
           ? ["navbar-logo", "navbar-language", "navbar-mobile-menu-trigger"]
           : [
               "navbar-logo",
@@ -145,7 +151,7 @@ for (const app of apps) {
       );
 
       for (let index = 0; index < sourceOrder.length; index += 1) {
-        if (test.info().project.name === "webkit") {
+        if (test.info().project.name.includes("webkit")) {
           await page.locator(`[data-e2e-tab-order-index="${index}"]`).focus();
         } else {
           await page.keyboard.press("Tab");
@@ -181,15 +187,18 @@ for (const app of apps) {
     const languageMenu = page.getByTestId(navbarTestIds.languageMenuContent);
     await expect(languageMenu).toHaveRole("menu");
     await expect(languageMenu).toHaveAccessibleName(/\S+/);
-    const arabicLink = languageMenu.locator('a[role="menuitem"][href^="/ar/"]');
+    for (const locale of app.locales.filter(({ name }) => name !== "en-US")) {
+      const localeLink = languageMenu.locator(`a[role="menuitem"][href^="/${locale.name}/"]`);
+      const expectedPath = `/${locale.name}/campaign/launch?experiment=phase2#features`;
+      await expect(localeLink).toHaveAttribute("href", expectedPath);
+    }
 
-    await expect(arabicLink).toHaveAttribute(
-      "href",
-      "/ar/campaign/launch?experiment=phase2#features",
-    );
-    await arabicLink.click();
+    const targetLocale = app.locales.find(({ name }) => name === "ar");
+    if (!targetLocale) throw new Error(`${app.id} must expose an Arabic locale`);
+    await languageMenu.locator('a[role="menuitem"][href^="/ar/"]').click();
     await expect(page).toHaveURL(`${app.origin}/ar/campaign/launch?experiment=phase2#features`);
-    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.locator("html")).toHaveAttribute("lang", targetLocale.name);
+    await expect(page.locator("html")).toHaveAttribute("dir", targetLocale.dir);
   });
 
   test(`${app.id} stable desktop screenshot`, async ({ page }, testInfo) => {
@@ -204,10 +213,9 @@ for (const app of apps) {
   test(`${app.id} pseudo-locale remains visible, focusable, and accessible`, async ({
     page,
   }, testInfo) => {
-    test.skip(
-      !["chromium", "mobile-chromium"].includes(testInfo.project.name),
-      "Pseudo-locale visual contract runs on Chromium desktop and mobile",
-    );
+    // Keep accessibility sampling deterministic across engines by avoiding an
+    // in-flight CTA color transition after the explicit focus check below.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const pageErrors: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.goto(`${pseudoOrigin}/pseudo.html?app=${app.id}`);
@@ -256,9 +264,11 @@ for (const app of apps) {
     expect(
       results.violations.filter(({ impact }) => impact === "critical" || impact === "serious"),
     ).toEqual([]);
-    await expect(page).toHaveScreenshot(`${app.id}-pseudo-${testInfo.project.name}.png`, {
-      fullPage: true,
-    });
+    if (["chromium", "mobile-chromium"].includes(testInfo.project.name)) {
+      await expect(page).toHaveScreenshot(`${app.id}-pseudo-${testInfo.project.name}.png`, {
+        fullPage: true,
+      });
+    }
   });
 
   test(`${app.id} honors reduced motion`, async ({ page }, testInfo) => {
