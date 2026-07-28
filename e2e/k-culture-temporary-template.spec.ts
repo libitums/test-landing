@@ -139,7 +139,7 @@ test.describe("K-culture temporary shared template", () => {
   test("omits unapproved media children and keeps only the existing feature CTA links", async ({
     page,
   }) => {
-    await expect(page.getByTestId("hero-media")).toHaveCount(0);
+    await expect(page.getByTestId("hero-media")).toHaveCount(1);
 
     for (const feature of features) {
       const rootId = featureTestId(feature.id);

@@ -31,7 +31,16 @@ describe("K-culture temporary landing", () => {
     expect(within(hero).getByRole("heading", { level: 1 })).toHaveTextContent(
       "Learn the Korean behind the culture.",
     );
-    expect(screen.queryByTestId("hero-media")).not.toBeInTheDocument();
+    const heroMedia = within(hero).getByTestId("hero-media");
+    expect(
+      within(heroMedia)
+        .getAllByRole("img")
+        .map((card) => card.getAttribute("aria-label")),
+    ).toEqual([
+      "A short-form feed replaying a Korean meme clip with its pronunciation.",
+      "A lesson card cycling through everyday Korean situations.",
+      "A list of characters whose lines shift from casual to formal Korean.",
+    ]);
     expect(screen.getByTestId("hero-highlight:clips")).toHaveTextContent(
       "Replay real clips with dual subtitles",
     );
