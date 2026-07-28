@@ -26,17 +26,19 @@ export function KCultureHeroVisuals({ t }: { t: Translate }) {
   );
 }
 
+/** Module scope: nothing here depends on the locale, unlike the labels below. */
+const registerRows = [
+  { id: "friend", src: "/images/feature-03/friend.png", line: "오늘 진짜 고마워!" },
+  { id: "elder", src: "/images/feature-03/elder-professor.png", line: "오늘 정말 감사드립니다." },
+  { id: "boss", src: "/images/feature-03/workplace-boss.png", line: "오늘 도와주셔서 감사합니다." },
+] as const;
+
 /**
  * Feature 03's roleplay scenes reduced to a list: the characters become square
  * thumbnails stacked vertically and their lines arrive beside them in turn, so
  * one meaning shifting across three relationships reads in a single glance.
  */
 function RegisterCard({ t }: { t: Translate }) {
-  const rows = [
-    { id: "friend", src: "/images/feature-03/friend.png", line: "오늘 진짜 고마워!" },
-    { id: "elder", src: "/images/feature-03/elder-professor.png", line: "오늘 정말 감사드립니다." },
-    { id: "boss", src: "/images/feature-03/workplace-boss.png", line: "오늘 도와주셔서 감사합니다." },
-  ] as const;
   const labels = {
     friend: t("visual.three.friend.label"),
     elder: t("visual.three.elder.label"),
@@ -52,7 +54,7 @@ function RegisterCard({ t }: { t: Translate }) {
       <div className="k-hero-card__content" aria-hidden="true">
         <span className="k-hero-registers__prompt">{t("visual.three.demo")}</span>
         <ul className="k-hero-registers">
-          {rows.map((row) => (
+          {registerRows.map((row) => (
             <li key={row.id} className="k-hero-registers__row">
               <span
                 className={`k-hero-registers__avatar k-hero-registers__avatar--${row.id}`}
