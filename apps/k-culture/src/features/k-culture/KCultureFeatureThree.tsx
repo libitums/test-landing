@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { I18nRuntime } from "@landing/contracts/i18n";
 
-type SceneId = "senior" | "elder" | "boss";
+type SceneId = "friend" | "elder" | "boss";
 
 function expressionFor(role: SceneId, message: string) {
   const isSorry = /sorry|apolog/i.test(message);
   const isGreeting = /hello|nice to meet|meet you/i.test(message);
   if (isSorry) {
-    if (role === "senior") return "선배님, 정말 미안해요.";
+    if (role === "friend") return "진짜 미안해.";
     if (role === "elder") return "정말 죄송합니다.";
     return "죄송합니다. 바로 수정하겠습니다.";
   }
   if (isGreeting) {
-    if (role === "senior") return "선배님, 만나서 반가워요!";
+    if (role === "friend") return "만나서 반가워!";
     if (role === "elder") return "처음 뵙겠습니다. 만나 뵙게 되어 반갑습니다.";
     return "안녕하세요. 만나 뵙게 되어 반갑습니다.";
   }
-  if (role === "senior") return "선배님, 오늘 정말 감사해요!";
+  if (role === "friend") return "오늘 진짜 고마워!";
   if (role === "elder") return "오늘 정말 감사드립니다.";
   return "오늘 도와주셔서 감사합니다.";
 }
@@ -24,7 +24,7 @@ function expressionFor(role: SceneId, message: string) {
 export function KCultureFeatureThree({ t }: { t: I18nRuntime["translate"] }) {
   const demoText = t("visual.three.demo");
   const roleplayScenes = [
-    { id: "senior", src: "/images/feature-03/senior.png", label: t("visual.three.senior.label"), tone: t("visual.three.senior.tone") },
+    { id: "friend", src: "/images/feature-03/friend.png", label: t("visual.three.friend.label"), tone: t("visual.three.friend.tone") },
     { id: "elder", src: "/images/feature-03/elder-professor.png", label: t("visual.three.elder.label"), tone: t("visual.three.elder.tone") },
     { id: "boss", src: "/images/feature-03/workplace-boss.png", label: t("visual.three.boss.label"), tone: t("visual.three.boss.tone") },
   ] as const;
