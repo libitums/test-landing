@@ -846,7 +846,10 @@
   height: 3.25rem;
   border-radius: 1.125rem;
   background: #97caf7;
-  color: #fff;
+  /* Navy, not the white the feature-02 original uses: white on #97caf7 is
+     1.73:1 and axe scans the hero, which is above the fold. Feature 02 escapes
+     the scan only because its card is still a skeleton that far down. */
+  color: #10243b;
   font-size: 0.9375rem;
   font-weight: 800;
 }
