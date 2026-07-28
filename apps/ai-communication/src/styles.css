@@ -1432,9 +1432,15 @@
   flex-wrap: wrap;
 }
 
+/* Directly under the subheader instead of centred in the artwork column.
+   `order` drives grid auto-placement, so the CTA takes the first row on its own
+   and the details/visual columns fall into the row beneath it — which also
+   holds when the mobile override collapses this to a single column. */
 .feature-roleplay > .feature-roleplay__cta.button--text {
-  grid-column: 2;
-  justify-self: center;
+  order: -1;
+  grid-column: 1 / -1;
+  justify-self: start;
+  align-self: start;
 }
 
 .feature-bias__details,
@@ -1442,8 +1448,11 @@
   min-inline-size: 0;
 }
 
+/* Top-aligned rather than centred against the media column, so its first child
+   — the CTA — stays directly under the subheader. */
 .feature-bias__details {
   display: grid;
+  align-self: start;
   align-content: start;
   gap: var(--space-6);
 }
@@ -1483,7 +1492,8 @@
 }
 
 .feature-corrections > .shared-feature__early-access-cta.button--text {
-  justify-self: center;
+  order: -1;
+  justify-self: start;
 }
 
 /* Placement only — the pill treatment is shared (@landing/ui). The accent is
@@ -1513,7 +1523,7 @@
 [data-mobile="true"] .feature-roleplay__cta.button--text,
 [data-mobile="true"] .feature-bias__cta.button--text {
   grid-column: 1;
-  justify-self: center;
+  justify-self: start;
 }
 
 /* Feature 02 motion (motion-safe): speech-like waveform + typing → reply. */
