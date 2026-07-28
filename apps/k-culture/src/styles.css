@@ -522,10 +522,10 @@
 .k-feature-three__scene img { display:block; width:100%; height:100%; object-fit:cover; }
 .k-feature-three__scene-panel { position:absolute; z-index:2; top:2.3125rem; left:2.5625rem; display:flex; flex-direction:column; justify-content:center; width:15.1875rem; min-height:8.5625rem; padding:1rem 1.125rem; border-radius:1.5rem; background:#fff; box-shadow:0 .5rem 1.25rem #10243b14; animation:k-feature-three-bubble .42s cubic-bezier(.2,.8,.2,1) both; }
 .k-feature-three__scene-panel span { color:#2a6bb0; font-size:.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.05em; }.k-feature-three__scene-panel strong { margin-top:.45rem; color:#111827; font-size:.875rem; line-height:1.35; }.k-feature-three__scene-panel small { margin-top:.45rem; color:#8a939f; font-size:.6875rem; }
-.k-feature-three__scene--senior { left:26.4375rem; }.k-feature-three__scene--elder { left:48.0625rem; }.k-feature-three__scene--boss { left:69.6875rem; }
+.k-feature-three__scene--friend { left:26.4375rem; }.k-feature-three__scene--elder { left:48.0625rem; }.k-feature-three__scene--boss { left:69.6875rem; }
 .k-feature-three__stage--visible .k-feature-three__composer { animation:k-feature-three-enter .55s cubic-bezier(.2,.8,.2,1) .1s 1 forwards; }
 .k-feature-three__stage--visible .k-feature-three__scene { animation:k-feature-three-enter .7s cubic-bezier(.2,.8,.2,1) 1 forwards; }
-.k-feature-three__stage--visible .k-feature-three__scene--senior { animation-delay:.3s; }.k-feature-three__stage--visible .k-feature-three__scene--elder { animation-delay:.48s; }.k-feature-three__stage--visible .k-feature-three__scene--boss { animation-delay:.66s; }
+.k-feature-three__stage--visible .k-feature-three__scene--friend { animation-delay:.3s; }.k-feature-three__stage--visible .k-feature-three__scene--elder { animation-delay:.48s; }.k-feature-three__stage--visible .k-feature-three__scene--boss { animation-delay:.66s; }
 @keyframes k-feature-three-bubble { from { opacity:0; transform:translateY(.6rem) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
 @keyframes k-feature-three-enter { from { opacity:0; transform:translateY(1.5rem); } to { opacity:1; transform:translateY(0); } }
 
@@ -533,7 +533,7 @@
   .k-feature-three__composer { left:50%; translate:-50% 0; }
   .k-feature-three__scenes { position:absolute; top:28.125rem; left:50%; width:63.5625rem; height:28.125rem; translate:-50% 0; transform-origin:top center; }
   .k-feature-three__scene { top:0; }
-  .k-feature-three__scene--senior { left:0; }
+  .k-feature-three__scene--friend { left:0; }
   .k-feature-three__scene--elder { left:21.625rem; }
   .k-feature-three__scene--boss { left:43.25rem; }
 }
@@ -548,7 +548,7 @@
   #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta { top:-1.5rem; left:0; }
   .k-feature-three__composer { top:1rem; left:50%; translate:-50% 0; }
   .k-feature-three__scenes { position:absolute; top:5rem; left:50%; width:48rem; height:29rem; translate:-50% 0; }
-  .k-feature-three__scene { top:0; scale:.72; transform-origin:top left; }.k-feature-three__scene--senior { left:0; }.k-feature-three__scene--elder { left:15rem; }.k-feature-three__scene--boss { left:30rem; }
+  .k-feature-three__scene { top:0; scale:.72; transform-origin:top left; }.k-feature-three__scene--friend { left:0; }.k-feature-three__scene--elder { left:15rem; }.k-feature-three__scene--boss { left:30rem; }
 }
 @media (max-width:40rem) {
   #features > .shared-feature:nth-child(3) { height:65rem; }
@@ -559,7 +559,7 @@
   .k-feature-three__composer { width:18rem; }.k-feature-three__input { width:14.125rem; }
   .k-feature-three__scenes { position:absolute; top:5rem; right:0; left:0; display:flex; flex-direction:column; gap:.75rem; width:100%; height:auto; translate:0 0; }
   .k-feature-three__scene,
-  .k-feature-three__scene--senior,
+  .k-feature-three__scene--friend,
   .k-feature-three__scene--elder,
   .k-feature-three__scene--boss { position:relative; top:auto; left:auto; width:100%; height:auto; overflow:visible; border-radius:0; background:transparent; scale:1; }
   .k-feature-three__scene > img { display:none; }
