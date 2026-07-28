@@ -1432,9 +1432,15 @@
   flex-wrap: wrap;
 }
 
+/* Directly under the subheader instead of centred in the artwork column.
+   `order` drives grid auto-placement, so the CTA takes the first row on its own
+   and the details/visual columns fall into the row beneath it — which also
+   holds when the mobile override collapses this to a single column. */
 .feature-roleplay > .feature-roleplay__cta.button--text {
-  grid-column: 2;
-  justify-self: center;
+  order: -1;
+  grid-column: 1 / -1;
+  justify-self: start;
+  align-self: start;
 }
 
 .feature-bias__details,
@@ -1442,8 +1448,11 @@
   min-inline-size: 0;
 }
 
+/* Top-aligned rather than centred against the media column, so its first child
+   — the CTA — stays directly under the subheader. */
 .feature-bias__details {
   display: grid;
+  align-self: start;
   align-content: start;
   gap: var(--space-6);
 }
@@ -1483,31 +1492,21 @@
 }
 
 .feature-corrections > .shared-feature__early-access-cta.button--text {
-  justify-self: center;
-}
-
-.shared-feature__early-access-cta.button--text {
+  order: -1;
   justify-self: start;
-  inline-size: fit-content;
-  block-size: auto;
-  min-block-size: 0;
-  padding: var(--space-0);
-  color: var(--color-subtle-fg);
-  font-size: var(--text-base);
-  font-weight: var(--font-normal);
-  line-height: var(--leading-body);
-  text-decoration: underline;
 }
 
-.shared-feature__early-access-cta.button--text:hover,
-.shared-feature__early-access-cta.button--text:active {
-  color: var(--color-link-interactive);
-  text-decoration: underline;
-}
-
-.shared-feature__early-access-cta.button--text:focus-visible {
-  outline-color: var(--color-focus);
-  box-shadow: var(--focus-ring);
+/* Placement only — the pill treatment is shared (@landing/ui). The accent is
+   remapped here because this app only redefines --color-accent on the early
+   access page, so the landing CTA would otherwise paint itself the token
+   default blue inside a violet editorial palette. The hover shade is the base:
+   --color-editorial-accent is 4.56:1 on white and the hover state has to clear
+   4.5:1 as well, so starting one step darker keeps both ends comfortable. */
+.shared-feature__early-access-cta.button--text {
+  --color-accent: var(--color-editorial-accent-hover);
+  --color-accent-hover: var(--color-editorial-accent-active);
+  --color-accent-active: var(--color-editorial-accent-active);
+  justify-self: start;
 }
 
 [data-mobile="true"] .feature-roleplay,
@@ -1524,7 +1523,7 @@
 [data-mobile="true"] .feature-roleplay__cta.button--text,
 [data-mobile="true"] .feature-bias__cta.button--text {
   grid-column: 1;
-  justify-self: center;
+  justify-self: start;
 }
 
 /* Feature 02 motion (motion-safe): speech-like waveform + typing → reply. */
