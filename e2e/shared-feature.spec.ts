@@ -194,7 +194,7 @@ for (const app of apps) {
         const cta = await expectEarlyAccessCta(root, app.earlyAccessPath, app.earlyAccessCta);
         const content = root.getByTestId(`${await root.getAttribute("data-testid")}:content`);
         const [ctaBox, contentBox] = await Promise.all([cta.boundingBox(), content.boundingBox()]);
-        expect(ctaBox?.width, "the mobile text link must retain intrinsic width").toBeLessThan(
+        expect(ctaBox?.width, "the mobile CTA must retain intrinsic width").toBeLessThan(
           contentBox?.width ?? 0,
         );
       }
@@ -264,37 +264,54 @@ test("shared feature copy preserves intentional lines, accessible text, and sema
   await expect(subheader).toHaveCSS("font-weight", "300");
 });
 
-test("feature early access CTA uses an intrinsic underlined text-link treatment", async ({
-  page,
-}, testInfo) => {
+test("feature early access CTA uses a solid accent pill treatment", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "Computed CTA presentation is sampled once");
   await page.goto(`${apps[0].origin}/en-US/`);
 
   const firstRoot = (await getFeatureRoots(page))[0];
   if (!firstRoot) throw new Error("the representative feature CTA is missing");
   const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
-  await expect(cta).toHaveCSS("min-height", "0px");
-  await expect(cta).toHaveCSS("padding-block-start", "0px");
-  await expect(cta).toHaveCSS("padding-inline-start", "0px");
+  await expect(cta).toHaveCSS("min-height", "48px");
+  await expect(cta).toHaveCSS("padding-inline-start", "28px");
   await expect(cta).toHaveCSS("font-size", "16px");
-  await expect(cta).toHaveCSS("font-weight", "400");
-  await expect(cta).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-  await expect(cta).toHaveCSS("color", "rgb(100, 116, 139)");
-  await expect(cta).toHaveCSS("border-top-width", "0px");
-  await expect(cta).toHaveCSS("text-decoration-line", "underline");
+  await expect(cta).toHaveCSS("font-weight", "700");
+  await expect(cta).toHaveCSS("background-color", "rgb(91, 75, 231)");
+  await expect(cta).toHaveCSS("color", "rgb(255, 255, 255)");
+  await expect(cta).toHaveCSS("text-decoration-line", "none");
+  // A pill, not a rounded rectangle: the radius has to exceed half the height.
+  const radius = await cta.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).borderTopLeftRadius),
+  );
+  expect(radius).toBeGreaterThan(24);
+  // Intrinsic width, so the action never stretches to the section it sits in.
+  // Measured against the section rather than the parent: some app layouts give
+  // the CTA a `display: contents` parent, which has no box of its own.
+  const [ctaBox, sectionBox] = await Promise.all([
+    cta.boundingBox(),
+    firstRoot.boundingBox(),
+  ]);
+  expect(ctaBox?.width).toBeLessThan(sectionBox?.width ?? 0);
 
   await cta.focus();
   await expect(cta).toBeFocused();
   await expect(cta).not.toHaveCSS("outline-style", "none");
 
-  await cta.hover();
-  await expect(cta).toHaveCSS("color", "rgb(91, 66, 199)");
-  await expect(cta).toHaveCSS("text-decoration-line", "underline");
+  // Re-hovered on every poll: the pill transitions its background, and the
+  // feature's entrance animations can shift it out from under a pointer that
+  // was parked once, which reads as the hover being lost mid-transition.
+  await expect
+    .poll(async () => {
+      await cta.hover();
+      return cta.evaluate((element) => getComputedStyle(element).backgroundColor);
+    })
+    .toBe("rgb(73, 56, 210)");
+  await expect(cta).toHaveCSS("color", "rgb(255, 255, 255)");
+
   const softRoot = (await getFeatureRoots(page))[1];
   if (!softRoot) throw new Error("the soft-surface feature CTA is missing");
   const softCta = await expectEarlyAccessCta(softRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
-  await expect(softCta).toHaveCSS("color", "rgb(100, 116, 139)");
-  await expect(softCta).toHaveCSS("text-decoration-line", "underline");
+  await expect(softCta).toHaveCSS("background-color", "rgb(91, 75, 231)");
+  await expect(softCta).toHaveCSS("color", "rgb(255, 255, 255)");
   await softCta.focus();
   await expect(softCta).toBeFocused();
   await expect(softCta).not.toHaveCSS("outline-style", "none");
