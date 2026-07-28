@@ -430,6 +430,17 @@
 #features .shared-feature__header {
   font-size: var(--text-4xl);
 }
+/* The shared pill paints itself from the accent tokens, and this app never
+   overrides --color-accent, so it would land on the token default blue inside a
+   violet editorial palette. Remapped on the control alone rather than at the
+   app root so no other primary button shifts. The hover shade is the base:
+   --color-editorial-accent is only 4.56:1 on white, and the hover state has to
+   clear 4.5:1 too, so starting one step darker keeps both ends comfortable. */
+#features .shared-feature__early-access-cta.button--text {
+  --color-accent: var(--color-editorial-accent-hover);
+  --color-accent-hover: var(--color-editorial-accent-active);
+  --color-accent-active: var(--color-editorial-accent-active);
+}
 #features > .shared-feature:nth-child(2) .shared-feature__early-access-cta {
   order: -1;
 }
