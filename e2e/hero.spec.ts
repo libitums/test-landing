@@ -8,18 +8,30 @@ const apps = [
     origin: `http://127.0.0.1:${process.env.K_DRAMA_E2E_PORT ?? 4173}`,
     displayOnly: true,
     hasMedia: true,
+    heroLabel: true,
+    // Painted white by the app; the others inherit the page surface.
+    heroBackground: "rgb(255, 255, 255)",
+    // Built from CSS alone; the other two compose real artwork.
+    cssOnlyMedia: true,
   },
   {
     id: "ai-communication",
     origin: `http://127.0.0.1:${process.env.AI_COMMUNICATION_E2E_PORT ?? 4174}`,
     displayOnly: false,
     hasMedia: true,
+    heroLabel: false,
+    heroBackground: null,
+    cssOnlyMedia: false,
   },
   {
     id: "k-culture",
     origin: `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`,
-    displayOnly: false,
-    hasMedia: false,
+    // Media-rich like k-drama, but with no eyebrow label above the heading.
+    displayOnly: true,
+    hasMedia: true,
+    heroLabel: false,
+    heroBackground: null,
+    cssOnlyMedia: false,
   },
 ] as const;
 const pseudoOrigin = `http://127.0.0.1:${process.env.PSEUDO_E2E_PORT ?? 4273}`;
@@ -116,8 +128,12 @@ for (const app of apps) {
       if (app.displayOnly) {
         const label = hero.getByTestId(landingTestIds.heroLabel);
         const visuals = media.getByRole("img", { name: /\S+/ });
-        await expect(label).toBeVisible();
-        await expect(label).toHaveText(/\S+/);
+        if (app.heroLabel) {
+          await expect(label).toBeVisible();
+          await expect(label).toHaveText(/\S+/);
+        } else {
+          await expect(label).toHaveCount(0);
+        }
         await expect(cta).toBeVisible();
         await expect(cta).toHaveRole("button");
         await expect(cta).toHaveText(/\S+/);
@@ -130,19 +146,21 @@ for (const app of apps) {
         await expect(visuals).toHaveCount(3);
         await expect(media.getByRole("button")).toHaveCount(0);
         await expect(media.getByRole("link")).toHaveCount(0);
-        await expectCentered(label);
+        if (app.heroLabel) await expectCentered(label);
         await expectCentered(cta);
         await expectOrderedWithoutOverlap([
-          label,
+          ...(app.heroLabel ? [label] : []),
           heading,
           description,
           cta,
           highlights,
           visuals.first(),
         ]);
-        await expect
-          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
-          .toBe("rgb(255, 255, 255)");
+        if (app.heroBackground) {
+          await expect
+            .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+            .toBe(app.heroBackground);
+        }
       } else if (app.hasMedia) {
         await expect(hero.getByTestId(landingTestIds.heroLabel)).toHaveCount(0);
         await expect(cta).toBeVisible();
@@ -167,7 +185,7 @@ for (const app of apps) {
       }
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
       expect(await hero.getAttribute("aria-labelledby")).toBe(await heading.getAttribute("id"));
-      if (app.hasMedia) await expect(media.locator("img")).toHaveCount(0);
+      if (app.cssOnlyMedia) await expect(media.locator("img")).toHaveCount(0);
       for (const element of [heading, description]) await expectCentered(element);
       await expectNoHorizontalOverflowWithin(hero);
       const { violations } = await new AxeBuilder({ page })
@@ -195,21 +213,23 @@ for (const app of apps) {
       if (app.displayOnly) {
         const label = hero.getByTestId(landingTestIds.heroLabel);
         const visuals = media.getByRole("img", { name: /\S+/ });
-        await expectCentered(label);
+        if (app.heroLabel) await expectCentered(label);
         await expectCentered(cta);
         await expect(highlights.getByRole("listitem")).toHaveCount(3);
         await expect(visuals).toHaveCount(3);
         await expectOrderedWithoutOverlap([
-          label,
+          ...(app.heroLabel ? [label] : []),
           heading,
           description,
           cta,
           highlights,
           ...(await visuals.all()),
         ]);
-        await expect
-          .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
-          .toBe("rgb(255, 255, 255)");
+        if (app.heroBackground) {
+          await expect
+            .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
+            .toBe(app.heroBackground);
+        }
       } else if (app.hasMedia) {
         await expectCentered(cta);
         await expectOrderedWithoutOverlap([
