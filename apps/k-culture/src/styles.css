@@ -1,4 +1,8 @@
-#top[data-testid="landing:k-culture"] {
+/* The language menu is rendered in a portal outside the app root, so it has to
+   carry the palette itself — otherwise its accents fall back to the violet
+   defaults in @landing/design-tokens instead of the K-culture blue. */
+#top[data-testid="landing:k-culture"],
+.navbar__language-menu {
   --color-accent: #2a6bb0;
   --color-accent-hover: #225d9a;
   --color-accent-active: #194b80;
@@ -22,7 +26,6 @@
   box-shadow: 0 20px 48px rgb(42 107 176 / 18%);
 }
 
-/* The language menu is rendered in a portal outside the app root. */
 .navbar__language-menu {
   box-shadow:
     0 8px 24px rgb(42 107 176 / 14%),
