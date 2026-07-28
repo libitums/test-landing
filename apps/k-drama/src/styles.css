@@ -441,7 +441,10 @@
   --color-accent-hover: var(--color-editorial-accent-active);
   --color-accent-active: var(--color-editorial-accent-active);
 }
-#features > .shared-feature:nth-child(2) .shared-feature__early-access-cta {
+/* The CTA reads as the answer to the copy, so it sits directly under the
+   subheader rather than trailing the artwork. This covers the stacked layout;
+   the grid layouts below place it explicitly. */
+.k-drama-feature-composition .shared-feature__early-access-cta {
   order: -1;
 }
 #features > .shared-feature:nth-child(2) {
@@ -507,10 +510,12 @@
   transform: translateX(-50%);
 }
 @media (min-width: 48.01rem) {
+  /* The free row is last, not under the subheader: leaving it at row 3 stretched
+     the copy block and pushed the CTA to the foot of the section. */
   #features > .shared-feature:first-child .shared-feature__inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(32.25rem, 0.9fr);
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto auto auto 1fr;
     column-gap: var(--space-16);
     align-items: start;
   }
@@ -545,7 +550,7 @@
   #features > .shared-feature:nth-child(3) .shared-feature__inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(38rem, 1fr);
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto auto auto auto 1fr;
     column-gap: var(--space-16);
     align-items: start;
   }
@@ -560,16 +565,17 @@
   }
   #features > .shared-feature:nth-child(3) .k-drama-feature--shortform {
     grid-column: 2;
-    grid-row: 1 / 5;
-  }
-  #features > .shared-feature:nth-child(3) .k-drama-feature__shortform-highlights {
-    grid-column: 1;
-    grid-row: 4;
+    grid-row: 1 / 6;
   }
   #features > .shared-feature:nth-child(3) .shared-feature__early-access-cta {
     grid-column: 1;
-    grid-row: 5;
+    grid-row: 4;
     justify-self: start;
+    margin-block-start: var(--space-8);
+  }
+  #features > .shared-feature:nth-child(3) .k-drama-feature__shortform-highlights {
+    grid-column: 1;
+    grid-row: 5;
     margin-block-start: var(--space-8);
   }
 }
