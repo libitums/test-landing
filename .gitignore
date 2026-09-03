@@ -34,3 +34,6 @@ AGENTS.md
 !**/.env.example
 supabase/.temp/
 supabase/.branches/
+
+# Agent harness run state (evidence and baselines for one flow)
+.harness/

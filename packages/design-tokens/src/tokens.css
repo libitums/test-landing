@@ -259,9 +259,24 @@
   --media-card-compact: 17.5rem;
   --media-card-wide: 26.25rem;
   --breakpoint-mobile: 48rem;
+
+  /* Section rhythm. Declared for the phone first — that is where the traffic is — and
+     raised on wider screens below. Reading the base value tells you what most visitors
+     actually get, instead of a desktop figure someone has to remember is overridden. */
+  --section-block: var(--space-12);
+  --section-block-compact: var(--space-10);
+  --section-block-cta: var(--space-16);
   --breakpoint-conversation-compact: 45rem;
   --breakpoint-conversation-stack: 56.25rem;
   --layer-header: 20;
   --layer-overlay: 40;
   --layer-dialog: 50;
+}
+
+@media (min-width: 48.01rem) {
+  :root {
+    --section-block: var(--space-24);
+    --section-block-compact: var(--space-16);
+    --section-block-cta: var(--space-20);
+  }
 }

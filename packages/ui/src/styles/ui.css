@@ -56,7 +56,7 @@ h3 {
   padding-inline: var(--space-8);
 }
 .section {
-  padding-block: var(--space-24);
+  padding-block: var(--section-block);
 }
 .stack {
   display: flex;
@@ -72,7 +72,7 @@ h3 {
   border-color: var(--color-border);
 }
 .footer {
-  padding-block: var(--space-16);
+  padding-block: var(--section-block-compact);
   background: var(--color-bg);
   color: var(--color-fg);
 }
@@ -848,7 +848,7 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-block: var(--space-20);
+  padding-block: var(--section-block-cta);
   padding-inline: var(--space-8);
   background: var(--color-surface);
 }
@@ -1015,7 +1015,7 @@ button:focus-visible {
   }
 }
 .shared-feature {
-  padding-block: var(--space-24);
+  padding-block: var(--section-block);
   color: var(--color-fg);
 }
 .shared-feature--white {
@@ -1316,12 +1316,6 @@ button:focus-visible {
   .container {
     padding-inline: var(--space-4);
   }
-  .section {
-    padding-block: var(--space-16);
-  }
-  .shared-feature {
-    padding-block: var(--space-16);
-  }
   .shared-feature__inner {
     padding-inline: var(--space-4);
   }
@@ -1361,7 +1355,6 @@ button:focus-visible {
   }
   .cta {
     min-block-size: min(80vh, 560px);
-    padding-block: var(--space-16);
     padding-inline: var(--space-4);
   }
   .navbar__inner {
@@ -1383,9 +1376,6 @@ button:focus-visible {
   }
   .navbar__mobile-navigation {
     display: block;
-  }
-  .footer {
-    padding-block: var(--space-12);
   }
   .accordion__content-inner {
     padding-inline-end: var(--space-6);

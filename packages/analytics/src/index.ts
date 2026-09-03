@@ -241,6 +241,8 @@ export type { EngagementTrackingOptions, TrackedSection } from "./engagement-dom
 export { createFormFunnelReporter } from "./form-funnel";
 export type { FormFunnelOptions, FormFunnelReporter } from "./form-funnel";
 export { discoverSections, featureSectionId } from "./section-discovery";
+export { isSectionSeen } from "./section-visibility";
+export type { SectionVisibilityInput } from "./section-visibility";
 export type { SectionDiscoveryOptions } from "./section-discovery";
 export { eventSchemas } from "./event-schema";
 export type { EventFieldSchema } from "./event-schema";

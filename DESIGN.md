@@ -6,8 +6,15 @@
 
 ## 원칙
 
-- 데스크톱 기본 레이아웃을 먼저 정의하고 `--breakpoint-mobile` 이하에서 한 열로
-  축소한다. 콘텐츠 순서와 핵심 행동은 뷰포트에 따라 바꾸지 않는다.
+- **모바일 기본 레이아웃을 먼저 정의하고 넓은 폭에서 확장한다.** 기본 선언이 좁은
+  폭을 향하고, `--breakpoint-mobile`을 넘는 폭에서 `min-width`로 올린다. 보장 폭은
+  320px부터 430px까지와 820px이다. 콘텐츠 순서와 핵심 행동은 뷰포트에 따라 바꾸지
+  않는다.
+- 이 순서는 2026-09-03에 뒤집혔다. 트래픽의 99% 이상이 모바일인데 기본값이 데스크톱을
+  향해 있어, 넓은 폭에서만 성립하는 값이 기본이 되고 좁은 폭은 예외로 덮어쓰는 구조가
+  됐다. 그 결과 768~1004px 구간에서 히어로 미디어가 넘쳤고, 세로 리듬이 데스크톱
+  기준으로 남아 모바일 섹션이 뷰포트의 두 배를 넘겼다. 남아 있는 `max-width` 블록은
+  건드리는 파일부터 `min-width`로 옮긴다.
 - 모든 시각 값은 `packages/design-tokens/src/tokens.css`의 CSS 변수에서 온다.
   컴포넌트와 앱 스타일에 색상, 길이, 시간의 생값을 쓰지 않는다.
 - 공통 프리미티브는 접근 가능한 shadcn 계열 API를 따른다. 앱 전용 UI는 공통
@@ -22,17 +29,18 @@
 토큰의 실제 값과 전체 목록은
 `packages/design-tokens/src/tokens.css`가 단일 출처다.
 
-| 범주     | 대표 토큰                                                   | 역할                       |
-| -------- | ----------------------------------------------------------- | -------------------------- |
-| 색       | `--color-bg`, `--color-fg`, `--color-muted-fg`              | 배경과 텍스트              |
-| 액션     | `--color-accent`, `--color-accent-fg`                       | 주요 행동과 그 위의 콘텐츠 |
-| 상태     | `--color-danger`, `--color-danger-fg`, `--color-focus`      | 오류와 키보드 포커스       |
-| 간격     | `--space-1` … `--space-24`                                  | 밀도와 레이아웃 리듬       |
-| 타이포   | `--font-sans`, `--text-xs` … `--text-display`               | 글꼴과 타입 스케일         |
-| 형태     | `--radius-sm` … `--radius-full`                             | 컨트롤과 컨테이너 모서리   |
-| 깊이     | `--shadow-sm` … `--shadow-lg`                               | 표면 위계                  |
-| 모션     | `--duration-fast`, `--duration-normal`, `--ease-standard`   | 상태 전환                  |
-| 레이아웃 | `--content-max`, `--content-reading`, `--breakpoint-mobile` | 콘텐츠 폭과 반응형 경계    |
+| 범주     | 대표 토큰                                                   | 역할                                                                    |
+| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 색       | `--color-bg`, `--color-fg`, `--color-muted-fg`              | 배경과 텍스트                                                           |
+| 액션     | `--color-accent`, `--color-accent-fg`                       | 주요 행동과 그 위의 콘텐츠                                              |
+| 상태     | `--color-danger`, `--color-danger-fg`, `--color-focus`      | 오류와 키보드 포커스                                                    |
+| 간격     | `--space-1` … `--space-24`                                  | 밀도와 레이아웃 리듬                                                    |
+| 타이포   | `--font-sans`, `--text-xs` … `--text-display`               | 글꼴과 타입 스케일                                                      |
+| 형태     | `--radius-sm` … `--radius-full`                             | 컨트롤과 컨테이너 모서리                                                |
+| 깊이     | `--shadow-sm` … `--shadow-lg`                               | 표면 위계                                                               |
+| 모션     | `--duration-fast`, `--duration-normal`, `--ease-standard`   | 상태 전환                                                               |
+| 레이아웃 | `--content-max`, `--content-reading`, `--breakpoint-mobile` | 콘텐츠 폭과 반응형 경계                                                 |
+| 리듬     | `--section-block`, `--section-block-compact`                | 섹션 세로 여백. 모바일 기본값을 갖고 `min-width: 48.01rem`에서 올라간다 |
 
 ## 컴포넌트 프리미티브
 

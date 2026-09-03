@@ -63,7 +63,8 @@
   color: var(--color-bg);
 }
 .k-drama-hero-card--lesson {
-  width: var(--media-card-wide);
+  width: 100%;
+  max-width: var(--media-card-wide);
   background: var(--color-bg);
   box-shadow: var(--shadow-media-card-soft);
   color: var(--color-fg);
@@ -408,13 +409,22 @@
 }
 
 @supports (display: grid) {
+  /* Proportional columns, not fixed ones. The three cards add up to about 1004px, so
+     fixed tracks spilled out of every viewport between the mobile breakpoint and that
+     width — an iPad in portrait overflowed by 92px. Ratios keep the same composition
+     and let it shrink; the max-width stops it growing past its designed size. */
   .k-drama-hero__visuals {
     display: grid;
-    grid-template-columns: var(--media-card-compact) var(--media-card-wide) var(
-        --media-card-compact
-      );
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    max-inline-size: calc(
+      var(--media-card-compact) * 2 + var(--media-card-wide) + var(--space-3) * 2
+    );
+    margin-inline: auto;
     justify-content: center;
     gap: var(--space-3);
+  }
+  .k-drama-hero__visuals .k-drama-hero-card {
+    inline-size: 100%;
   }
   .k-drama-hero-card {
     margin: 0;
@@ -688,7 +698,12 @@
   place-items: center;
   background:
     radial-gradient(circle at 70% 24%, var(--color-drama-accent-glow), transparent 24%),
-    linear-gradient(145deg, var(--color-drama-ink-deep), var(--color-fg) 55%, var(--color-drama-accent-shadow));
+    linear-gradient(
+      145deg,
+      var(--color-drama-ink-deep),
+      var(--color-fg) 55%,
+      var(--color-drama-accent-shadow)
+    );
 }
 .k-drama-feature__scene--night {
   height: 100%;
@@ -700,7 +715,12 @@
   position: absolute;
   z-index: 1;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 32%, var(--color-drama-scrim-soft) 54%, var(--color-drama-device) 72%);
+  background: linear-gradient(
+    to bottom,
+    transparent 32%,
+    var(--color-drama-scrim-soft) 54%,
+    var(--color-drama-device) 72%
+  );
 }
 .k-drama-feature__scene--night img {
   position: absolute;
@@ -909,7 +929,12 @@
   height: 74%;
   background:
     linear-gradient(to top, var(--color-drama-scrim-deep), transparent 55%),
-    radial-gradient(circle at 34% 30%, var(--color-drama-accent), var(--color-drama-accent-midnight) 56%, var(--color-fg));
+    radial-gradient(
+      circle at 34% 30%,
+      var(--color-drama-accent),
+      var(--color-drama-accent-midnight) 56%,
+      var(--color-fg)
+    );
 }
 .k-drama-feature__play {
   width: var(--space-12);
@@ -1158,7 +1183,11 @@
 .k-drama-feature__download-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--color-drama-overlay-light), var(--color-drama-glass-fill));
+  background: linear-gradient(
+    to bottom,
+    var(--color-drama-overlay-light),
+    var(--color-drama-glass-fill)
+  );
 }
 .k-drama-feature__download-overlay .k-drama-feature__lesson-progress {
   position: absolute;
@@ -1213,7 +1242,12 @@
   display: block;
   height: var(--space-6);
   border-radius: var(--radius-lg);
-  background: linear-gradient(90deg, var(--color-drama-surface-muted) 25%, var(--color-bg) 50%, var(--color-drama-surface-muted) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--color-drama-surface-muted) 25%,
+    var(--color-bg) 50%,
+    var(--color-drama-surface-muted) 75%
+  );
   background-size: 200% 100%;
   animation: k-drama-feature-skeleton-shimmer 5s linear infinite;
 }
@@ -1354,7 +1388,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(to bottom, var(--color-drama-scrim-tint), transparent 36%, var(--color-drama-scrim-deep));
+  background: linear-gradient(
+    to bottom,
+    var(--color-drama-scrim-tint),
+    transparent 36%,
+    var(--color-drama-scrim-deep)
+  );
   color: var(--color-drama-on-media);
 }
 .k-drama-feature__saved-heading {
@@ -1602,8 +1641,14 @@
   background: var(--color-drama-accent-soft-media);
   animation: k-drama-challenge-wave 0.8s ease-in-out infinite alternate;
 }
-.k-drama-feature__challenge-wave i:nth-child(2n) { height: 82%; animation-delay: -0.4s; }
-.k-drama-feature__challenge-wave i:nth-child(3n) { height: 58%; animation-delay: -0.2s; }
+.k-drama-feature__challenge-wave i:nth-child(2n) {
+  height: 82%;
+  animation-delay: -0.4s;
+}
+.k-drama-feature__challenge-wave i:nth-child(3n) {
+  height: 58%;
+  animation-delay: -0.2s;
+}
 .k-drama-feature__challenge-capture > small {
   display: flex;
   align-items: center;
@@ -1695,11 +1740,19 @@
   font-size: 0.75rem;
 }
 @keyframes k-drama-challenge-wave {
-  to { transform: scaleY(0.38); }
+  to {
+    transform: scaleY(0.38);
+  }
 }
 @keyframes k-drama-challenge-countdown {
-  from { opacity: 0; transform: scale(1.45); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .k-drama-feature__shorts-screen {
   position: relative;
@@ -1713,7 +1766,13 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--color-drama-scrim-top), transparent 26%, transparent 56%, var(--color-drama-scrim-bottom));
+  background: linear-gradient(
+    to bottom,
+    var(--color-drama-scrim-top),
+    transparent 26%,
+    transparent 56%,
+    var(--color-drama-scrim-bottom)
+  );
 }
 .k-drama-feature__shorts-slides {
   position: absolute;
@@ -1834,7 +1893,9 @@
   opacity: 0;
   text-align: start;
   transform: translateY(1rem);
-  transition: opacity 320ms ease 180ms, transform 420ms ease 180ms;
+  transition:
+    opacity 320ms ease 180ms,
+    transform 420ms ease 180ms;
 }
 .k-drama-feature__shorts-caption.is-visible {
   opacity: 1;
@@ -1874,8 +1935,14 @@
   background: var(--color-drama-progress-caption);
 }
 @keyframes k-drama-challenge-tap {
-  0%, 100% { transform: scale(1); }
-  45% { transform: scale(0.72); box-shadow: var(--shadow-drama-challenge-tap-ring); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.72);
+    box-shadow: var(--shadow-drama-challenge-tap-ring);
+  }
 }
 .k-drama-feature__shortform-toolbar {
   padding: var(--space-4);
@@ -1894,7 +1961,12 @@
   gap: var(--space-3);
   background:
     linear-gradient(to top, var(--color-drama-scrim-deep), transparent 62%),
-    radial-gradient(circle at 50% 25%, var(--color-drama-accent), var(--color-drama-accent-deep) 42%, var(--color-drama-ink-deepest) 75%);
+    radial-gradient(
+      circle at 50% 25%,
+      var(--color-drama-accent),
+      var(--color-drama-accent-deep) 42%,
+      var(--color-drama-ink-deepest) 75%
+    );
   color: var(--color-drama-on-media);
   text-align: center;
 }
