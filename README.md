@@ -40,7 +40,7 @@ Navbar  →  Hero (+ 진입 CTA)  →  Proof  →  Features ×3  →  Final CTA 
 랜딩페이지를 여러 개 만드는 일의 어려움은 만드는 게 아니라 **비교 가능하게 유지하는 것**이다. 이 저장소가 그 비용을 무는 자리는 넷이다.
 
 - **언어** — 세 앱 모두 `en-US`(기본), `ko-KR`, `ja-JP`, `vi-VN`, `th-TH`, `zh-CN`, `zh-TW`, `ar`(RTL) 여덟 locale을 같은 키 집합으로 갖는다. 키가 빠지거나 남으면 테스트가 실패한다. `?pseudo=1`로 문구를 35% 늘린 pseudo-locale(`en-XA`)을 띄워 잘림을 확인한다.
-- **측정** — 노출·CTA 클릭·전환 이벤트 이름과 필수 속성이 `@landing/contracts`에 고정돼 있고, 동의 전에는 외부로 나가지 않으며 payload에 PII를 담지 못한다. 분석이 죽어도 링크와 렌더링은 살아 있어야 한다.
+- **측정** — 열세 개 이벤트의 이름과 필수 속성이 `@landing/contracts`에 고정돼 있고, 동의 전에는 외부로 나가지 않으며 payload에 PII를 담지 못한다. 분석이 죽어도 링크와 렌더링은 살아 있어야 한다. 무엇을 왜 재는지는 [`MEASUREMENT.md`](MEASUREMENT.md)에 있다.
 - **시각** — 색·간격·타이포는 `@landing/design-tokens`의 CSS 변수에서만 온다. 앱 스타일에 생값을 쓰지 않는다.
 - **접근성** — axe critical/serious 0건, WCAG AA 대비, 키보드만으로 모든 상호작용 도달, `prefers-reduced-motion` 존중. Playwright가 데스크톱·모바일, LTR·RTL에서 검사한다.
 
@@ -114,7 +114,8 @@ docs/
 | 어떤 순서로 보여주는가             | `apps/<app>/src/app/App.tsx`                                       |
 | 무엇이 공통이고 무엇이 앱 전용인가 | [`docs/specs/landing-monorepo.md`](docs/specs/landing-monorepo.md) |
 | 시각 규칙과 토큰의 의미            | [`DESIGN.md`](DESIGN.md)                                           |
-| 무엇을 재고 어디까지 검증됐는가    | [`PLAN.md`](PLAN.md)                                               |
+| 무엇을 왜 재는가                   | [`MEASUREMENT.md`](MEASUREMENT.md)                                 |
+| 어디까지 검증됐는가                | [`PLAN.md`](PLAN.md)                                               |
 | 개별 기능의 고정 계약              | `docs/specs/`                                                      |
 
 ## 새 실험 추가
