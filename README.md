@@ -127,20 +127,6 @@ docs/
 6. 데스크톱에서 먼저 구성하되 모바일에서도 정보와 액션을 유지한다.
 7. 루트 품질 게이트를 모두 실행하고 스펙의 수용 기준을 확인한다.
 
-## 에이전트 하네스
-
-이 저장소는 [sehyun0518/agent](https://github.com/sehyun0518/agent) 하네스를 소비 저장소로 연결해 쓴다. 저장소가 소유하는 것은 [`.agent-harness/profile.yaml`](.agent-harness/profile.yaml) 하나 — 계층별 테스트 명령, 파일 패턴, 컨벤션 경로, 권한 축소다. 작업 순서와 이관 조건은 하네스의 `workflows/`가 소유한다.
-
-`.claude/`와 `.codex/`는 하네스가 생성한 로컬 미러이며 `.gitignore` 대상이다. 새 체크아웃에서는 나란히 둔 하네스에서 다시 낸다.
-
-```sh
-cd ../agent
-npm run generate -- --check --into <이 저장소 절대경로>   # 먼저 무엇이 바뀌는지 본다
-npm run generate -- --into <이 저장소 절대경로>
-```
-
-계층은 러너가 아니라 파일 이름으로 갈린다 — `*.test.ts`(unit) · `*.test.tsx`(ui) · `*.integration.test.*`(integration) · `e2e/*.spec.ts`(e2e).
-
 ## 유지보수
 
 - 문구 변경: `apps/<app>/src/resources.ts`의 여덟 locale을 함께 바꾼다. 한 곳만 고치면 키 드리프트 테스트가 실패한다.
