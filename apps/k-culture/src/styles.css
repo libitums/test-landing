@@ -1950,11 +1950,31 @@
 }
 @media (max-width: 48rem) {
   .k-hero__visuals {
-    grid-auto-flow: row;
-    justify-items: center;
+    /* Phone rail. Stacked, the three cards ate 904-1124px — 1.6 to 1.9 screens on the
+       shortest supported device, and they grew on taller phones because their size is
+       driven by width. Laid out inline they cost one card's height instead of three,
+       and the hero stops scaling with the wrong axis. Same cards, same order. */
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: min(78%, var(--media-card-wide));
+    gap: var(--space-4);
+    justify-content: start;
+    inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: var(--space-4);
+    padding-inline: var(--space-4);
+    scrollbar-width: none;
+  }
+  .k-hero__visuals > * {
+    scroll-snap-align: center;
+  }
+  .k-hero__visuals::-webkit-scrollbar {
+    display: none;
   }
   .k-hero-card--lesson {
-    width: min(100%, var(--media-card-compact));
+    width: 100%;
   }
 }
 @media (prefers-reduced-motion: reduce) {

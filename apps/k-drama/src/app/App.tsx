@@ -119,7 +119,12 @@ export function App({
         <LandingShell.Main>
           <div className="k-drama-hero">
             <Hero content={content.hero} onAction={() => openEarlyAccess("hero")}>
-              <div className="k-drama-hero__visuals">
+              <div
+                className="k-drama-hero__visuals"
+                role="group"
+                aria-label={t("hero.preview")}
+                tabIndex={0}
+              >
                 <div
                   className="k-drama-hero-card k-drama-hero-card--video"
                   role="img"

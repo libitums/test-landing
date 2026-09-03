@@ -5,7 +5,14 @@ import { expect, test } from "@playwright/test";
  * 320 is an iPhone SE, 430 an iPhone 15 Pro Max, 820 an iPad in portrait — the two ends
  * where the desktop-first layout was still breaking.
  */
-const widths = [320, 360, 390, 412, 430, 820] as const;
+const viewports = [
+  { width: 320, height: 568, label: "iPhone SE" },
+  { width: 360, height: 640, label: "small Android" },
+  { width: 390, height: 844, label: "iPhone 12" },
+  { width: 412, height: 915, label: "Pixel 7" },
+  { width: 430, height: 932, label: "iPhone 15 Pro Max" },
+  { width: 820, height: 1180, label: "iPad portrait" },
+] as const;
 
 const apps = [
   { id: "k-drama", origin: "http://127.0.0.1:4173" },
@@ -23,13 +30,15 @@ const namedSections = [
 
 test.describe("responsive matrix", () => {
   for (const app of apps) {
-    for (const width of widths) {
-      test(`${app.id} fits and stays measurable at ${width}px`, async ({ page }, testInfo) => {
+    for (const { width, height, label } of viewports) {
+      test(`${app.id} fits and stays measurable at ${width}x${height} (${label})`, async ({
+        page,
+      }, testInfo) => {
         test.skip(
           testInfo.project.name !== "chromium",
           "The matrix drives its own viewports; one engine is enough",
         );
-        await page.setViewportSize({ width, height: 900 });
+        await page.setViewportSize({ width, height });
         await page.goto(`${app.origin}/en-US/`, { waitUntil: "networkidle" });
 
         // 1. Nothing sticks out sideways. Horizontal scroll on a phone hides content that
@@ -74,7 +83,10 @@ test.describe("responsive matrix", () => {
         );
         expect(unmeasurable, `${app.id} at ${width}px`).toEqual([]);
 
-        // 3. The primary call to action stays inside the viewport and stays tappable.
+        // 3. The primary call to action stays inside the viewport and stays tappable —
+        //    on both axes. Height is the one that was wrong: the hero kept the same
+        //    vertical spend on a 568px screen as on a 932px one, so the action fell
+        //    below the fold exactly on the shortest phones.
         const cta = page
           .locator('[data-testid="hero"] button, [data-testid="hero"] a[href]')
           .first();
@@ -83,6 +95,22 @@ test.describe("responsive matrix", () => {
         expect(box).not.toBeNull();
         expect(box!.x + box!.width).toBeLessThanOrEqual(width + 1);
         expect(box!.height).toBeGreaterThanOrEqual(44);
+        expect(
+          Math.round(box!.y + box!.height),
+          `${app.id} hero CTA falls below the first screen at ${width}x${height}`,
+        ).toBeLessThanOrEqual(height);
+
+        // 4. The hero answers to the height of the device it is on. Two screens of hero
+        //    means the visitor scrolls past the whole pitch before reaching anything else,
+        //    and the shorter the phone the worse it got.
+        const heroScreens = await page.evaluate(() => {
+          const hero = document.querySelector('[data-testid="hero"]');
+          return hero ? hero.getBoundingClientRect().height / window.innerHeight : 0;
+        });
+        expect(
+          Number(heroScreens.toFixed(2)),
+          `${app.id} hero spends ${heroScreens.toFixed(2)} screens at ${width}x${height}`,
+        ).toBeLessThanOrEqual(2);
       });
     }
   }

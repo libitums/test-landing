@@ -89,10 +89,7 @@ function ScenarioCard({
   children?: ReactNode;
 }) {
   return (
-    <div
-      className={`hero-showcase__scene hero-showcase__scene--${variant}`}
-      aria-hidden="true"
-    >
+    <div className={`hero-showcase__scene hero-showcase__scene--${variant}`} aria-hidden="true">
       <div className="hero-showcase__scene-scrim" />
       <CaptureTile kind={tile} />
       <div className="hero-showcase__scene-body">
@@ -141,7 +138,7 @@ function CorrectionCard() {
 
 export function HeroShowcase({ label }: HeroShowcaseProps) {
   return (
-    <div className="hero-showcase" role="group" aria-label={label}>
+    <div className="hero-showcase" role="group" aria-label={label} tabIndex={0}>
       <div className="hero-showcase__col">
         <ScenarioCard variant="cosmetic" title="Buy cosmetic" tile="mic" />
       </div>

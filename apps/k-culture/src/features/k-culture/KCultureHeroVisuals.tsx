@@ -18,7 +18,7 @@ type Translate = I18nRuntime["translate"];
  */
 export function KCultureHeroVisuals({ t }: { t: Translate }) {
   return (
-    <div className="k-hero__visuals">
+    <div className="k-hero__visuals" role="group" aria-label={t("hero.preview")} tabIndex={0}>
       <FeedCard t={t} />
       <LessonCard t={t} />
       <RegisterCard t={t} />
@@ -88,7 +88,9 @@ function FeedCard({ t }: { t: Translate }) {
             <div className="k-hero-card__feed-slide">
               <strong className="k-hero-card__feed-heading">Now say it back</strong>
               <div className="k-hero-card__feed-chips">
-                <span className="k-hero-card__feed-chip k-hero-card__feed-chip--topic">K-drama</span>
+                <span className="k-hero-card__feed-chip k-hero-card__feed-chip--topic">
+                  K-drama
+                </span>
                 <span className="k-hero-card__feed-chip k-hero-card__feed-chip--time">0:08</span>
               </div>
               <span>아 진짜 대박이다</span>

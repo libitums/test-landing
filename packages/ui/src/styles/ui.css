@@ -843,7 +843,12 @@ button:focus-visible {
   isolation: isolate;
   overflow: clip;
   inline-size: 100%;
+  /* svh, not vh: on a phone vh is the large viewport with the URL bar hidden, so a
+     vh-sized block is taller than what is actually on screen and the layout jumps when
+     the bar collapses. The vh line stays first as the fallback for iOS 15.0-15.3, which
+     is inside the support floor and does not know svh. */
   min-block-size: min(88vh, 780px);
+  min-block-size: min(88svh, 780px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1355,6 +1360,7 @@ button:focus-visible {
   }
   .cta {
     min-block-size: min(80vh, 560px);
+    min-block-size: min(80svh, 560px);
     padding-inline: var(--space-4);
   }
   .navbar__inner {
@@ -1408,5 +1414,29 @@ button:focus-visible {
   .accordion__trigger,
   .accordion__chevron {
     transition: none;
+  }
+}
+
+/* Short screens. Width alone does not describe a phone: a 320x568 iPhone SE and a
+   430x932 Pro Max differ by 364px of height, and the hero was composed for neither —
+   it kept the same vertical spend on both, so the primary call to action fell off the
+   first screen on the short one. These rules trade spacing and type scale for the one
+   thing that has to be reachable without scrolling. */
+@media (max-height: 40rem) {
+  .section {
+    padding-block: var(--space-10);
+  }
+  .hero__copy h1 {
+    font-size: var(--text-4xl);
+  }
+  .hero__description {
+    margin-block-start: var(--space-4);
+    font-size: var(--text-base);
+  }
+  .hero__cta {
+    margin-block-start: var(--space-5);
+  }
+  .hero__media {
+    margin-block-start: var(--space-6);
   }
 }

@@ -9,6 +9,7 @@
   --color-accent-active: var(--color-editorial-accent-active);
   --color-focus: var(--color-editorial-accent);
   min-block-size: 100vh;
+  min-block-size: 100svh;
   display: grid;
   grid-template-rows: auto 1fr;
   background: var(--color-bg);
@@ -272,6 +273,7 @@
     transition: none;
   }
 }
+
 @media (max-width: 48rem) {
   .early-access__header {
     align-items: flex-start;
@@ -1837,5 +1839,30 @@
       visibility: hidden;
       transform: translateY(0) scale(1);
     }
+  }
+}
+
+@media (max-width: 48rem) {
+  /* Phone rail. Wrapped, the three columns stacked into 1.3 screens of hero and pushed
+     the primary call to action off an iPhone SE's first screen. Inline they cost one
+     column's height, and the hero stops growing as the phone gets shorter. */
+  .hero-showcase {
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: var(--space-4);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: var(--space-4);
+    padding-inline: var(--space-4);
+    scrollbar-width: none;
+  }
+  .hero-showcase > .hero-showcase__col {
+    flex: 0 0 min(78%, var(--hero-scene-inline));
+    scroll-snap-align: center;
+  }
+  .hero-showcase::-webkit-scrollbar {
+    display: none;
   }
 }
