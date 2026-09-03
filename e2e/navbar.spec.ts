@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 const apps = [
   { id: "k-drama", origin: "http://127.0.0.1:4173", localeCount: 8 },
   { id: "ai-communication", origin: "http://127.0.0.1:4174", localeCount: 8 },
-  { id: "k-culture", origin: "http://127.0.0.1:4175", localeCount: 3 },
+  { id: "k-culture", origin: "http://127.0.0.1:4175", localeCount: 8 },
 ] as const;
 
 const ids = {

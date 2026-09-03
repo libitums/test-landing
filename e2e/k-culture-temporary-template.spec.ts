@@ -2,7 +2,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const origin = `http://127.0.0.1:${process.env.K_CULTURE_E2E_PORT ?? 4175}`;
-const earlyAccessPath = "/k-culture/early-access";
+// Opens the in-page modal now, not a separate route.
+const earlyAccessPath = "#early-access";
 const locales = ["ko-KR", "en-US", "ja-JP", "vi-VN", "th-TH", "zh-CN", "zh-TW", "ar"] as const;
 
 const features = [
@@ -76,7 +77,7 @@ test.describe("K-culture temporary shared template", () => {
     const faq = page.getByTestId("footer-faq");
     const featureRoots = features.map(({ id }) => page.getByTestId(featureTestId(id)));
 
-    await expect(page).toHaveTitle("K-zip");
+    await expect(page).toHaveTitle("K-zip — Learn Korean through K-Culture");
     await expect(logo).toHaveRole("link");
     await expect(logo).toHaveAccessibleName("K-zip");
     await expect(logo).toHaveAttribute("href", "#top");
@@ -146,10 +147,26 @@ test.describe("K-culture temporary shared template", () => {
       const content = page.getByTestId(`${rootId}:content`);
       const cta = content.getByTestId(`${rootId}:early-access-cta`);
 
-      await expect(content.locator(":scope > *")).toHaveCount(1);
-      await expect(
-        content.locator("img, picture, video, canvas, svg, [role='img'], [role='group']"),
-      ).toHaveCount(0);
+      // The template froze this at one child — the CTA — while k-culture had no feature
+      // visuals of its own. It has them now (#37, #38), so the stage is expected and the
+      // freeze moves to what it was really guarding: nothing in the stage carries meaning
+      // that only sighted visitors get, and the CTA stays a plain link.
+      await expect(content.locator(":scope > *")).toHaveCount(2);
+      await expect(content.locator(":scope > [class$='__stage']")).toHaveCount(1);
+      const undescribed = await content
+        .locator("img, picture, video, canvas, svg, [role='img'], [role='group']")
+        .evaluateAll((nodes) =>
+          nodes
+            .filter((node) => {
+              if (node.closest("[aria-hidden='true']") !== null) return false;
+              const alt = node.getAttribute("alt");
+              // An empty alt is the decorative marker; a missing one is an omission.
+              if (alt === "") return false;
+              return (alt ?? node.getAttribute("aria-label")) === null;
+            })
+            .map((node) => node.outerHTML.slice(0, 120)),
+        );
+      expect(undescribed).toEqual([]);
       await expect(cta).toHaveRole("link");
       await expect(cta).toHaveAccessibleName("Get early access");
       await expect(cta).toHaveAttribute("href", earlyAccessPath);
@@ -186,7 +203,7 @@ test.describe("K-culture temporary shared template", () => {
       await page.goto(`${origin}/${locale}/`);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-      await expect(page).toHaveTitle("K-zip");
+      await expect(page).toHaveTitle("K-zip — Learn Korean through K-Culture");
       const heading = page.getByRole("heading", { level: 1 });
       await expect(heading).toBeVisible();
       await expect(heading).not.toHaveText("The real Korean you actually wanted to learn");

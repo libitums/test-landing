@@ -566,7 +566,7 @@
   border-radius: 999px;
   background: #ffffffb3;
   color: #2a6bb0;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 .k-feature-one__promo-copy strong {
@@ -577,8 +577,11 @@
 }
 .k-feature-one__promo-copy p {
   margin: 0.35rem 0 0;
-  color: #46627d;
-  font-size: 0.7rem;
+  /* #46627d measured 4.19:1 on this card's #a9d7ff at 11.2px — under the 4.5:1 floor that
+     applies below large-text size. #33506b reaches 5.4:1 and reads the same at a glance.
+     The size goes to 12px so it clears the readable floor on a phone as well. */
+  color: #33506b;
+  font-size: 0.75rem;
 }
 .k-feature-one__promo-grid > img {
   position: absolute;
@@ -1373,7 +1376,7 @@
 }
 .k-feature-three__scene-panel span {
   color: #2a6bb0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1387,7 +1390,7 @@
 .k-feature-three__scene-panel small {
   margin-top: 0.45rem;
   color: #64748b;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
 }
 .k-feature-three__scene--friend {
   left: 26.4375rem;
@@ -1593,8 +1596,11 @@
     border: 1px solid #e7ecf1;
     border-radius: 1rem;
   }
+  /* These three lines are real content, not part of the mock: the register name, the
+     phrase, and the tone. Every other sub-12px string on these pages sits inside an
+     aria-hidden mock of an app screen; these are read out, so they hold 12px. */
   .k-feature-three__scene-panel span {
-    font-size: 0.625rem;
+    font-size: 0.75rem;
   }
   .k-feature-three__scene-panel strong {
     margin-top: 0.3rem;
@@ -1602,7 +1608,7 @@
   }
   .k-feature-three__scene-panel small {
     margin-top: 0.3rem;
-    font-size: 0.625rem;
+    font-size: 0.75rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2083,9 +2089,16 @@
 :dir(rtl) .k-hero-registers__bubble::before {
   transform: rotate(45deg);
 }
-/* Staggered so the three registers land in order, then hold before repeating. */
+/* Staggered so the three registers land in order, then hold before repeating.
+   Two animations, not one, because they need different timing. The slide eases; the
+   opacity steps. Easing the opacity too meant the Korean lines spent part of every cycle
+   half transparent, which measured 3.5:1 against the card — under the 4.5:1 floor for
+   13px text, and caught in all eight locales. Stepping it keeps the text either fully
+   there or fully gone, and the motion reads the same. */
 .k-hero-registers__row {
-  animation: k-hero-register-in 6s var(--ease-standard) infinite both;
+  animation:
+    k-hero-register-in 6s var(--ease-standard) infinite both,
+    k-hero-register-reveal 6s steps(1, end) infinite both;
 }
 .k-hero-registers__row:nth-child(2) {
   animation-delay: 0.45s;
@@ -2095,17 +2108,26 @@
 }
 @keyframes k-hero-register-in {
   0% {
-    opacity: 0;
     transform: translateY(0.5rem);
   }
   8%,
   92% {
-    opacity: 1;
     transform: translateY(0);
   }
   100% {
-    opacity: 0;
     transform: translateY(0.5rem);
+  }
+}
+@keyframes k-hero-register-reveal {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {

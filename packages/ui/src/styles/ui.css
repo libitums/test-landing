@@ -1329,7 +1329,27 @@ button:focus-visible {
     gap: var(--space-8);
   }
   .pricing__plans {
-    grid-template-columns: 1fr;
+    /* Stacked, three plan cards ran 2026-2148px — 3.6 to 3.8 screens on the shortest
+       supported phone, so comparing plans meant scrolling past each one. Side by side
+       in a rail they cost one card's height and can be compared by swiping, which is
+       what a pricing table is for. Same plans, same order. */
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(82%, 20rem);
+    gap: var(--space-4);
+    justify-content: start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: var(--space-4);
+    padding-inline: var(--space-4);
+    scrollbar-width: none;
+  }
+  .pricing__plans > * {
+    scroll-snap-align: center;
+  }
+  .pricing__plans::-webkit-scrollbar {
+    display: none;
   }
   .hero__description {
     margin-block-start: var(--space-4);

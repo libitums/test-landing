@@ -60,7 +60,7 @@ function RegisterCard({ t }: { t: Translate }) {
                 className={`k-hero-registers__avatar k-hero-registers__avatar--${row.id}`}
                 title={labels[row.id]}
               >
-                <img src={row.src} alt="" />
+                <img src={row.src} alt="" width={72} height={72} />
               </span>
               <span className="k-hero-registers__bubble">{row.line}</span>
             </li>
@@ -176,7 +176,7 @@ function LessonCard({ t }: { t: Translate }) {
                     situation.id === active.id ? " k-hero-lesson__situation--active" : ""
                   }`}
                 >
-                  <img src={situation.src} alt="" />
+                  <img src={situation.src} alt="" width={68} height={68} />
                 </div>
               ))}
             </div>
@@ -185,7 +185,7 @@ function LessonCard({ t }: { t: Translate }) {
                 <strong key={active.title}>{active.title}</strong>
                 <p key={active.prompt}>{active.prompt}</p>
               </div>
-              <img key={active.cardSrc} src={active.cardSrc} alt="" />
+              <img key={active.cardSrc} src={active.cardSrc} alt="" width={177} height={138} />
               <span className="k-hero-lesson__button">
                 {active.action} <i>→</i>
               </span>

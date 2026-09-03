@@ -7,8 +7,19 @@ const appServers = [
 ] as const;
 const pseudoPort = Number(process.env.PSEUDO_E2E_PORT ?? 4273);
 
+/**
+ * Specs that own a config carry their own `baseURL` and navigate with relative paths.
+ * Picked up here they had nowhere to navigate to, which is where 63 of the 81 failures
+ * on this command came from. `pnpm e2e` runs every config in turn instead.
+ */
+const ownConfigSpecs = [
+  "ai-communication-shared-feature.spec.ts",
+  "ai-communication-early-access.spec.ts",
+];
+
 export default defineConfig({
   testDir: ".",
+  testIgnore: ownConfigSpecs,
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,

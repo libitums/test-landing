@@ -6,7 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
-    "e2e": "playwright test --config playwright.config.ts",
+    "e2e": "playwright test --config playwright.config.ts && playwright test --config playwright.ai-communication.config.ts && playwright test --config playwright.ai-communication-early-access.config.ts",
     "e2e:update": "playwright test --config playwright.config.ts --update-snapshots"
   },
   "dependencies": {

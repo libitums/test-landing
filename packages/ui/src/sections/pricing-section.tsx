@@ -54,7 +54,9 @@ export function PricingSection({ content, testId = "pricing-section" }: PricingS
           </div>
         </div>
 
-        <ul className="pricing__plans">
+        {/* Focusable because it becomes a swipe rail on phones, and a scrollable region
+            has to be reachable without a pointer. The section heading names it. */}
+        <ul className="pricing__plans" tabIndex={0} aria-labelledby={`${testId}-title`}>
           {plans.map((plan) => (
             <li
               key={plan.id}

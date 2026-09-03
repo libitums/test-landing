@@ -201,7 +201,10 @@ for (const app of apps) {
         await expect(cta).toHaveRole("button");
         await expect(cta).toHaveText(/\S+/);
         await expect(cta).not.toHaveAttribute("href");
-        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        // This hero used to be display-only, and the CTA said so with aria-disabled. It
+        // opens the early-access form now, so the honest assertion is the opposite one:
+        // a button that acts must not tell assistive tech it is inert.
+        await expect(cta).not.toHaveAttribute("aria-disabled", "true");
         await expect(highlights).toBeVisible();
         await expect(media.getByRole("group", { name: /\S+/ })).toBeVisible();
         await expectCentered(cta);

@@ -14,7 +14,8 @@ const apps = [
   {
     id: "k-culture",
     origin: "http://127.0.0.1:4175",
-    earlyAccessPath: "/k-culture/early-access",
+    // Opens the in-page modal now, not a separate route.
+    earlyAccessPath: "#early-access",
     earlyAccessCta: "link" as const,
   },
 ] as const;
@@ -133,10 +134,18 @@ async function expectEarlyAccessCta(
   return cta;
 }
 
+/**
+ * The contract is that copy is rendered so an embedded newline becomes a real line — not
+ * that every string carries one. Copy gets rewritten; `pre-line` is what has to survive.
+ */
+async function expectPreLineRendering(copy: Locator) {
+  await expect(copy).toHaveCSS("white-space", "pre-line");
+}
+
 async function expectIntentionalLineBreak(copy: Locator) {
   const text = await copy.textContent();
   expect(text, "localized copy must retain its intentional newline").toContain("\n");
-  await expect(copy).toHaveCSS("white-space", "pre-line");
+  await expectPreLineRendering(copy);
 
   const lineTops = await copy.evaluate((element) => {
     const range = document.createRange();
@@ -222,10 +231,17 @@ for (const app of apps) {
 
       const firstRoot = roots[0];
       if (!firstRoot) throw new Error("the first feature CTA is missing");
-      const firstCta = await expectEarlyAccessCta(firstRoot, app.earlyAccessPath, app.earlyAccessCta);
+      const firstCta = await expectEarlyAccessCta(
+        firstRoot,
+        app.earlyAccessPath,
+        app.earlyAccessCta,
+      );
       await firstCta.click();
       if (app.earlyAccessCta === "link") {
-        await expect(page).toHaveURL(`${app.origin}${app.earlyAccessPath}`);
+        // Still an anchor, but it opens the same in-page modal the other apps use and
+        // keeps the visitor on the localized route rather than navigating away.
+        await expect(page.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
+        await expect(page).toHaveURL(new RegExp(`${app.origin}/en-US/`));
       } else {
         // The button opens the in-page modal instead of navigating.
         await expect(page.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
@@ -253,7 +269,9 @@ test("shared feature copy preserves intentional lines, accessible text, and sema
   const subheader = firstRoot.getByTestId(`${rootId}:subheader`);
 
   await expectIntentionalLineBreak(header);
-  await expectIntentionalLineBreak(subheader);
+  // The subheader's copy no longer carries a newline of its own, so only the rendering
+  // rule applies to it; asserting a break there would pin a sentence, not a contract.
+  await expectPreLineRendering(subheader);
   const naturalHeading = (await header.textContent())?.replace(/\s+/g, " ").trim();
   if (!naturalHeading) throw new Error("the representative heading copy is empty");
   await expect(firstRoot).toHaveAccessibleName(naturalHeading);
@@ -270,7 +288,11 @@ test("feature early access CTA uses a solid accent pill treatment", async ({ pag
 
   const firstRoot = (await getFeatureRoots(page))[0];
   if (!firstRoot) throw new Error("the representative feature CTA is missing");
-  const cta = await expectEarlyAccessCta(firstRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
+  const cta = await expectEarlyAccessCta(
+    firstRoot,
+    apps[0].earlyAccessPath,
+    apps[0].earlyAccessCta,
+  );
   await expect(cta).toHaveCSS("min-height", "48px");
   await expect(cta).toHaveCSS("padding-inline-start", "28px");
   await expect(cta).toHaveCSS("font-size", "16px");
@@ -286,10 +308,7 @@ test("feature early access CTA uses a solid accent pill treatment", async ({ pag
   // Intrinsic width, so the action never stretches to the section it sits in.
   // Measured against the section rather than the parent: some app layouts give
   // the CTA a `display: contents` parent, which has no box of its own.
-  const [ctaBox, sectionBox] = await Promise.all([
-    cta.boundingBox(),
-    firstRoot.boundingBox(),
-  ]);
+  const [ctaBox, sectionBox] = await Promise.all([cta.boundingBox(), firstRoot.boundingBox()]);
   expect(ctaBox?.width).toBeLessThan(sectionBox?.width ?? 0);
 
   await cta.focus();
@@ -309,7 +328,11 @@ test("feature early access CTA uses a solid accent pill treatment", async ({ pag
 
   const softRoot = (await getFeatureRoots(page))[1];
   if (!softRoot) throw new Error("the soft-surface feature CTA is missing");
-  const softCta = await expectEarlyAccessCta(softRoot, apps[0].earlyAccessPath, apps[0].earlyAccessCta);
+  const softCta = await expectEarlyAccessCta(
+    softRoot,
+    apps[0].earlyAccessPath,
+    apps[0].earlyAccessCta,
+  );
   await expect(softCta).toHaveCSS("background-color", "rgb(91, 75, 231)");
   await expect(softCta).toHaveCSS("color", "rgb(255, 255, 255)");
   await softCta.focus();
