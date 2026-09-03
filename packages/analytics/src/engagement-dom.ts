@@ -1,4 +1,5 @@
 import type { EngagementReporter } from "./engagement-reporter";
+import { isSectionSeen } from "./section-visibility";
 
 export interface TrackedSection {
   id: string;
@@ -9,9 +10,19 @@ export interface EngagementTrackingOptions {
   reporter: EngagementReporter;
   sections: readonly TrackedSection[];
   target?: (Window & typeof globalThis) | undefined;
-  /** Visible ratio that counts as "seen"; half the section by default. */
+  /**
+   * Fraction that counts as "seen": half the section, or half the viewport, whichever
+   * happens first. Half by default.
+   */
   visibleRatio?: number | undefined;
 }
+
+/**
+ * A section taller than twice the viewport never reaches ratio 0.5, so a `[0, ratio]`
+ * threshold list would never call back for it at all. Twenty evenly spaced steps keep the
+ * callback arriving as any section scrolls through, whatever its height.
+ */
+const observerThresholds = Array.from({ length: 21 }, (_, index) => index / 20);
 
 /** Undefined when the page cannot scroll, so depth is never faked as fully read. */
 function scrollPercent(target: Window & typeof globalThis): number | undefined {
@@ -62,14 +73,24 @@ export function startEngagementTracking(options: EngagementTrackingOptions): () 
             continue;
           }
 
-          if (entry.isIntersecting && entry.intersectionRatio >= ratio) {
+          const seen =
+            entry.isIntersecting &&
+            isSectionSeen({
+              intersectionHeight: entry.intersectionRect.height,
+              sectionHeight: entry.boundingClientRect.height,
+              // Safari can report null rootBounds; the window is the same viewport.
+              viewportHeight: entry.rootBounds?.height ?? target.innerHeight,
+              ratio,
+            });
+
+          if (seen) {
             reporter.sectionEntered(sectionId);
           } else {
             reporter.sectionLeft(sectionId);
           }
         }
       },
-      { threshold: [0, ratio] },
+      { threshold: observerThresholds },
     );
 
     for (const section of options.sections) {

@@ -41,7 +41,7 @@ describe("K-drama landing", () => {
         name: "experiment_viewed",
         version: 1,
         projectId: "k-drama",
-        experimentId: "landing-phase-1",
+        experimentId: "landing-phase-2",
         variantId: "k-drama-v1",
         locale: "en-US",
         pageId: "home",

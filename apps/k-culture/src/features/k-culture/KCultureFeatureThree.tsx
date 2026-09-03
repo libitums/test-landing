@@ -24,9 +24,24 @@ function expressionFor(role: SceneId, message: string) {
 export function KCultureFeatureThree({ t }: { t: I18nRuntime["translate"] }) {
   const demoText = t("visual.three.demo");
   const roleplayScenes = [
-    { id: "friend", src: "/images/feature-03/friend.png", label: t("visual.three.friend.label"), tone: t("visual.three.friend.tone") },
-    { id: "elder", src: "/images/feature-03/elder-professor.png", label: t("visual.three.elder.label"), tone: t("visual.three.elder.tone") },
-    { id: "boss", src: "/images/feature-03/workplace-boss.png", label: t("visual.three.boss.label"), tone: t("visual.three.boss.tone") },
+    {
+      id: "friend",
+      src: "/images/feature-03/friend.png",
+      label: t("visual.three.friend.label"),
+      tone: t("visual.three.friend.tone"),
+    },
+    {
+      id: "elder",
+      src: "/images/feature-03/elder-professor.png",
+      label: t("visual.three.elder.label"),
+      tone: t("visual.three.elder.tone"),
+    },
+    {
+      id: "boss",
+      src: "/images/feature-03/workplace-boss.png",
+      label: t("visual.three.boss.label"),
+      tone: t("visual.three.boss.tone"),
+    },
   ] as const;
   const stageRef = useRef<HTMLDivElement>(null);
   const typingTimerRef = useRef<number | null>(null);
@@ -43,11 +58,14 @@ export function KCultureFeatureThree({ t }: { t: I18nRuntime["translate"] }) {
       setIsVisible(true);
       return;
     }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry?.isIntersecting) return;
-      setIsVisible(true);
-      observer.disconnect();
-    }, { threshold: 0.25 });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setIsVisible(true);
+        observer.disconnect();
+      },
+      { threshold: 0.25 },
+    );
     observer.observe(stage);
     return () => observer.disconnect();
   }, []);
@@ -86,18 +104,35 @@ export function KCultureFeatureThree({ t }: { t: I18nRuntime["translate"] }) {
   };
 
   return (
-    <div ref={stageRef} className={`k-feature-three__stage${isVisible ? " k-feature-three__stage--visible" : ""}`}>
+    <div
+      ref={stageRef}
+      className={`k-feature-three__stage${isVisible ? " k-feature-three__stage--visible" : ""}`}
+    >
       <form className="k-feature-three__composer" onSubmit={submit}>
         <label className="k-feature-three__input">
           <span>◯</span>
-          <input value={draft} onChange={(event) => editDraft(event.target.value)} aria-label={t("visual.three.inputLabel")} placeholder={t("visual.three.placeholder")} />
+          <input
+            value={draft}
+            onChange={(event) => editDraft(event.target.value)}
+            aria-label={t("visual.three.inputLabel")}
+            placeholder={t("visual.three.placeholder")}
+          />
         </label>
-        <button className="k-feature-three__play" type="submit" aria-label={t("visual.three.submitLabel")}>▶</button>
+        <button
+          className="k-feature-three__play"
+          type="submit"
+          aria-label={t("visual.three.submitLabel")}
+        >
+          ▶
+        </button>
       </form>
       <div className="k-feature-three__scenes">
         {roleplayScenes.map((scene) => (
-          <div key={scene.id} className={`k-feature-three__scene k-feature-three__scene--${scene.id}`}>
-            <img src={scene.src} alt="" />
+          <div
+            key={scene.id}
+            className={`k-feature-three__scene k-feature-three__scene--${scene.id}`}
+          >
+            <img src={scene.src} alt="" width={72} height={72} />
             <div key={`${scene.id}-${revision}`} className="k-feature-three__scene-panel">
               <span>{scene.label}</span>
               <strong>{submitted === "" ? "…" : expressionFor(scene.id, submitted)}</strong>

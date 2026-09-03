@@ -74,10 +74,20 @@ async function expectCentered(locator: Locator) {
 async function expectNoHorizontalOverflowWithin(locator: Locator) {
   const result = await locator.evaluate((root) => {
     const rootBox = root.getBoundingClientRect();
+    // Content parked outside its own scroll container is reachable by swiping, not lost
+    // off the page, so it is not what this check is looking for.
+    const insideScroller = (element: Element) => {
+      for (let node = element.parentElement; node && node !== root; node = node.parentElement) {
+        const overflow = getComputedStyle(node).overflowX;
+        if (overflow === "auto" || overflow === "scroll") return true;
+      }
+      return false;
+    };
     return {
       clientWidth: root.clientWidth,
       scrollWidth: root.scrollWidth,
       offenders: [...root.querySelectorAll<HTMLElement>("*")]
+        .filter((element) => !insideScroller(element))
         .map((element) => {
           const box = element.getBoundingClientRect();
           return {
@@ -102,6 +112,30 @@ async function expectOrderedWithoutOverlap(locators: readonly Locator[]) {
     expect(boxes[index]?.y ?? 0, JSON.stringify(boxes)).toBeGreaterThanOrEqual(
       (boxes[index - 1]?.y ?? 0) + (boxes[index - 1]?.height ?? 0),
     );
+  }
+}
+
+/**
+ * Same contract as above, one axis over. The hero media is a swipe rail on phones, so its
+ * cards run along the inline axis instead of stacking; what has to hold is still that they
+ * keep their order and do not sit on top of each other.
+ */
+async function expectInlineOrderedWithoutOverlap(locators: readonly Locator[], rtl = false) {
+  const boxes = await Promise.all(locators.map((locator) => locator.boundingBox()));
+  expect(boxes.every(Boolean)).toBe(true);
+  for (let index = 1; index < boxes.length; index += 1) {
+    const previous = boxes[index - 1];
+    const current = boxes[index];
+    if (rtl) {
+      // Right to left: the next card ends where the previous one starts.
+      expect((current?.x ?? 0) + (current?.width ?? 0), JSON.stringify(boxes)).toBeLessThanOrEqual(
+        previous?.x ?? 0,
+      );
+    } else {
+      expect(current?.x ?? 0, JSON.stringify(boxes)).toBeGreaterThanOrEqual(
+        (previous?.x ?? 0) + (previous?.width ?? 0),
+      );
+    }
   }
 }
 
@@ -167,7 +201,10 @@ for (const app of apps) {
         await expect(cta).toHaveRole("button");
         await expect(cta).toHaveText(/\S+/);
         await expect(cta).not.toHaveAttribute("href");
-        await expect(cta).toHaveAttribute("aria-disabled", "true");
+        // This hero used to be display-only, and the CTA said so with aria-disabled. It
+        // opens the early-access form now, so the honest assertion is the opposite one:
+        // a button that acts must not tell assistive tech it is inert.
+        await expect(cta).not.toHaveAttribute("aria-disabled", "true");
         await expect(highlights).toBeVisible();
         await expect(media.getByRole("group", { name: /\S+/ })).toBeVisible();
         await expectCentered(cta);
@@ -223,8 +260,9 @@ for (const app of apps) {
           description,
           cta,
           highlights,
-          ...(await visuals.all()),
+          media,
         ]);
+        await expectInlineOrderedWithoutOverlap(await visuals.all());
         if (app.heroBackground) {
           await expect
             .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
@@ -274,14 +312,11 @@ test("RTL and long pseudo content preserve Hero order without overflow", async (
       await expect(cta).toBeVisible();
       await expect(highlights.getByRole("listitem")).toHaveCount(3);
       await expect(visuals).toHaveCount(3);
-      await expectOrderedWithoutOverlap([
-        label,
-        heading,
-        description,
-        cta,
-        highlights,
-        ...(viewport.width <= 768 ? await visuals.all() : [visuals.first()]),
-      ]);
+      await expectOrderedWithoutOverlap([label, heading, description, cta, highlights, media]);
+      if (viewport.width <= 768) {
+        const rtl = await hero.evaluate((element) => getComputedStyle(element).direction === "rtl");
+        await expectInlineOrderedWithoutOverlap(await visuals.all(), rtl);
+      }
       await expect
         .poll(() => hero.evaluate((element) => getComputedStyle(element).backgroundColor))
         .toBe("rgb(255, 255, 255)");

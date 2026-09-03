@@ -20,7 +20,7 @@
 - **ai-communication** — 역할극, 즉석 교정, 좋아하는 아이돌과의 대화. "이미 배운 단어를 실제로 말해보게 한다"가 축이다.
 - **k-culture** — "교과서가 빼놓은 것" 전부. 밈 한 장(뜻·유래·말맛), 상황 팩 두 개(덕질·한국 여행), 관계별 말투 네 가지(친구·선배·상사·어른)로 편다.
 
-분석에서는 세 페이지가 한 실험의 세 variant다 — `experimentId: landing-phase-1`, `variantId: k-drama-v1 · ai-communication-v1 · k-culture-v1`.
+분석에서는 세 페이지가 한 실험의 세 variant다 — `experimentId: landing-phase-2`, `variantId: k-drama-v1 · ai-communication-v1 · k-culture-v1`.
 
 ## 방문자가 지나는 길
 

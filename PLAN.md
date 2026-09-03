@@ -197,6 +197,11 @@ Exit criteria:
 - `pnpm e2e` 결과는 **79 passed, 81 intentionally skipped, 0 failed**다.
 - 81건의 skip은 의도된 browser/viewport 제한이다. localization 24건은 Phase 2의 deterministic snapshot·pseudo-locale·reduced-motion 제한이며, Navbar 21건은 desktop Chromium·mobile Chromium·cross-app 단일 실행 제한, Footer 36건은 desktop Chromium·mobile Chromium·cross-app/RTL/reduced-motion 단일 실행 제한이다. 기능 미구현이나 실패에 따른 skip은 없다.
 
+추가 완료 (2026-09-03):
+
+- 보장 폭 매트릭스를 E2E에 넣었다. 320 · 360 · 390 · 412 · 430 · 820px 각각에서 세 앱의 가로 오버플로 0px, 추적 섹션의 측정 가능성, 히어로 CTA의 화면 안 위치와 44px 이상 탭 영역을 검사한다(`e2e/responsive-matrix.spec.ts`, 18건).
+- 이 매트릭스가 없어 보이지 않던 결손을 두 개 찾았다. 820px에서 k-drama 92px, k-culture 22px 오버플로. 히어로 미디어 행이 고정 폭 3열이라 모바일 breakpoint와 그 합계 폭 사이 구간이 통째로 깨져 있었다. 경위는 `docs/specs/mobile-first-measurement-integrity.md`.
+
 남은 범위:
 
 - Hero CTA부터 실제 목적지까지의 프로젝트별 핵심 전환 흐름 E2E

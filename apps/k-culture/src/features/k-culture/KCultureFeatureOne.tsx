@@ -11,13 +11,22 @@ function GuidePhone({ t }: { t: Translate }) {
   return (
     <div className="k-feature-one__device k-feature-one__device--guide">
       <div className="k-feature-one__guide-handle" />
-      <div className="k-feature-one__guide-nav"><b>GUIDE</b><SpeakerIcon /></div>
+      <div className="k-feature-one__guide-nav">
+        <b>GUIDE</b>
+        <SpeakerIcon />
+      </div>
       <h3>Lucky Vicky</h3>
       <p className="k-feature-one__pronunciation">럭키비키&nbsp; · &nbsp;leok-ki-bi-ki</p>
       <div className="k-feature-one__word-row">
-        <div><strong>Lucky</strong><span>{t("visual.one.goodFortune")}</span></div>
+        <div>
+          <strong>Lucky</strong>
+          <span>{t("visual.one.goodFortune")}</span>
+        </div>
         <i>＋</i>
-        <div><strong>Vicky</strong><span>{t("visual.one.englishName")}</span></div>
+        <div>
+          <strong>Vicky</strong>
+          <span>{t("visual.one.englishName")}</span>
+        </div>
       </div>
       <div className="k-feature-one__guide-dialog">
         <span className="k-feature-one__dog">🐶</span>
@@ -26,7 +35,9 @@ function GuidePhone({ t }: { t: Translate }) {
           <p>{t("visual.one.example")}</p>
         </div>
       </div>
-      <div className="k-feature-one__guide-button">{t("visual.one.confirm")} <span>✓</span></div>
+      <div className="k-feature-one__guide-button">
+        {t("visual.one.confirm")} <span>✓</span>
+      </div>
     </div>
   );
 }
@@ -34,27 +45,42 @@ function GuidePhone({ t }: { t: Translate }) {
 function MemePhone({ t }: { t: Translate }) {
   return (
     <div className="k-feature-one__device k-feature-one__device--meme">
-      <div className="k-feature-one__notch"><i /><b /></div>
+      <div className="k-feature-one__notch">
+        <i />
+        <b />
+      </div>
       <div className="k-feature-one__promo-grid">
-        {Array.from({ length: 7 }, (_, index) => <i key={`v-${index}`} />)}
-        <i className="horizontal-one" /><i className="horizontal-two" />
+        {Array.from({ length: 7 }, (_, index) => (
+          <i key={`v-${index}`} />
+        ))}
+        <i className="horizontal-one" />
+        <i className="horizontal-two" />
         <div className="k-feature-one__promo-copy">
           <span>Meme Shorts</span>
           <strong>{t("visual.one.bannerTitle")}</strong>
           <p>{t("visual.one.bannerDescription")}</p>
         </div>
-        <img src="/images/study-dog-character-v6.png" alt="" />
+        <img src="/images/study-dog-character-v6.png" alt="" width={152} height={163} />
       </div>
       <strong className="k-feature-one__content-title">Shorts Meme</strong>
-      <div className="k-feature-one__streak">♨ <span>{t("visual.one.likes")}</span></div>
+      <div className="k-feature-one__streak">
+        ♨ <span>{t("visual.one.likes")}</span>
+      </div>
       <div className="k-feature-one__caption">
         <strong>Meme title</strong>
-        <div><span>Dead</span><span>0:42</span></div>
+        <div>
+          <span>Dead</span>
+          <span>0:42</span>
+        </div>
         <p>{t("visual.one.instruction")}</p>
       </div>
-      <div className="k-feature-one__shadow-button"><span>♩</span> {t("visual.one.shadow")}</div>
+      <div className="k-feature-one__shadow-button">
+        <span>♩</span> {t("visual.one.shadow")}
+      </div>
       <small>be hind the meme</small>
-      <div className="k-feature-one__progress"><i /></div>
+      <div className="k-feature-one__progress">
+        <i />
+      </div>
       <div className="k-feature-one__home" />
     </div>
   );

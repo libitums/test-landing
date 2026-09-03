@@ -56,7 +56,7 @@ h3 {
   padding-inline: var(--space-8);
 }
 .section {
-  padding-block: var(--space-24);
+  padding-block: var(--section-block);
 }
 .stack {
   display: flex;
@@ -72,7 +72,7 @@ h3 {
   border-color: var(--color-border);
 }
 .footer {
-  padding-block: var(--space-16);
+  padding-block: var(--section-block-compact);
   background: var(--color-bg);
   color: var(--color-fg);
 }
@@ -843,12 +843,17 @@ button:focus-visible {
   isolation: isolate;
   overflow: clip;
   inline-size: 100%;
+  /* svh, not vh: on a phone vh is the large viewport with the URL bar hidden, so a
+     vh-sized block is taller than what is actually on screen and the layout jumps when
+     the bar collapses. The vh line stays first as the fallback for iOS 15.0-15.3, which
+     is inside the support floor and does not know svh. */
   min-block-size: min(88vh, 780px);
+  min-block-size: min(88svh, 780px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-block: var(--space-20);
+  padding-block: var(--section-block-cta);
   padding-inline: var(--space-8);
   background: var(--color-surface);
 }
@@ -1015,7 +1020,7 @@ button:focus-visible {
   }
 }
 .shared-feature {
-  padding-block: var(--space-24);
+  padding-block: var(--section-block);
   color: var(--color-fg);
 }
 .shared-feature--white {
@@ -1316,12 +1321,6 @@ button:focus-visible {
   .container {
     padding-inline: var(--space-4);
   }
-  .section {
-    padding-block: var(--space-16);
-  }
-  .shared-feature {
-    padding-block: var(--space-16);
-  }
   .shared-feature__inner {
     padding-inline: var(--space-4);
   }
@@ -1330,7 +1329,27 @@ button:focus-visible {
     gap: var(--space-8);
   }
   .pricing__plans {
-    grid-template-columns: 1fr;
+    /* Stacked, three plan cards ran 2026-2148px — 3.6 to 3.8 screens on the shortest
+       supported phone, so comparing plans meant scrolling past each one. Side by side
+       in a rail they cost one card's height and can be compared by swiping, which is
+       what a pricing table is for. Same plans, same order. */
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(82%, 20rem);
+    gap: var(--space-4);
+    justify-content: start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: var(--space-4);
+    padding-inline: var(--space-4);
+    scrollbar-width: none;
+  }
+  .pricing__plans > * {
+    scroll-snap-align: center;
+  }
+  .pricing__plans::-webkit-scrollbar {
+    display: none;
   }
   .hero__description {
     margin-block-start: var(--space-4);
@@ -1361,7 +1380,7 @@ button:focus-visible {
   }
   .cta {
     min-block-size: min(80vh, 560px);
-    padding-block: var(--space-16);
+    min-block-size: min(80svh, 560px);
     padding-inline: var(--space-4);
   }
   .navbar__inner {
@@ -1383,9 +1402,6 @@ button:focus-visible {
   }
   .navbar__mobile-navigation {
     display: block;
-  }
-  .footer {
-    padding-block: var(--space-12);
   }
   .accordion__content-inner {
     padding-inline-end: var(--space-6);
@@ -1418,5 +1434,29 @@ button:focus-visible {
   .accordion__trigger,
   .accordion__chevron {
     transition: none;
+  }
+}
+
+/* Short screens. Width alone does not describe a phone: a 320x568 iPhone SE and a
+   430x932 Pro Max differ by 364px of height, and the hero was composed for neither —
+   it kept the same vertical spend on both, so the primary call to action fell off the
+   first screen on the short one. These rules trade spacing and type scale for the one
+   thing that has to be reachable without scrolling. */
+@media (max-height: 40rem) {
+  .section {
+    padding-block: var(--space-10);
+  }
+  .hero__copy h1 {
+    font-size: var(--text-4xl);
+  }
+  .hero__description {
+    margin-block-start: var(--space-4);
+    font-size: var(--text-base);
+  }
+  .hero__cta {
+    margin-block-start: var(--space-5);
+  }
+  .hero__media {
+    margin-block-start: var(--space-6);
   }
 }

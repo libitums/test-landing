@@ -39,8 +39,23 @@ function createReporter(): EngagementReporter & Record<string, ReturnType<typeof
   } as unknown as EngagementReporter & Record<string, ReturnType<typeof vi.fn>>;
 }
 
-function entry(target: Element, isIntersecting: boolean, ratio: number) {
-  return { target, isIntersecting, intersectionRatio: ratio } as IntersectionObserverEntry;
+interface EntryGeometry {
+  /** Height of the section currently inside the viewport. */
+  visible: number;
+  section: number;
+  viewport?: number | null;
+}
+
+function entry(target: Element, isIntersecting: boolean, geometry: EntryGeometry) {
+  const { visible, section, viewport = 900 } = geometry;
+  return {
+    target,
+    isIntersecting,
+    intersectionRatio: section === 0 ? 0 : visible / section,
+    intersectionRect: { height: visible },
+    boundingClientRect: { height: section },
+    rootBounds: viewport === null ? null : { height: viewport },
+  } as unknown as IntersectionObserverEntry;
 }
 
 function setupSections() {
@@ -69,14 +84,80 @@ describe("engagement DOM bindings", () => {
     const { hero, sections } = setupSections();
 
     startEngagementTracking({ reporter, sections });
-    observerCallbacks[0]?.([entry(hero, true, 0.2)]);
+    observerCallbacks[0]?.([entry(hero, true, { visible: 120, section: 600 })]);
     expect(reporter.sectionEntered).not.toHaveBeenCalled();
 
-    observerCallbacks[0]?.([entry(hero, true, 0.7)]);
+    observerCallbacks[0]?.([entry(hero, true, { visible: 420, section: 600 })]);
     expect(reporter.sectionEntered).toHaveBeenCalledWith("hero");
 
-    observerCallbacks[0]?.([entry(hero, false, 0)]);
+    observerCallbacks[0]?.([entry(hero, false, { visible: 0, section: 600 })]);
     expect(reporter.sectionLeft).toHaveBeenCalledWith("hero");
+  });
+
+
+  it("sees a section taller than twice the viewport", () => {
+    // k-drama pricing measured 2006px inside an iPhone 12's 844px viewport. Its area ratio
+    // peaks at 0.42, so the old area-only rule never fired and the section was recorded as
+    // never seen on every phone in the traffic.
+    vi.stubGlobal("IntersectionObserver", FakeIntersectionObserver);
+    const reporter = createReporter();
+    const { pricing, sections } = setupSections();
+
+    startEngagementTracking({ reporter, sections });
+    observerCallbacks[0]?.([entry(pricing, true, { visible: 200, section: 2006, viewport: 844 })]);
+    expect(reporter.sectionEntered).not.toHaveBeenCalled();
+
+    observerCallbacks[0]?.([entry(pricing, true, { visible: 500, section: 2006, viewport: 844 })]);
+    expect(reporter.sectionEntered).toHaveBeenCalledWith("pricing");
+  });
+
+  it("leaves a tall section when it stops covering half the viewport", () => {
+    vi.stubGlobal("IntersectionObserver", FakeIntersectionObserver);
+    const reporter = createReporter();
+    const { pricing, sections } = setupSections();
+
+    startEngagementTracking({ reporter, sections });
+    observerCallbacks[0]?.([entry(pricing, true, { visible: 500, section: 2006, viewport: 844 })]);
+    observerCallbacks[0]?.([entry(pricing, true, { visible: 100, section: 2006, viewport: 844 })]);
+
+    expect(reporter.sectionLeft).toHaveBeenCalledWith("pricing");
+  });
+
+  it("falls back to the window height when the observer reports no root bounds", () => {
+    // Safari hands back a null rootBounds in some cross-document cases; without a fallback
+    // the viewport rule would divide by nothing and tall sections would go dark again.
+    vi.stubGlobal("IntersectionObserver", FakeIntersectionObserver);
+    vi.stubGlobal("innerHeight", 844);
+    const reporter = createReporter();
+    const { pricing, sections } = setupSections();
+
+    startEngagementTracking({ reporter, sections });
+    observerCallbacks[0]?.([
+      entry(pricing, true, { visible: 500, section: 2006, viewport: null }),
+    ]);
+
+    expect(reporter.sectionEntered).toHaveBeenCalledWith("pricing");
+  });
+
+  it("asks the observer for thresholds fine enough to see a tall section arrive", () => {
+    // With only [0, 0.5] the callback never runs for a section whose ratio tops out at 0.42.
+    const observers: { threshold: readonly number[] }[] = [];
+    class RecordingObserver extends FakeIntersectionObserver {
+      constructor(callback: ObserverCallback, options?: IntersectionObserverInit) {
+        super(callback);
+        const threshold = options?.threshold ?? [];
+        observers.push({ threshold: Array.isArray(threshold) ? threshold : [threshold] });
+      }
+    }
+    vi.stubGlobal("IntersectionObserver", RecordingObserver);
+    const reporter = createReporter();
+    const { sections } = setupSections();
+
+    startEngagementTracking({ reporter, sections });
+
+    const thresholds = observers[0]?.threshold ?? [];
+    const belowHalf = thresholds.filter((value) => value > 0 && value < 0.5);
+    expect(belowHalf.length).toBeGreaterThanOrEqual(5);
   });
 
   it("ignores intersections from elements it was not asked to track", () => {
@@ -86,7 +167,7 @@ describe("engagement DOM bindings", () => {
     const stranger = document.createElement("div");
 
     startEngagementTracking({ reporter, sections });
-    observerCallbacks[0]?.([entry(stranger, true, 1)]);
+    observerCallbacks[0]?.([entry(stranger, true, { visible: 600, section: 600 })]);
 
     expect(reporter.sectionEntered).not.toHaveBeenCalled();
   });

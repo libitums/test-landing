@@ -252,7 +252,6 @@ export const koKR = {
   "locale.th-TH": "태국어",
   "locale.zh-CN": "중국어(간체)",
   "locale.zh-TW": "중국어(번체)",
-  "hero.eyebrow": "더 나은 의사결정",
   "hero.title": "언제 어디서나 실제 한국어 대화를 소리 내어 연습하세요",
   "hero.description":
     "배운 단어를 이제 직접 말해 보세요. 실제 상황을 역할극으로 연습하고 즉시 교정받으며, 언제나 함께하는 AI로 최애와도 대화할 수 있어요.",
@@ -284,7 +283,6 @@ export const koKR = {
   "proof.reuse.label": "언제든 기다리는 AI 회화 파트너",
   "proof.launch.value": "즉시",
   "proof.launch.label": "말한 문장을 자연스러운 한국어로 교정",
-  "features.title": "트레이드오프를 보여주는 시스템",
   "features.clarity.title": "명확한\n경계",
   "features.clarity.description": "공통 책임과 로컬 책임을\n쉽게 구분할 수 있습니다.",
   "features.access.title": "접근 가능한 기본값",
@@ -378,7 +376,6 @@ export const enUS: Record<keyof typeof koKR, string> = {
   "nav.comparison": "Comparison",
   "nav.benefits": "Benefits",
   "nav.cta": "Start speaking",
-  "hero.eyebrow": "A better way to decide",
   "hero.title": "Practice real Korean Conversations - out loud, anytime",
   "hero.description":
     "You've learned the words. Now actually say them. Role-play real situations, get corrected on the spot, and even chat with your favorite idol - with an AI that's always on.",
@@ -410,7 +407,6 @@ export const enUS: Record<keyof typeof koKR, string> = {
   "proof.reuse.label": "An AI conversation partner ready whenever you are",
   "proof.launch.value": "Instant",
   "proof.launch.label": "Natural Korean corrections while you speak",
-  "features.title": "A system that makes tradeoffs visible",
   "features.clarity.title": "Clear\nboundaries",
   "features.clarity.description": "Shared and local responsibilities\nremain easy to see.",
   "features.access.title": "Accessible defaults",
@@ -507,7 +503,6 @@ export const ar: Record<keyof typeof koKR, string> = {
   "nav.comparison": "المقارنة",
   "nav.benefits": "الفوائد",
   "nav.cta": "ابدأ التحدث",
-  "hero.eyebrow": "طريقة أفضل للقرار",
   "hero.title": "تدرّب بصوت عالٍ على محادثات كورية حقيقية في أي وقت",
   "hero.description":
     "لقد تعلمت الكلمات، والآن حان وقت نطقها. حاكِ مواقف حقيقية واحصل على تصحيح فوري، وتحدّث حتى مع نجمك المفضل بمساعدة ذكاء اصطناعي متاح دائماً.",
@@ -539,7 +534,6 @@ export const ar: Record<keyof typeof koKR, string> = {
   "proof.reuse.label": "شريك محادثة ذكي جاهز متى أردت",
   "proof.launch.value": "فوري",
   "proof.launch.label": "تصحيح كوري طبيعي أثناء حديثك",
-  "features.title": "نظام يوضح المفاضلات",
   "features.clarity.title": "حدود\nواضحة",
   "features.clarity.description": "تبقى المسؤوليات المشتركة والمحلية\nسهلة الرؤية.",
   "features.access.title": "إعدادات ميسّرة",

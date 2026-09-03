@@ -43,7 +43,7 @@ export function createAppAnalytics(
   return createAnalyticsTracker({
     context: {
       projectId: "k-culture",
-      experimentId: "landing-phase-1",
+      experimentId: "landing-phase-2",
       variantId: "k-culture-v1",
       locale: activeLocale,
       pageId: "home",
